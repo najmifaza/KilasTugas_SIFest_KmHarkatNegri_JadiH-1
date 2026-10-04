@@ -2,18 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { checkHealth } from '../api'
 
 export default function HealthBanner() {
-  const [status, setStatus] = useState({ loading: true, ok: false, message: '' })
+  const [status, setStatus] = useState({ loading: true, ok: false })
 
   const ping = async () => {
     try {
-      const data = await checkHealth()
-      setStatus({ loading: false, ok: true, message: data.app || 'Online' })
-    } catch (err) {
-      setStatus({
-        loading: false,
-        ok: false,
-        message: 'Offline',
-      })
+      await checkHealth()
+      setStatus({ loading: false, ok: true })
+    } catch {
+      setStatus({ loading: false, ok: false })
     }
   }
 
@@ -25,21 +21,26 @@ export default function HealthBanner() {
 
   return (
     <button
+      type="button"
       onClick={ping}
-      title={status.ok ? 'Backend VPS Online' : 'Koneksi API bermasalah. Klik untuk cek ulang.'}
-      className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white border border-stone-200/90 shadow-xs text-[11px] font-medium text-stone-600 active:scale-95 transition"
+      title={status.ok ? 'Server tersambung dan siap' : 'Gagal menghubungi server. Klik untuk cek ulang.'}
+      className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-[11px] font-medium transition active:scale-95 ${
+        status.ok
+          ? 'bg-stone-100 text-stone-600 hover:bg-stone-200/70'
+          : 'bg-rose-50 text-rose-700 border border-rose-200'
+      }`}
     >
       <span
-        className={`w-2 h-2 rounded-full ${
+        className={`w-1.5 h-1.5 rounded-full ${
           status.loading
             ? 'bg-amber-400 animate-pulse'
             : status.ok
-            ? 'bg-emerald-500 ring-2 ring-emerald-200'
-            : 'bg-rose-500 ring-2 ring-rose-200'
+            ? 'bg-emerald-500'
+            : 'bg-rose-500'
         }`}
       />
-      <span className="font-mono text-[10px]">
-        {status.loading ? 'Cek...' : status.ok ? 'VPS AI' : 'Offline'}
+      <span className="text-[10px] tracking-tight">
+        {status.loading ? 'Menghubungkan' : status.ok ? 'Tersambung' : 'Offline'}
       </span>
     </button>
   )

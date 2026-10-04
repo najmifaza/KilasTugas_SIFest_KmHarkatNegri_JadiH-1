@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { Check, Clock, ChevronRight, ChevronDown, ChevronUp, Trash2, BookOpen, Layers } from 'lucide-react'
+import { Check, Clock, ChevronRight, ChevronDown, ChevronUp, Trash2 } from 'lucide-react'
 import { getSubtasks, patchSubtask } from '../api'
 
-const CATEGORY_COLORS = {
-  laporan_lab: { bg: 'bg-emerald-50 text-emerald-700 border-emerald-200', dot: 'bg-emerald-500' },
-  makalah: { bg: 'bg-purple-50 text-purple-700 border-purple-200', dot: 'bg-purple-500' },
-  coding: { bg: 'bg-blue-50 text-blue-700 border-blue-200', dot: 'bg-blue-500' },
-  presentasi: { bg: 'bg-amber-50 text-amber-700 border-amber-200', dot: 'bg-amber-500' },
-  custom: { bg: 'bg-stone-50 text-stone-700 border-stone-200', dot: 'bg-stone-400' },
+const CATEGORY_MAP = {
+  laporan_lab: 'Laporan Lab',
+  makalah: 'Makalah Teori',
+  coding: 'Projek Coding',
+  presentasi: 'Presentasi',
+  custom: 'Tugas Lain',
 }
 
 export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
@@ -33,159 +33,200 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
 
   const toggleSubtask = async (e, st) => {
     e.stopPropagation()
-    const updatedStatus = !st.is_completed
+    const nextState = !st.is_completed
+
+    // Optimistic UI update
     setSubtasks((prev) =>
-      prev.map((s) => (s.id === st.id ? { ...s, is_completed: updatedStatus } : s))
+      prev.map((s) => (s.id === st.id ? { ...s, is_completed: nextState } : s))
     )
+
+    if (navigator.vibrate) {
+      navigator.vibrate(25)
+    }
+
     try {
-      await patchSubtask(st.id, { is_completed: updatedStatus })
+      await patchSubtask(st.id, { is_completed: nextState })
     } catch (err) {
+      // Rollback on network failure
       setSubtasks((prev) =>
         prev.map((s) => (s.id === st.id ? { ...s, is_completed: st.is_completed } : s))
       )
     }
   }
 
-  // Calculate progress & pacing
   const total = subtasks.length
   const completed = subtasks.filter((s) => s.is_completed).length
   const percent = total > 0 ? Math.round((completed / total) * 100) : 0
+  const isAllDone = total > 0 && completed === total
 
   const deadlineDate = new Date(task.deadline)
   const now = new Date()
   const diffDays = Math.ceil((deadlineDate - now) / (1000 * 60 * 60 * 24))
-  const isOverdue = diffDays < 0 && percent < 100
+  const isOverdue = diffDays < 0 && !isAllDone
 
-  let pacing = { label: 'On Track', color: 'bg-emerald-50 text-emerald-800 border-emerald-200' }
-  if (isOverdue) {
-    pacing = { label: 'Overdue', color: 'bg-rose-50 text-rose-800 border-rose-200' }
-  } else if (diffDays <= 1 && percent < 50) {
-    pacing = { label: 'Behind', color: 'bg-amber-50 text-amber-800 border-amber-200' }
+  let pacing = { label: 'Tepat Waktu', color: 'text-stone-600 bg-stone-100' }
+  if (isAllDone) {
+    pacing = { label: 'Selesai', color: 'text-emerald-700 bg-emerald-50' }
+  } else if (isOverdue) {
+    pacing = { label: 'Terlambat', color: 'text-rose-700 bg-rose-50' }
+  } else if (diffDays <= 1 && percent < 60) {
+    pacing = { label: 'Mepet', color: 'text-amber-700 bg-amber-50' }
   }
 
-  const categoryStyle = CATEGORY_COLORS[task.category] || CATEGORY_COLORS.custom
-
   return (
-    <div className="bg-white rounded-3xl p-5 border border-stone-200/90 shadow-card space-y-4 transition">
-      
-      {/* Top Header Card */}
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${categoryStyle.bg}`}>
-            <span className={`w-1.5 h-1.5 rounded-full ${categoryStyle.dot}`} />
-            <span className="capitalize">{task.category?.replace('_', ' ') || 'Tugas'}</span>
-          </span>
+    <article className="bg-white rounded-2xl border border-stone-200/90 shadow-soft overflow-hidden transition-all">
+      {/* Header Bar */}
+      <div className="p-4 sm:p-5 pb-3">
+        <div className="flex items-center justify-between gap-2 mb-2.5">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-[11px] font-semibold text-stone-700 bg-stone-100 px-2.5 py-0.5 rounded-full">
+              {CATEGORY_MAP[task.category] || 'Tugas Kuliah'}
+            </span>
 
-          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${pacing.color}`}>
-            {pacing.label}
-          </span>
-        </div>
+            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${pacing.color}`}>
+              {pacing.label}
+            </span>
+          </div>
 
-        <div className="flex items-center gap-1">
-          {onDeleteTask && (
+          <div className="flex items-center gap-0.5">
+            {onDeleteTask && (
+              <button
+                type="button"
+                onClick={() => onDeleteTask(task.id)}
+                className="w-8 h-8 rounded-full text-stone-400 hover:text-rose-600 hover:bg-stone-50 flex items-center justify-center transition active:scale-90"
+                title="Hapus Tugas"
+                aria-label="Hapus tugas"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            )}
+
             <button
-              onClick={() => onDeleteTask(task.id)}
-              className="w-7 h-7 rounded-full hover:bg-stone-100 text-stone-400 hover:text-rose-600 flex items-center justify-center transition"
-              title="Hapus Tugas"
+              type="button"
+              onClick={() => setExpanded(!expanded)}
+              className="w-8 h-8 rounded-full text-stone-400 hover:text-stone-800 hover:bg-stone-50 flex items-center justify-center transition active:scale-90"
+              aria-label={expanded ? 'Tutup sub-tugas' : 'Buka sub-tugas'}
             >
-              <Trash2 className="w-3.5 h-3.5" />
+              {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </button>
-          )}
-
-          <button
-            onClick={() => setExpanded(!expanded)}
-            className="w-7 h-7 rounded-full hover:bg-stone-100 text-stone-400 hover:text-stone-700 flex items-center justify-center transition"
-          >
-            {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-          </button>
+          </div>
         </div>
-      </div>
 
-      {/* Task Title & Subject */}
-      <div>
-        <h3 className="font-bold text-base text-stone-900 leading-snug">
+        {/* Task Title & Details */}
+        <h3 className="font-semibold text-stone-950 text-base leading-snug tracking-tight">
           {task.title}
         </h3>
+
         <div className="flex items-center gap-2 text-xs text-stone-500 mt-1">
           {task.subject && (
-            <span className="font-medium text-stone-700">{task.subject} •</span>
+            <>
+              <span className="font-medium text-stone-700">{task.subject}</span>
+              <span className="text-stone-300">•</span>
+            </>
           )}
           <span className="flex items-center gap-1">
             <Clock className="w-3.5 h-3.5 text-stone-400" />
-            {diffDays > 0 ? `${diffDays} hari lagi` : diffDays === 0 ? 'Hari ini!' : 'Lewat deadline'}
+            <span>
+              {isAllDone
+                ? 'Target tercapai'
+                : diffDays > 0
+                ? `${diffDays} hari lagi`
+                : diffDays === 0
+                ? 'Hari ini'
+                : `${Math.abs(diffDays)} hari lewat`}
+            </span>
           </span>
         </div>
+
+        {/* Progress Bar */}
+        <div className="mt-3.5 space-y-1.5">
+          <div className="flex items-center justify-between text-[11px] text-stone-500 font-medium">
+            <span>Rincian Pengerjaan</span>
+            <span className="font-mono text-stone-700">{completed}/{total} langkah ({percent}%)</span>
+          </div>
+          <div className="w-full bg-stone-100 rounded-full h-1.5 overflow-hidden">
+            <div
+              className={`h-full rounded-full transition-all duration-300 ${
+                isAllDone ? 'bg-emerald-600' : 'bg-stone-900'
+              }`}
+              style={{ width: `${percent}%` }}
+            />
+          </div>
+        </div>
       </div>
 
-      {/* Slim Progress Bar */}
-      <div className="space-y-1.5">
-        <div className="flex items-center justify-between text-[11px] text-stone-500 font-medium">
-          <span>Progres Eksekusi</span>
-          <span className="font-mono text-stone-700">{completed}/{total} aksi ({percent}%)</span>
-        </div>
-        <div className="w-full bg-stone-100 rounded-full h-1.5 overflow-hidden">
-          <div
-            className="h-full bg-stone-900 rounded-full transition-all duration-300"
-            style={{ width: `${percent}%` }}
-          />
-        </div>
-      </div>
-
-      {/* Subtask Schedule Stack (Inspired by Mockup Cards) */}
+      {/* Subtask List */}
       {expanded && (
-        <div className="space-y-2 pt-2 border-t border-stone-100">
+        <div className="px-3 pb-3 sm:px-4 sm:pb-4 pt-1 space-y-1.5 border-t border-stone-100 bg-stone-50/50">
           {loading && subtasks.length === 0 ? (
-            <div className="text-xs text-stone-400 py-3 text-center">Memuat sub-tugas...</div>
+            <div className="text-xs text-stone-400 py-4 text-center font-medium">
+              Memuat langkah kerja...
+            </div>
           ) : subtasks.length === 0 ? (
-            <div className="text-xs text-stone-400 py-3 text-center">Belum ada sub-tugas terurai.</div>
+            <div className="text-xs text-stone-400 py-4 text-center">
+              Belum ada langkah kerja terurai.
+            </div>
           ) : (
-            subtasks.map((st, idx) => (
-              <div
-                key={st.id || idx}
-                onClick={() => onOpenDetail(st, task)}
-                className={`group flex items-center justify-between gap-3 p-3 rounded-2xl border transition cursor-pointer select-none active:scale-[0.99] ${
-                  st.is_completed
-                    ? 'bg-stone-50/60 border-stone-200/60 opacity-60'
-                    : 'bg-[#FAFBFD] hover:bg-white border-stone-200/90 shadow-xs'
-                }`}
-              >
-                {/* Left check circle */}
-                <button
-                  type="button"
-                  onClick={(e) => toggleSubtask(e, st)}
-                  className={`w-6 h-6 rounded-full flex items-center justify-center transition border ${
+            subtasks.map((st, idx) => {
+              const stepNum = st.step_number || (idx + 1)
+              return (
+                <div
+                  key={st.id || idx}
+                  onClick={() => onOpenDetail(st, task)}
+                  className={`group flex items-center gap-2 p-2.5 sm:p-3 rounded-xl border transition-all cursor-pointer select-none active:scale-[0.99] ${
                     st.is_completed
-                      ? 'bg-emerald-500 border-emerald-500 text-white'
-                      : 'border-stone-300 hover:border-stone-500 bg-white'
+                      ? 'bg-stone-100/70 border-stone-200/60 opacity-65'
+                      : 'bg-white hover:bg-stone-50 border-stone-200 shadow-soft'
                   }`}
                 >
-                  {st.is_completed && <Check className="w-3.5 h-3.5 stroke-[3]" />}
-                </button>
+                  {/* Big accessible Touch Area for Checkbox (min 44x44) */}
+                  <button
+                    type="button"
+                    onClick={(e) => toggleSubtask(e, st)}
+                    className="w-10 h-10 -my-1 -ml-1 flex items-center justify-center rounded-lg text-stone-400 hover:text-stone-700 active:scale-90 transition flex-shrink-0"
+                    aria-label={`Tandai ${st.title} ${st.is_completed ? 'belum selesai' : 'selesai'}`}
+                  >
+                    <div
+                      className={`w-5 h-5 rounded-md flex items-center justify-center border transition ${
+                        st.is_completed
+                          ? 'bg-stone-900 border-stone-900 text-white'
+                          : 'border-stone-300 bg-white hover:border-stone-500'
+                      }`}
+                    >
+                      {st.is_completed && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                    </div>
+                  </button>
 
-                {/* Subtask Info */}
-                <div className="flex-1 min-w-0">
-                  <div className={`text-xs font-semibold truncate ${st.is_completed ? 'line-through text-stone-400' : 'text-stone-900'}`}>
-                    {st.title}
+                  {/* Step Order Badge */}
+                  <span className="font-mono text-[10px] font-bold text-stone-400 px-1">
+                    {String(stepNum).padStart(2, '0')}
+                  </span>
+
+                  {/* Title and metadata */}
+                  <div className="flex-1 min-w-0 pr-1">
+                    <p
+                      className={`text-xs font-medium leading-snug line-clamp-1 ${
+                        st.is_completed ? 'line-through text-stone-400' : 'text-stone-900'
+                      }`}
+                    >
+                      {st.title}
+                    </p>
+                    <div className="flex items-center gap-2 mt-0.5 text-[10px] text-stone-500 font-mono">
+                      <span>{st.duration_minutes || 25}m</span>
+                      {st.target_date && <span>• {st.target_date}</span>}
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2 mt-0.5 text-[10px] text-stone-500">
-                    <span className="font-mono bg-white px-1.5 py-0.5 rounded border border-stone-200 text-stone-700">
-                      {st.duration_minutes || 25} min
-                    </span>
-                    <span>Langkah {st.step_number || (idx + 1)}</span>
-                    {st.target_date && <span>• {st.target_date}</span>}
+
+                  {/* Action chevron */}
+                  <div className="w-6 h-6 flex items-center justify-center text-stone-300 group-hover:text-stone-600 transition flex-shrink-0">
+                    <ChevronRight className="w-4 h-4" />
                   </div>
                 </div>
-
-                {/* Right Arrow / Open Detail */}
-                <div className="w-7 h-7 rounded-full bg-white group-hover:bg-stone-100 border border-stone-200 flex items-center justify-center text-stone-400 group-hover:text-stone-700 transition">
-                  <ChevronRight className="w-4 h-4" />
-                </div>
-              </div>
-            ))
+              )
+            })
           )}
         </div>
       )}
-
-    </div>
+    </article>
   )
 }
