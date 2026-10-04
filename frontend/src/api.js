@@ -55,6 +55,11 @@ export const patchSubtask = async (subtaskId, updates) => {
   return res.data
 }
 
+export const deleteTask = async (taskId) => {
+  const res = await apiClient.delete(`/api/tasks/${taskId}`)
+  return res.data
+}
+
 export const triggerBreakdown = async (payload) => {
   const res = await apiClient.post('/api/breakdown', payload)
   return res.data

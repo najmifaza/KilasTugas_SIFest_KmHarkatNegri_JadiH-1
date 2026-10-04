@@ -1,8 +1,16 @@
 import React, { useState, useEffect } from 'react'
-import { CheckCircle2, Circle, Clock, ChevronDown, ChevronUp, Play, Sparkles, AlertTriangle } from 'lucide-react'
+import { Check, Clock, ChevronRight, ChevronDown, ChevronUp, Trash2, BookOpen, Layers } from 'lucide-react'
 import { getSubtasks, patchSubtask } from '../api'
 
-export default function TaskCard({ task, onStartPomodoro }) {
+const CATEGORY_COLORS = {
+  laporan_lab: { bg: 'bg-emerald-50 text-emerald-700 border-emerald-200', dot: 'bg-emerald-500' },
+  makalah: { bg: 'bg-purple-50 text-purple-700 border-purple-200', dot: 'bg-purple-500' },
+  coding: { bg: 'bg-blue-50 text-blue-700 border-blue-200', dot: 'bg-blue-500' },
+  presentasi: { bg: 'bg-amber-50 text-amber-700 border-amber-200', dot: 'bg-amber-500' },
+  custom: { bg: 'bg-stone-50 text-stone-700 border-stone-200', dot: 'bg-stone-400' },
+}
+
+export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
   const [subtasks, setSubtasks] = useState([])
   const [loading, setLoading] = useState(false)
   const [expanded, setExpanded] = useState(true)
@@ -23,16 +31,15 @@ export default function TaskCard({ task, onStartPomodoro }) {
     fetchSubtasks()
   }, [task.id])
 
-  const toggleSubtask = async (st) => {
+  const toggleSubtask = async (e, st) => {
+    e.stopPropagation()
     const updatedStatus = !st.is_completed
-    // Optimistic UI
     setSubtasks((prev) =>
       prev.map((s) => (s.id === st.id ? { ...s, is_completed: updatedStatus } : s))
     )
     try {
       await patchSubtask(st.id, { is_completed: updatedStatus })
     } catch (err) {
-      // Revert if error
       setSubtasks((prev) =>
         prev.map((s) => (s.id === st.id ? { ...s, is_completed: st.is_completed } : s))
       )
@@ -49,64 +56,82 @@ export default function TaskCard({ task, onStartPomodoro }) {
   const diffDays = Math.ceil((deadlineDate - now) / (1000 * 60 * 60 * 24))
   const isOverdue = diffDays < 0 && percent < 100
 
-  // Pacing status
-  let pacingStatus = { label: 'On Track', color: 'emerald', bg: 'bg-emerald-50 text-emerald-800 border-emerald-200' }
+  let pacing = { label: 'On Track', color: 'bg-emerald-50 text-emerald-800 border-emerald-200' }
   if (isOverdue) {
-    pacingStatus = { label: 'Overdue', color: 'rose', bg: 'bg-rose-50 text-rose-800 border-rose-200' }
+    pacing = { label: 'Overdue', color: 'bg-rose-50 text-rose-800 border-rose-200' }
   } else if (diffDays <= 1 && percent < 50) {
-    pacingStatus = { label: 'Behind Schedule', color: 'amber', bg: 'bg-amber-50 text-amber-800 border-amber-200' }
+    pacing = { label: 'Behind', color: 'bg-amber-50 text-amber-800 border-amber-200' }
   }
 
+  const categoryStyle = CATEGORY_COLORS[task.category] || CATEGORY_COLORS.custom
+
   return (
-    <div className="bg-white border border-stone-200/90 rounded-xl p-5 shadow-sm space-y-4">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
-        <div>
-          <div className="flex items-center gap-2">
-            <h3 className="font-semibold text-sm text-stone-900">{task.title}</h3>
-            <span className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded border ${pacingStatus.bg}`}>
-              {pacingStatus.label}
-            </span>
-          </div>
-          <div className="flex items-center gap-3 text-xs text-stone-500 mt-1">
-            {task.subject && <span className="text-stone-700 font-medium">{task.subject}</span>}
-            <span className="flex items-center gap-1">
-              <Clock className="w-3.5 h-3.5 text-stone-400" />
-              {diffDays > 0 ? `${diffDays} hari lagi` : diffDays === 0 ? 'Hari ini!' : 'Lewat deadline'}
-            </span>
-          </div>
+    <div className="bg-white rounded-3xl p-5 border border-stone-200/90 shadow-card space-y-4 transition">
+      
+      {/* Top Header Card */}
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-1.5 flex-wrap">
+          <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${categoryStyle.bg}`}>
+            <span className={`w-1.5 h-1.5 rounded-full ${categoryStyle.dot}`} />
+            <span className="capitalize">{task.category?.replace('_', ' ') || 'Tugas'}</span>
+          </span>
+
+          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${pacing.color}`}>
+            {pacing.label}
+          </span>
         </div>
 
-        {/* Progress percent badge */}
-        <div className="flex items-center gap-3">
-          <div className="text-right">
-            <div className="text-[11px] text-stone-500">{completed}/{total} selesai</div>
-            <div className="text-sm font-semibold font-mono text-stone-800">{percent}%</div>
-          </div>
+        <div className="flex items-center gap-1">
+          {onDeleteTask && (
+            <button
+              onClick={() => onDeleteTask(task.id)}
+              className="w-7 h-7 rounded-full hover:bg-stone-100 text-stone-400 hover:text-rose-600 flex items-center justify-center transition"
+              title="Hapus Tugas"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+            </button>
+          )}
+
           <button
             onClick={() => setExpanded(!expanded)}
-            className="p-1.5 rounded-md border border-stone-200 hover:bg-stone-100 text-stone-600 transition"
+            className="w-7 h-7 rounded-full hover:bg-stone-100 text-stone-400 hover:text-stone-700 flex items-center justify-center transition"
           >
             {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
         </div>
       </div>
 
-      {/* Progress Bar */}
-      <div className="w-full bg-stone-100 rounded-full h-1.5 overflow-hidden border border-stone-200">
-        <div
-          className={`h-full transition-all duration-300 ${
-            percent === 100
-              ? 'bg-emerald-600'
-              : pacingStatus.color === 'amber'
-              ? 'bg-amber-500'
-              : 'bg-stone-900'
-          }`}
-          style={{ width: `${percent}%` }}
-        />
+      {/* Task Title & Subject */}
+      <div>
+        <h3 className="font-bold text-base text-stone-900 leading-snug">
+          {task.title}
+        </h3>
+        <div className="flex items-center gap-2 text-xs text-stone-500 mt-1">
+          {task.subject && (
+            <span className="font-medium text-stone-700">{task.subject} •</span>
+          )}
+          <span className="flex items-center gap-1">
+            <Clock className="w-3.5 h-3.5 text-stone-400" />
+            {diffDays > 0 ? `${diffDays} hari lagi` : diffDays === 0 ? 'Hari ini!' : 'Lewat deadline'}
+          </span>
+        </div>
       </div>
 
-      {/* Subtasks List */}
+      {/* Slim Progress Bar */}
+      <div className="space-y-1.5">
+        <div className="flex items-center justify-between text-[11px] text-stone-500 font-medium">
+          <span>Progres Eksekusi</span>
+          <span className="font-mono text-stone-700">{completed}/{total} aksi ({percent}%)</span>
+        </div>
+        <div className="w-full bg-stone-100 rounded-full h-1.5 overflow-hidden">
+          <div
+            className="h-full bg-stone-900 rounded-full transition-all duration-300"
+            style={{ width: `${percent}%` }}
+          />
+        </div>
+      </div>
+
+      {/* Subtask Schedule Stack (Inspired by Mockup Cards) */}
       {expanded && (
         <div className="space-y-2 pt-2 border-t border-stone-100">
           {loading && subtasks.length === 0 ? (
@@ -117,56 +142,50 @@ export default function TaskCard({ task, onStartPomodoro }) {
             subtasks.map((st, idx) => (
               <div
                 key={st.id || idx}
-                className={`flex items-start justify-between gap-3 p-3 rounded-lg border transition ${
+                onClick={() => onOpenDetail(st, task)}
+                className={`group flex items-center justify-between gap-3 p-3 rounded-2xl border transition cursor-pointer select-none active:scale-[0.99] ${
                   st.is_completed
-                    ? 'bg-stone-50/80 border-stone-200/60 opacity-60'
-                    : 'bg-stone-50/40 border-stone-200 hover:border-stone-300'
+                    ? 'bg-stone-50/60 border-stone-200/60 opacity-60'
+                    : 'bg-[#FAFBFD] hover:bg-white border-stone-200/90 shadow-xs'
                 }`}
               >
-                <div className="flex items-start gap-3 flex-1">
-                  <button
-                    onClick={() => toggleSubtask(st)}
-                    className="mt-0.5 text-stone-400 hover:text-stone-900 transition"
-                  >
-                    {st.is_completed ? (
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                    ) : (
-                      <Circle className="w-4 h-4" />
-                    )}
-                  </button>
-                  <div>
-                    <h4 className={`text-xs font-semibold ${st.is_completed ? 'line-through text-stone-400' : 'text-stone-900'}`}>
-                      {st.title}
-                    </h4>
-                    {st.description && (
-                      <p className="text-[11px] text-stone-600 mt-0.5 leading-relaxed">
-                        {st.description}
-                      </p>
-                    )}
-                    <div className="flex items-center gap-2 mt-1.5 text-[10px] text-stone-500">
-                      <span className="bg-stone-100 px-1.5 py-0.5 rounded text-stone-700 font-mono border border-stone-200">
-                        {st.duration_minutes || 25}m
-                      </span>
-                      {st.target_date && <span>Target: {st.target_date}</span>}
-                    </div>
+                {/* Left check circle */}
+                <button
+                  type="button"
+                  onClick={(e) => toggleSubtask(e, st)}
+                  className={`w-6 h-6 rounded-full flex items-center justify-center transition border ${
+                    st.is_completed
+                      ? 'bg-emerald-500 border-emerald-500 text-white'
+                      : 'border-stone-300 hover:border-stone-500 bg-white'
+                  }`}
+                >
+                  {st.is_completed && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                </button>
+
+                {/* Subtask Info */}
+                <div className="flex-1 min-w-0">
+                  <div className={`text-xs font-semibold truncate ${st.is_completed ? 'line-through text-stone-400' : 'text-stone-900'}`}>
+                    {st.title}
+                  </div>
+                  <div className="flex items-center gap-2 mt-0.5 text-[10px] text-stone-500">
+                    <span className="font-mono bg-white px-1.5 py-0.5 rounded border border-stone-200 text-stone-700">
+                      {st.duration_minutes || 25} min
+                    </span>
+                    <span>Langkah {st.step_number || (idx + 1)}</span>
+                    {st.target_date && <span>• {st.target_date}</span>}
                   </div>
                 </div>
 
-                {!st.is_completed && (
-                  <button
-                    onClick={() => onStartPomodoro(st)}
-                    className="flex items-center gap-1 px-2.5 py-1 rounded-md bg-white hover:bg-stone-100 text-stone-800 border border-stone-300 text-xs font-medium transition shadow-xs"
-                    title="Mulai Fokus Pomodoro"
-                  >
-                    <Play className="w-3 h-3 fill-current" />
-                    <span>Fokus</span>
-                  </button>
-                )}
+                {/* Right Arrow / Open Detail */}
+                <div className="w-7 h-7 rounded-full bg-white group-hover:bg-stone-100 border border-stone-200 flex items-center justify-center text-stone-400 group-hover:text-stone-700 transition">
+                  <ChevronRight className="w-4 h-4" />
+                </div>
               </div>
             ))
           )}
         </div>
       )}
+
     </div>
   )
 }
