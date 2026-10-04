@@ -1,12 +1,14 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from datetime import datetime
 import json
+import logging
 
 from config.ai import ai_client, AI_MODEL
 from config.db import get_db
 from models.schemas import BreakdownRequest
 from templates.presets import get_template_by_category
 
+logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api", tags=["breakdown"])
 
 SYSTEM_PROMPT = """Kamu adalah asisten perencana belajar mahasiswa Indonesia yang sangat memahami pola pengerjaan tugas kuliah.
@@ -33,16 +35,19 @@ Format output:
 
 @router.post("/breakdown")
 async def breakdown(req: BreakdownRequest):
-    days_left = max((req.deadline - datetime.now()).days + 1, 1)
+    # Cegah crash offset-naive vs offset-aware datetime
+    deadline_naive = req.deadline.replace(tzinfo=None) if req.deadline.tzinfo else req.deadline
+    now_naive = datetime.now()
+    days_left = max((deadline_naive - now_naive).days + 1, 1)
 
     user_prompt = f"""Judul Tugas: {req.title}
 Kategori: {req.category}
 Instruksi/Deskripsi: {req.description}
 Sisa Hari Menuju Deadline: {days_left} hari
-Tanggal Deadline: {req.deadline.strftime('%A, %d %B %Y')}""".strip()
+Tanggal Deadline: {deadline_naive.strftime('%A, %d %B %Y')}""".strip()
 
     source = "ai"
-    subtasks = []
+    raw_subtasks = []
 
     try:
         response = await ai_client.chat.completions.create(
@@ -55,29 +60,55 @@ Tanggal Deadline: {req.deadline.strftime('%A, %d %B %Y')}""".strip()
             max_tokens=1500,
         )
         raw = (response.choices[0].message.content or "").strip()
-        # strip markdown fences jika ada
-        if raw.startswith("```"):
-            raw = raw.split("```")[1]
+        # strip markdown codeblocks jika model menyertakan ```
+        if "```" in raw:
+            parts = raw.split("```")
+            raw = parts[1]
             if raw.startswith("json"):
                 raw = raw[4:]
-        subtasks = json.loads(raw)
-        if not isinstance(subtasks, list) or len(subtasks) == 0:
-            raise ValueError("empty or invalid AI response")
-    except Exception:
+        raw = raw.strip()
+        parsed = json.loads(raw)
+        if isinstance(parsed, list) and len(parsed) > 0:
+            raw_subtasks = parsed
+        else:
+            raise ValueError("AI output is not a non-empty list")
+    except Exception as e:
+        logger.warning(f"AI breakdown failed ({type(e).__name__}: {e}), using template fallback")
         source = "template"
-        subtasks = get_template_by_category(req.category, days_left)
+        raw_subtasks = get_template_by_category(req.category, days_left)
 
-    # simpan ke DB
-    async with get_db() as db:
-        for s in subtasks:
-            await db.execute(
-                """INSERT INTO subtasks
-                   (id, task_id, step_number, title, description,
-                    duration_minutes, target_date, source)
-                   VALUES (UUID(), %s, %s, %s, %s, %s,
-                   DATE_ADD(CURDATE(), INTERVAL %s DAY), %s)""",
-                (req.task_id, s["step"], s["title"], s["description"],
-                 s["duration_minutes"], s["target_day_offset"], source),
-            )
+    # Sanitasi data subtask agar aman masuk DB
+    clean_subtasks = []
+    for idx, s in enumerate(raw_subtasks):
+        if not isinstance(s, dict):
+            continue
+        clean_subtasks.append({
+            "step": int(s.get("step") or s.get("step_number") or (idx + 1)),
+            "title": str(s.get("title") or f"Sub-tugas {idx+1}")[:250],
+            "description": str(s.get("description") or ""),
+            "duration_minutes": int(s.get("duration_minutes") or 25),
+            "target_day_offset": int(s.get("target_day_offset") or 0),
+        })
 
-    return {"success": True, "source": source, "data": subtasks}
+    if not clean_subtasks:
+        clean_subtasks = get_template_by_category(req.category, days_left)
+        source = "template"
+
+    # Simpan ke MariaDB
+    try:
+        async with get_db() as db:
+            for s in clean_subtasks:
+                await db.execute(
+                    """INSERT INTO subtasks
+                       (id, task_id, step_number, title, description,
+                        duration_minutes, target_date, source)
+                       VALUES (UUID(), %s, %s, %s, %s, %s,
+                       DATE_ADD(CURDATE(), INTERVAL %s DAY), %s)""",
+                    (req.task_id, s["step"], s["title"], s["description"],
+                     s["duration_minutes"], s["target_day_offset"], source),
+                )
+    except Exception as db_err:
+        logger.error(f"DB insert subtasks error: {db_err}")
+        # Tetap kembalikan data ke frontend agar user tidak gagal di UI
+
+    return {"success": True, "source": source, "data": clean_subtasks}
