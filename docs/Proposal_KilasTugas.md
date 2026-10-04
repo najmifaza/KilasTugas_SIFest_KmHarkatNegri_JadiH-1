@@ -15,11 +15,10 @@
 |---|---|
 | **Nama Tim** | Tim KilasTugas |
 | **Ketua Tim (Team Leader)** | Adridinan Najmi Faza (Informatika — Universitas Jenderal Soedirman) |
-| **Anggota Tim** | 1. Timotius Willy Narendra (Informatika — Universitas Jenderal Soedirman)<br>2. Salman Thufail (Informatika — Universitas Jenderal Soedirman) |
+| **Anggota Tim** | 1. Timotius Willy Narendra (Informatika — Universitas Jenderal Soedirman)<br>2. Fardizza Finda Rahman (Informatika — Universitas Jenderal Soedirman) |
 | **Judul Produk** | **KilasTugas** |
 | **Challenge Track** | **Education** |
-| **Tautan Repositori GitHub** | `https://github.com/najmifaza/kilastugas` *(Akses Publik / Juri)* |
-| **Tautan Demo / Deployment** | `https://kilastugas.vercel.app` |
+| **Tautan Repositori GitHub** | `https://github.com/najmifaza/KilasTugas_SIFest_KmHarkatNegri_JadiH-1` *(Akses Publik / Juri)* |
 
 ---
 
