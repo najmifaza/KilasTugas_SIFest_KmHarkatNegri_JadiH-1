@@ -28,7 +28,7 @@ export const checkHealth = async () => {
 export const initSession = async () => {
   const sid = getSessionId()
   try {
-    await apiClient.post('/api/session', { user_agent: navigator.userAgent })
+    await apiClient.post('/api/session', { session_id: sid, user_agent: navigator.userAgent })
   } catch (err) {
     console.warn('Backend session init offline/skipped:', err?.message)
   }

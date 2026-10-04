@@ -9,6 +9,11 @@ router = APIRouter(prefix="/api", tags=["tasks"])
 async def create_task(body: TaskCreate):
     tid = str(uuid.uuid4())
     async with get_db() as db:
+        # Guarantee session exists to prevent foreign key error
+        await db.execute(
+            """INSERT IGNORE INTO sessions (id, user_agent) VALUES (%s, %s)""",
+            (body.session_id, "Guest Auto-Init"),
+        )
         await db.execute(
             """INSERT INTO tasks (id, session_id, title, description, subject, category, deadline)
                VALUES (%s, %s, %s, %s, %s, %s, %s)""",

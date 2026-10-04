@@ -4,6 +4,7 @@ from datetime import datetime, date
 
 # ── Session ──────────────────────────────────────────────
 class SessionCreate(BaseModel):
+    session_id: Optional[str] = None
     user_agent: Optional[str] = None
 
 class SessionOut(BaseModel):
