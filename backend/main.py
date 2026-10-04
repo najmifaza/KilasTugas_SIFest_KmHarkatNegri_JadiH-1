@@ -21,9 +21,12 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+raw_origins = os.getenv("CORS_ORIGINS", "http://localhost:5173,https://kilastugas.vercel.app")
+cors_origins = [o.strip() for o in raw_origins.split(",") if o.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=os.getenv("CORS_ORIGINS", "http://localhost:5173").split(","),
+    allow_origins=cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -35,5 +38,6 @@ app.include_router(subtasks.router)
 app.include_router(breakdown.router)
 
 @app.get("/")
-async def root():
+@app.get("/health")
+async def health():
     return {"status": "ok", "app": "KilasTugas API v1.0.0"}
