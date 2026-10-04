@@ -87,62 +87,68 @@ export default function TaskInputForm({ onTaskCreated }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-zinc-900/90 border border-zinc-800 rounded-2xl p-5 md:p-6 shadow-xl">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-base font-semibold text-zinc-100 flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-indigo-400" />
-          Pecah Tugas Baru
-        </h2>
-        <span className="text-xs text-zinc-500 font-mono">Micro-Pacing Engine</span>
+    <form onSubmit={handleSubmit} className="bg-white border border-stone-200/90 rounded-xl p-5 md:p-6 shadow-sm">
+      <div className="flex items-center justify-between mb-5 border-b border-stone-100 pb-3">
+        <div>
+          <h2 className="text-sm font-semibold text-stone-900 tracking-tight">
+            Input Tugas Baru
+          </h2>
+          <p className="text-xs text-stone-500 mt-0.5">
+            AI membagi modul kuliah menjadi tindakan kerja harian realistis.
+          </p>
+        </div>
+        <span className="text-[11px] font-mono text-stone-400 bg-stone-100 px-2 py-0.5 rounded">
+          Task Chunking
+        </span>
       </div>
 
       {error && (
-        <div className="mb-4 text-xs text-rose-300 bg-rose-950/40 border border-rose-800/60 p-3 rounded-xl">
+        <div className="mb-4 text-xs text-rose-800 bg-rose-50 border border-rose-200 p-3 rounded-lg">
           {error}
         </div>
       )}
 
       <div className="space-y-4">
         {/* Judul & Mata Kuliah */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
           <div>
-            <label className="block text-xs font-medium text-zinc-400 mb-1">Judul Tugas *</label>
+            <label className="block text-xs font-medium text-stone-700 mb-1.5">Judul Tugas *</label>
             <input
               type="text"
               required
               placeholder="Contoh: Laporan Praktikum Subnetting VLSM"
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
-              className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2 text-sm text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-indigo-500 transition"
+              className="w-full bg-white border border-stone-300 rounded-lg px-3.5 py-2 text-sm text-stone-900 placeholder-stone-400 focus:outline-none focus:border-stone-800 focus:ring-1 focus:ring-stone-800 transition"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-zinc-400 mb-1">Mata Kuliah</label>
+            <label className="block text-xs font-medium text-stone-700 mb-1.5">Mata Kuliah</label>
             <input
               type="text"
               placeholder="Contoh: Jaringan Komputer"
               value={form.subject}
               onChange={(e) => setForm({ ...form, subject: e.target.value })}
-              className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2 text-sm text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-indigo-500 transition"
+              className="w-full bg-white border border-stone-300 rounded-lg px-3.5 py-2 text-sm text-stone-900 placeholder-stone-400 focus:outline-none focus:border-stone-800 focus:ring-1 focus:border-stone-800 transition"
             />
           </div>
         </div>
 
         {/* Kategori & Deadline */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
           <div>
-            <label className="block text-xs font-medium text-zinc-400 mb-1">Kategori Tugas</label>
+            <label className="block text-xs font-medium text-stone-700 mb-1.5">Kategori Pengerjaan</label>
             <div className="flex flex-wrap gap-1.5">
               {CATEGORIES.map((cat) => (
                 <button
                   type="button"
                   key={cat.id}
                   onClick={() => setForm({ ...form, category: cat.id })}
-                  className={`text-xs px-2.5 py-1 rounded-lg border transition ${
+                  className={`text-xs px-2.5 py-1 rounded-md border transition ${
                     form.category === cat.id
-                      ? 'bg-indigo-600/20 text-indigo-300 border-indigo-500'
-                      : 'bg-zinc-950 text-zinc-400 border-zinc-800 hover:border-zinc-700'
+                      ? 'bg-stone-900 text-white border-stone-900 font-medium'
+                      : 'bg-stone-50 text-stone-600 border-stone-200 hover:border-stone-300'
                   }`}
                 >
                   {cat.label}
@@ -152,46 +158,43 @@ export default function TaskInputForm({ onTaskCreated }) {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-zinc-400 mb-1">Batas Pengumpulan (Deadline)</label>
+            <label className="block text-xs font-medium text-stone-700 mb-1.5">Batas Pengumpulan (Deadline)</label>
             <input
               type="datetime-local"
               required
               value={form.deadline}
               onChange={(e) => setForm({ ...form, deadline: e.target.value })}
-              className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2 text-sm text-zinc-100 focus:outline-none focus:border-indigo-500 transition"
+              className="w-full bg-white border border-stone-300 rounded-lg px-3.5 py-1.5 text-sm text-stone-900 focus:outline-none focus:border-stone-800 focus:ring-1 focus:ring-stone-800 transition"
             />
           </div>
         </div>
 
         {/* Deskripsi / Instruksi Dosen */}
         <div>
-          <label className="block text-xs font-medium text-zinc-400 mb-1">
-            Instruksi / Detail Tugas (Paste modul dosen di sini)
+          <label className="block text-xs font-medium text-stone-700 mb-1.5">
+            Instruksi / Catatan Dosen
           </label>
           <textarea
             rows={3}
-            placeholder="Paste instruksi lengkap dari dosen... AI akan otomatis menganalisis dan membaginya per hari."
+            placeholder="Salin instruksi atau poin-poin modul penugasan..."
             value={form.description}
             onChange={(e) => setForm({ ...form, description: e.target.value })}
-            className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-3.5 py-2 text-sm text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-indigo-500 transition"
+            className="w-full bg-white border border-stone-300 rounded-lg px-3.5 py-2 text-sm text-stone-900 placeholder-stone-400 focus:outline-none focus:border-stone-800 focus:ring-1 focus:ring-stone-800 transition"
           />
         </div>
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-medium text-sm transition shadow-lg shadow-indigo-600/20"
+          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-stone-900 hover:bg-stone-800 disabled:opacity-50 text-white font-medium text-sm transition shadow-sm"
         >
           {loading ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin" />
-              <span>Memproses AI Breakdown (9Router)...</span>
+              <Loader2 className="w-4 h-4 animate-spin text-stone-300" />
+              <span>Memproses analisis sub-tugas...</span>
             </>
           ) : (
-            <>
-              <Sparkles className="w-4 h-4" />
-              <span>Pecah Tugasku Jadi Aksi Harian</span>
-            </>
+            <span>Pecah Tugas Jadi Aksi Harian</span>
           )}
         </button>
       </div>

@@ -32,24 +32,23 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col">
+    <div className="min-h-screen bg-stone-50 text-stone-900 flex flex-col">
       {/* Top Navbar */}
-      <header className="border-b border-zinc-800/80 bg-zinc-900/50 backdrop-blur-md sticky top-0 z-40">
-        <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-600/30">
-              <Zap className="w-4 h-4 text-white fill-current" />
+      <header className="border-b border-stone-200/80 bg-white sticky top-0 z-40">
+        <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-7 h-7 rounded-md bg-stone-900 text-white font-black text-sm flex items-center justify-center">
+              K
             </div>
             <div>
-              <h1 className="font-bold text-sm tracking-tight text-white flex items-center gap-1.5">
-                KilasTugas
-                <span className="text-[10px] font-normal bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-1.5 py-0.2 rounded">
+              <div className="flex items-center gap-2">
+                <h1 className="font-semibold text-sm tracking-tight text-stone-900">
+                  KilasTugas
+                </h1>
+                <span className="text-[10px] text-stone-500 font-mono bg-stone-100 px-1.5 py-0.5 rounded border border-stone-200">
                   SIFest DIC 2026
                 </span>
-              </h1>
-              <p className="text-[11px] text-zinc-400 hidden sm:block">
-                Problem First, Technology Second — Actionable Task Breakdown
-              </p>
+              </div>
             </div>
           </div>
 
@@ -60,14 +59,14 @@ export default function App() {
       </header>
 
       {/* Main Container */}
-      <main className="flex-1 max-w-4xl w-full mx-auto px-4 py-6 md:py-8 space-y-8">
-        {/* Hero Quote */}
-        <div className="text-center py-2 space-y-1">
-          <h2 className="text-xl md:text-2xl font-black tracking-tight text-white">
-            Jangan tanya &quot;kapan selesai&quot;, tanya &quot;apa yang dikerjakan hari ini&quot;.
+      <main className="flex-1 max-w-3xl w-full mx-auto px-4 py-8 space-y-7">
+        {/* Editorial Header */}
+        <div className="space-y-1.5">
+          <h2 className="text-xl md:text-2xl font-bold tracking-tight text-stone-900">
+            Rencana Aksi &amp; Micro-Pacing Tugas
           </h2>
-          <p className="text-xs md:text-sm text-zinc-400">
-            Ubah instruksi tugas yang panjang menjadi sub-tugas harian realistis dan terukur.
+          <p className="text-sm text-stone-600 leading-relaxed">
+            Pecah instruksi modul kuliah yang padat menjadi target harian konkret berdurasi 25–45 menit.
           </p>
         </div>
 
@@ -75,31 +74,29 @@ export default function App() {
         <TaskInputForm onTaskCreated={handleTaskCreated} />
 
         {/* Tasks Section */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-zinc-200 flex items-center gap-2">
-              <CheckSquare className="w-4 h-4 text-indigo-400" />
+        <div className="space-y-3.5">
+          <div className="flex items-center justify-between border-b border-stone-200 pb-2">
+            <h3 className="text-xs font-semibold text-stone-700 uppercase tracking-wider">
               Daftar Tugas Aktif
             </h3>
-            <span className="text-xs text-zinc-500">
-              {tasks.length} tugas tersimpan
+            <span className="text-xs text-stone-400 font-mono">
+              {tasks.length} tugas
             </span>
           </div>
 
           {loading ? (
-            <div className="text-center py-12 text-zinc-500 text-xs">
-              Menghubungkan ke backend dan memuat daftar tugas...
+            <div className="text-center py-10 text-stone-400 text-xs">
+              Memuat daftar tugas...
             </div>
           ) : tasks.length === 0 ? (
-            <div className="border border-dashed border-zinc-800 rounded-2xl p-10 text-center space-y-2">
-              <Layers className="w-8 h-8 text-zinc-600 mx-auto" />
-              <p className="text-sm font-medium text-zinc-300">Belum ada tugas</p>
-              <p className="text-xs text-zinc-500 max-w-sm mx-auto">
-                Masukkan tugas kuliah pertama Anda di atas untuk melihat sihir pembagian sub-tugas harian.
+            <div className="border border-dashed border-stone-300 rounded-xl p-8 text-center bg-white space-y-1">
+              <p className="text-sm font-medium text-stone-700">Belum ada tugas</p>
+              <p className="text-xs text-stone-500 max-w-xs mx-auto">
+                Isi form di atas untuk membuat breakdown pertama.
               </p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3">
               {tasks.map((task) => (
                 <TaskCard
                   key={task.id}
@@ -118,15 +115,14 @@ export default function App() {
           subtask={activePomodoroSubtask}
           onClose={() => setActivePomodoroSubtask(null)}
           onComplete={(st) => {
-            // Reload tasks on complete
             loadTasks()
           }}
         />
       )}
 
       {/* Footer */}
-      <footer className="border-t border-zinc-900 py-4 text-center text-xs text-zinc-600 font-mono">
-        SIFest Digital Innovation Challenge 2026 — Track: Education • KilasTugas MVP
+      <footer className="border-t border-stone-200 py-5 text-center text-xs text-stone-400 font-mono">
+        KilasTugas • Problem First, Technology Second
       </footer>
     </div>
   )

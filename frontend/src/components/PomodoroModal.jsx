@@ -41,48 +41,48 @@ export default function PomodoroModal({ subtask, onClose, onComplete }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
-      <div className="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-md p-6 relative shadow-2xl">
+    <div className="fixed inset-0 z-50 bg-stone-900/40 backdrop-blur-xs flex items-center justify-center p-4">
+      <div className="bg-white border border-stone-200 rounded-xl w-full max-w-md p-6 relative shadow-xl">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-zinc-400 hover:text-zinc-100 p-1.5 rounded-lg hover:bg-zinc-800 transition"
+          className="absolute top-4 right-4 text-stone-400 hover:text-stone-700 p-1 rounded-md hover:bg-stone-100 transition"
         >
           <X className="w-5 h-5" />
         </button>
 
-        <div className="flex items-center gap-2 text-indigo-400 font-medium text-xs uppercase tracking-wider mb-2">
-          <Flame className="w-4 h-4" /> Focus Mode (Pomodoro)
+        <div className="flex items-center gap-1.5 text-stone-500 font-medium text-xs uppercase tracking-wider mb-2">
+          <span>Mode Fokus Mandiri</span>
         </div>
 
-        <h3 className="text-lg font-bold text-zinc-100 line-clamp-1">{subtask?.title}</h3>
-        <p className="text-xs text-zinc-400 mt-1 line-clamp-2">{subtask?.description}</p>
+        <h3 className="text-base font-semibold text-stone-900 line-clamp-1">{subtask?.title}</h3>
+        <p className="text-xs text-stone-500 mt-1 line-clamp-2">{subtask?.description}</p>
 
         {/* Timer Box */}
-        <div className="my-8 text-center bg-zinc-950/70 border border-zinc-800/80 rounded-2xl py-8">
-          <div className="text-xs font-semibold uppercase tracking-widest text-zinc-400 mb-2">
-            {isBreak ? '☕ Waktu Istirahat' : '🎯 Sesi Fokus'}
+        <div className="my-6 text-center bg-stone-50 border border-stone-200 rounded-xl py-7">
+          <div className="text-[11px] font-medium uppercase tracking-widest text-stone-500 mb-1">
+            {isBreak ? 'Waktu Istirahat' : 'Sesi Fokus Terarah'}
           </div>
-          <div className="text-6xl font-black font-mono tracking-tight text-white">
+          <div className="text-5xl font-bold font-mono tracking-tight text-stone-900">
             {formatTime(timeLeft)}
           </div>
         </div>
 
         {/* Controls */}
-        <div className="flex items-center justify-center gap-4">
+        <div className="flex items-center justify-center gap-3">
           <button
             onClick={() => setIsActive(!isActive)}
-            className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold transition shadow-lg shadow-indigo-600/30"
+            className="flex items-center gap-2 px-5 py-2 rounded-lg bg-stone-900 hover:bg-stone-800 text-white font-medium text-sm transition shadow-xs"
           >
-            {isActive ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 fill-current" />}
+            {isActive ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 fill-current" />}
             {isActive ? 'Jeda' : 'Mulai'}
           </button>
 
           <button
             onClick={handleReset}
-            className="p-2.5 rounded-xl border border-zinc-700 hover:bg-zinc-800 text-zinc-300 transition"
+            className="p-2 rounded-lg border border-stone-300 hover:bg-stone-100 text-stone-600 transition"
             title="Reset Timer"
           >
-            <RotateCcw className="w-5 h-5" />
+            <RotateCcw className="w-4 h-4" />
           </button>
 
           <button
@@ -90,9 +90,9 @@ export default function PomodoroModal({ subtask, onClose, onComplete }) {
               onComplete(subtask)
               onClose()
             }}
-            className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600/20 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-600/30 transition text-sm font-medium"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-300 hover:bg-emerald-100 transition text-xs font-medium"
           >
-            <CheckCircle className="w-4 h-4" />
+            <CheckCircle className="w-4 h-4 text-emerald-600" />
             Tandai Selesai
           </button>
         </div>

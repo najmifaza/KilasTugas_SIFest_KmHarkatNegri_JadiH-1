@@ -50,28 +50,28 @@ export default function TaskCard({ task, onStartPomodoro }) {
   const isOverdue = diffDays < 0 && percent < 100
 
   // Pacing status
-  let pacingStatus = { label: 'On Track', color: 'emerald', bg: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' }
+  let pacingStatus = { label: 'On Track', color: 'emerald', bg: 'bg-emerald-50 text-emerald-800 border-emerald-200' }
   if (isOverdue) {
-    pacingStatus = { label: 'Overdue', color: 'rose', bg: 'bg-rose-500/10 text-rose-400 border-rose-500/30' }
+    pacingStatus = { label: 'Overdue', color: 'rose', bg: 'bg-rose-50 text-rose-800 border-rose-200' }
   } else if (diffDays <= 1 && percent < 50) {
-    pacingStatus = { label: 'Behind Schedule', color: 'amber', bg: 'bg-amber-500/10 text-amber-400 border-amber-500/30' }
+    pacingStatus = { label: 'Behind Schedule', color: 'amber', bg: 'bg-amber-50 text-amber-800 border-amber-200' }
   }
 
   return (
-    <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 shadow-lg space-y-4">
+    <div className="bg-white border border-stone-200/90 rounded-xl p-5 shadow-sm space-y-4">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
         <div>
           <div className="flex items-center gap-2">
-            <h3 className="font-bold text-base text-zinc-100">{task.title}</h3>
-            <span className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full border ${pacingStatus.bg}`}>
+            <h3 className="font-semibold text-sm text-stone-900">{task.title}</h3>
+            <span className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded border ${pacingStatus.bg}`}>
               {pacingStatus.label}
             </span>
           </div>
-          <div className="flex items-center gap-3 text-xs text-zinc-400 mt-1">
-            {task.subject && <span className="text-indigo-400 font-medium">{task.subject}</span>}
+          <div className="flex items-center gap-3 text-xs text-stone-500 mt-1">
+            {task.subject && <span className="text-stone-700 font-medium">{task.subject}</span>}
             <span className="flex items-center gap-1">
-              <Clock className="w-3.5 h-3.5 text-zinc-500" />
+              <Clock className="w-3.5 h-3.5 text-stone-400" />
               {diffDays > 0 ? `${diffDays} hari lagi` : diffDays === 0 ? 'Hari ini!' : 'Lewat deadline'}
             </span>
           </div>
@@ -80,12 +80,12 @@ export default function TaskCard({ task, onStartPomodoro }) {
         {/* Progress percent badge */}
         <div className="flex items-center gap-3">
           <div className="text-right">
-            <div className="text-xs text-zinc-400">{completed}/{total} aksi</div>
-            <div className="text-sm font-bold font-mono text-zinc-200">{percent}%</div>
+            <div className="text-[11px] text-stone-500">{completed}/{total} selesai</div>
+            <div className="text-sm font-semibold font-mono text-stone-800">{percent}%</div>
           </div>
           <button
             onClick={() => setExpanded(!expanded)}
-            className="p-1.5 rounded-lg border border-zinc-800 hover:bg-zinc-800 text-zinc-400 transition"
+            className="p-1.5 rounded-md border border-stone-200 hover:bg-stone-100 text-stone-600 transition"
           >
             {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
@@ -93,14 +93,14 @@ export default function TaskCard({ task, onStartPomodoro }) {
       </div>
 
       {/* Progress Bar */}
-      <div className="w-full bg-zinc-950 rounded-full h-2 overflow-hidden border border-zinc-800/80">
+      <div className="w-full bg-stone-100 rounded-full h-1.5 overflow-hidden border border-stone-200">
         <div
-          className={`h-full transition-all duration-500 ${
+          className={`h-full transition-all duration-300 ${
             percent === 100
-              ? 'bg-emerald-500'
+              ? 'bg-emerald-600'
               : pacingStatus.color === 'amber'
               ? 'bg-amber-500'
-              : 'bg-indigo-500'
+              : 'bg-stone-900'
           }`}
           style={{ width: `${percent}%` }}
         />
@@ -108,43 +108,43 @@ export default function TaskCard({ task, onStartPomodoro }) {
 
       {/* Subtasks List */}
       {expanded && (
-        <div className="space-y-2 pt-2 border-t border-zinc-800/60">
+        <div className="space-y-2 pt-2 border-t border-stone-100">
           {loading && subtasks.length === 0 ? (
-            <div className="text-xs text-zinc-500 py-3 text-center">Memuat sub-tugas...</div>
+            <div className="text-xs text-stone-400 py-3 text-center">Memuat sub-tugas...</div>
           ) : subtasks.length === 0 ? (
-            <div className="text-xs text-zinc-500 py-3 text-center">Belum ada sub-tugas terurai.</div>
+            <div className="text-xs text-stone-400 py-3 text-center">Belum ada sub-tugas terurai.</div>
           ) : (
             subtasks.map((st, idx) => (
               <div
                 key={st.id || idx}
-                className={`flex items-start justify-between gap-3 p-3 rounded-xl border transition ${
+                className={`flex items-start justify-between gap-3 p-3 rounded-lg border transition ${
                   st.is_completed
-                    ? 'bg-zinc-950/40 border-zinc-800/40 opacity-60'
-                    : 'bg-zinc-950/90 border-zinc-800 hover:border-zinc-700'
+                    ? 'bg-stone-50/80 border-stone-200/60 opacity-60'
+                    : 'bg-stone-50/40 border-stone-200 hover:border-stone-300'
                 }`}
               >
                 <div className="flex items-start gap-3 flex-1">
                   <button
                     onClick={() => toggleSubtask(st)}
-                    className="mt-0.5 text-zinc-500 hover:text-indigo-400 transition"
+                    className="mt-0.5 text-stone-400 hover:text-stone-900 transition"
                   >
                     {st.is_completed ? (
-                      <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                     ) : (
                       <Circle className="w-4 h-4" />
                     )}
                   </button>
                   <div>
-                    <h4 className={`text-xs font-semibold ${st.is_completed ? 'line-through text-zinc-400' : 'text-zinc-100'}`}>
+                    <h4 className={`text-xs font-semibold ${st.is_completed ? 'line-through text-stone-400' : 'text-stone-900'}`}>
                       {st.title}
                     </h4>
                     {st.description && (
-                      <p className="text-[11px] text-zinc-400 mt-0.5 leading-relaxed">
+                      <p className="text-[11px] text-stone-600 mt-0.5 leading-relaxed">
                         {st.description}
                       </p>
                     )}
-                    <div className="flex items-center gap-2 mt-1.5 text-[10px] text-zinc-500">
-                      <span className="bg-zinc-800/80 px-1.5 py-0.5 rounded text-zinc-300 font-mono">
+                    <div className="flex items-center gap-2 mt-1.5 text-[10px] text-stone-500">
+                      <span className="bg-stone-100 px-1.5 py-0.5 rounded text-stone-700 font-mono border border-stone-200">
                         {st.duration_minutes || 25}m
                       </span>
                       {st.target_date && <span>Target: {st.target_date}</span>}
@@ -155,7 +155,7 @@ export default function TaskCard({ task, onStartPomodoro }) {
                 {!st.is_completed && (
                   <button
                     onClick={() => onStartPomodoro(st)}
-                    className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-indigo-600/10 hover:bg-indigo-600/20 text-indigo-300 border border-indigo-500/20 hover:border-indigo-500/40 text-xs font-medium transition"
+                    className="flex items-center gap-1 px-2.5 py-1 rounded-md bg-white hover:bg-stone-100 text-stone-800 border border-stone-300 text-xs font-medium transition shadow-xs"
                     title="Mulai Fokus Pomodoro"
                   >
                     <Play className="w-3 h-3 fill-current" />
