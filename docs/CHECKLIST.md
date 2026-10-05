@@ -109,6 +109,17 @@
 
 ### Prioritas 2: Penyempurnaan Produk Tambahan (Opsional / Polish)
 
+- [x] **Checklist Interaktif Sub-Tugas (PRD F-03)**
+  - Tampil sebagai kartu berurutan dengan durasi menit dan target hari.
+  - Tambah sub-tugas manual via tombol `+ Tambah Langkah Manual`.
+  - Hapus sub-tugas secara selektif via icon trash.
+  - Edit inline teks sub-tugas (judul, estimasi durasi, dan panduan) via modal detail.
+  - Optimistic UI updates terhubung ke API backend (`/api/subtasks`).
+- [x] **Focus Mode Pomodoro Timer & Notifikasi (PRD F-04)**
+  - Hitungan mundur 25 menit fokus / 5 menit istirahat dengan format waktu MM:SS.
+  - Synthesizer suara bel (*Web Audio API*) saat timer selesai.
+  - Haptic feedback (*navigator.vibrate*) untuk smartphone.
+  - Web Browser Notification API saat timer tuntas (ketika user berpindah tab).
 - [x] **Status 100% "Ready to Submit 🎉" & Dopamine Feedback** (PRD F-05 & PRD 13.1)
   - Badge otomatis berubah menjadi `Ready to Submit 🎉` saat semua sub-tugas tuntas.
   - Banner perayaan hijau emerald muncul di dalam kartu tugas lengkap dengan tombol *"Rayakan ✨"*.
