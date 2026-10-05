@@ -109,7 +109,11 @@
 
 ### Prioritas 2: Penyempurnaan Produk Tambahan (Opsional / Polish)
 
-- [x] **Ekspor Jadwal ke Google / Apple Calendar (`.ics`)** (PRD F-09)
+- [x] **Responsivitas Multi-Device (Mobile, Tablet, Desktop)**
+  - Mobile (<768px): Full-width layar native, bottom dock navigation ber-inset safe area notch.
+  - Tablet (768px–1024px): Layout cockpit 2-kolom kartu tugas, hero banner & 3 metrik seimbang.
+  - Desktop (>1024px): Max-width 6xl, grid 2-kolom tugas, floating pill dock centered di bawah, tombol CTA langsung di navbar atas.
+- [x] **Ekspor Jadwal ke Google / Apple Calendar (`.ics` & Direct G-Calendar Intent)** (PRD F-09)
   - Tombol *"Ekspor .ics"* langsung menghasilkan berkas standar iCalendar RFC 5545.
   - Setiap langkah kerja menjadi event kalender mandiri lengkap dengan tanggal target, durasi fokus, deskripsi aksi, dan alarm pengingat otomatis 15 menit sebelumnya.
 - [x] **Checklist Interaktif Sub-Tugas (PRD F-03)**
