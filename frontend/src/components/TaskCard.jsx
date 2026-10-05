@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Check, Clock, ChevronRight, ChevronDown, ChevronUp, Trash2, Sparkles, CheckCircle2, Plus } from 'lucide-react'
+import { Check, Clock, ChevronRight, ChevronDown, ChevronUp, Trash2, Sparkles, CheckCircle2, Plus, Calendar } from 'lucide-react'
 import confetti from 'canvas-confetti'
 import { getSubtasks, patchSubtask, createSubtask, deleteSubtask } from '../api'
 
@@ -78,6 +78,91 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
     }
   }
 
+  const exportToCalendar = (e) => {
+    e.stopPropagation()
+    if (!subtasks || subtasks.length === 0) {
+      alert('Belum ada langkah kerja untuk diekspor.')
+      return
+    }
+
+    const pad = (n) => String(n).padStart(2, '0')
+    const formatICSDate = (date) => {
+      return (
+        date.getUTCFullYear() +
+        pad(date.getUTCMonth() + 1) +
+        pad(date.getUTCDate()) +
+        'T' +
+        pad(date.getUTCHours()) +
+        pad(date.getUTCMinutes()) +
+        pad(date.getUTCSeconds()) +
+        'Z'
+      )
+    }
+
+    const now = new Date()
+    const nowStr = formatICSDate(now)
+
+    let events = []
+
+    subtasks.forEach((st, idx) => {
+      let startDate = new Date()
+      if (st.target_date) {
+        const parts = st.target_date.split('-')
+        if (parts.length === 3) {
+          startDate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]), 9 + (idx % 8), 0, 0)
+        }
+      } else {
+        startDate.setDate(startDate.getDate() + Math.min(idx, 7))
+        startDate.setHours(9 + (idx % 8), 0, 0, 0)
+      }
+
+      const durationMinutes = st.duration_minutes || 25
+      const endDate = new Date(startDate.getTime() + durationMinutes * 60000)
+
+      const uid = `kt-${task.id}-${st.id || idx}@najmifaza.my.id`
+      const summary = `[KilasTugas] ${task.subject ? task.subject + ' - ' : ''}${st.title}`
+      const description = `Langkah ${st.step_number || idx + 1}: ${st.description || st.title}\n\nTugas: ${task.title}\nEstimasi: ${durationMinutes} menit.\nStatus: ${st.is_completed ? 'Selesai' : 'Belum Selesai'}`
+
+      events.push([
+        'BEGIN:VEVENT',
+        `UID:${uid}`,
+        `DTSTAMP:${nowStr}`,
+        `DTSTART:${formatICSDate(startDate)}`,
+        `DTEND:${formatICSDate(endDate)}`,
+        `SUMMARY:${summary.replace(/,/g, '\\,')}`,
+        `DESCRIPTION:${description.replace(/\n/g, '\\n').replace(/,/g, '\\,')}`,
+        'STATUS:CONFIRMED',
+        'BEGIN:VALARM',
+        'TRIGGER:-PT15M',
+        'ACTION:DISPLAY',
+        'DESCRIPTION:Pengingat Fokus KilasTugas',
+        'END:VALARM',
+        'END:VEVENT',
+      ].join('\r\n'))
+    })
+
+    const icsContent = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//KilasTugas//SIFest 2026//ID',
+      'CALSCALE:GREGORIAN',
+      'METHOD:PUBLISH',
+      'X-WR-CALNAME:KilasTugas - ' + task.title,
+      events.join('\r\n'),
+      'END:VCALENDAR',
+    ].join('\r\n')
+
+    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', `${task.title.replace(/[^a-zA-Z0-9_-]/g, '_')}_jadwal.ics`)
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+  }
+
   const toggleSubtask = async (e, st) => {
     e.stopPropagation()
     const nextState = !st.is_completed
@@ -139,7 +224,17 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
             </span>
           </div>
 
-          <div className="flex items-center gap-0.5">
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={exportToCalendar}
+              className="px-2 py-1 rounded-xl text-[10px] font-bold text-violet-700 bg-violet-50 hover:bg-violet-100 border border-violet-200 transition active:scale-95 flex items-center gap-1 shadow-2xs"
+              title="Ekspor seluruh target langkah ke file .ics (Google Calendar / Apple Calendar)"
+            >
+              <Calendar className="w-3 h-3" />
+              <span>Ekspor .ics</span>
+            </button>
+
             {onDeleteTask && (
               <button
                 type="button"
