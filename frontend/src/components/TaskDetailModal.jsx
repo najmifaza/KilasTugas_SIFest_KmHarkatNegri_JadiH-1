@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { ChevronLeft, Play, Pause, RotateCcw, Check, Clock, BookOpen, X, Volume2 } from 'lucide-react'
+import confetti from 'canvas-confetti'
 import { patchSubtask } from '../api'
 
 const playChime = () => {
@@ -72,6 +73,16 @@ export default function TaskDetailModal({ subtask, task, onClose, onComplete }) 
     const nextStatus = !subtask.is_completed
     try {
       await patchSubtask(subtask.id, { is_completed: nextStatus })
+      if (nextStatus) {
+        try {
+          confetti({
+            particleCount: 80,
+            spread: 60,
+            origin: { y: 0.8 },
+            colors: ['#10B981', '#F26A36', '#6366F1', '#F59E0B'],
+          })
+        } catch (e) {}
+      }
       if (onComplete) onComplete({ ...subtask, is_completed: nextStatus })
       onClose()
     } catch (err) {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Check, Clock, ChevronRight, ChevronDown, ChevronUp, Trash2 } from 'lucide-react'
+import { Check, Clock, ChevronRight, ChevronDown, ChevronUp, Trash2, Sparkles, CheckCircle2 } from 'lucide-react'
+import confetti from 'canvas-confetti'
 import { getSubtasks, patchSubtask } from '../api'
 
 const CATEGORY_MAP = {
@@ -31,14 +32,31 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
     fetchSubtasks()
   }, [task.id])
 
+  const fireConfetti = () => {
+    try {
+      confetti({
+        particleCount: 80,
+        spread: 60,
+        origin: { y: 0.7 },
+        colors: ['#10B981', '#F26A36', '#6366F1', '#F59E0B'],
+      })
+    } catch (e) {
+      // ignore
+    }
+  }
+
   const toggleSubtask = async (e, st) => {
     e.stopPropagation()
     const nextState = !st.is_completed
 
     // Optimistic UI update
-    setSubtasks((prev) =>
-      prev.map((s) => (s.id === st.id ? { ...s, is_completed: nextState } : s))
-    )
+    const updated = subtasks.map((s) => (s.id === st.id ? { ...s, is_completed: nextState } : s))
+    setSubtasks(updated)
+
+    const newlyCompleted = updated.filter((s) => s.is_completed).length
+    if (newlyCompleted === total && total > 0 && nextState) {
+      fireConfetti()
+    }
 
     if (navigator.vibrate) {
       navigator.vibrate(25)
@@ -64,13 +82,13 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
   const diffDays = Math.ceil((deadlineDate - now) / (1000 * 60 * 60 * 24))
   const isOverdue = diffDays < 0 && !isAllDone
 
-  let pacing = { label: 'Tepat Waktu', color: 'text-stone-600 bg-stone-100' }
+  let pacing = { label: 'On Track 🟢', color: 'text-emerald-700 bg-emerald-50 border border-emerald-200' }
   if (isAllDone) {
-    pacing = { label: 'Selesai', color: 'text-emerald-700 bg-emerald-50' }
+    pacing = { label: 'Ready to Submit 🎉', color: 'text-emerald-800 bg-emerald-100 border border-emerald-300 font-bold' }
   } else if (isOverdue) {
-    pacing = { label: 'Terlambat', color: 'text-rose-700 bg-rose-50' }
+    pacing = { label: 'Overdue Alert 🔴', color: 'text-rose-700 bg-rose-50 border border-rose-200' }
   } else if (diffDays <= 1 && percent < 60) {
-    pacing = { label: 'Mepet', color: 'text-amber-700 bg-amber-50' }
+    pacing = { label: 'Behind Schedule 🟡', color: 'text-amber-800 bg-amber-50 border border-amber-200' }
   }
 
   return (
@@ -153,6 +171,29 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
             />
           </div>
         </div>
+
+        {/* Celebration Banner when 100% (PRD F-05 Ready to Submit) */}
+        {isAllDone && (
+          <div className="mt-3.5 p-3 rounded-xl bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50 border border-emerald-200 flex items-center justify-between gap-3 text-emerald-950 animate-in fade-in">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-sm shadow-xs flex-shrink-0">
+                🎉
+              </div>
+              <div>
+                <h4 className="text-xs font-bold text-emerald-950">Ready to Submit!</h4>
+                <p className="text-[11px] text-emerald-700">Semua aksi harian tuntas. Tugas siap dikumpulkan.</p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={fireConfetti}
+              className="text-xs font-semibold text-emerald-800 bg-white hover:bg-emerald-100 border border-emerald-300 px-3 py-1.5 rounded-lg transition active:scale-95 flex items-center gap-1 shadow-xs flex-shrink-0"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+              <span>Rayakan</span>
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Subtask List */}
