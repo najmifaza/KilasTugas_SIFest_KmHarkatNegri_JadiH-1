@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { ChevronLeft, Play, Pause, RotateCcw, Check, Clock, BookOpen, X } from 'lucide-react'
+import { ChevronLeft, Play, Pause, RotateCcw, Check, Clock, BookOpen, X, Edit3, Save, Bell } from 'lucide-react'
 import confetti from 'canvas-confetti'
 import { patchSubtask } from '../api'
 
@@ -27,6 +27,11 @@ const playChime = () => {
 export default function TaskDetailModal({ subtask, task, onClose, onComplete }) {
   if (!subtask) return null
 
+  const [isEditing, setIsEditing] = useState(false)
+  const [editTitle, setEditTitle] = useState(subtask?.title || '')
+  const [editDesc, setEditDesc] = useState(subtask?.description || '')
+  const [editDuration, setEditDuration] = useState(subtask?.duration_minutes || 25)
+
   const WORK_SECONDS = (subtask?.duration_minutes || 25) * 60
   const BREAK_SECONDS = 5 * 60
 
@@ -35,11 +40,22 @@ export default function TaskDetailModal({ subtask, task, onClose, onComplete }) 
   const [isBreak, setIsBreak] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // Reset timer if subtask changes
+  // Request browser notification permission once
   useEffect(() => {
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission().catch(() => {})
+    }
+  }, [])
+
+  // Reset states if subtask changes
+  useEffect(() => {
+    setEditTitle(subtask?.title || '')
+    setEditDesc(subtask?.description || '')
+    setEditDuration(subtask?.duration_minutes || 25)
     setTimeLeft((subtask?.duration_minutes || 25) * 60)
     setIsActive(false)
     setIsBreak(false)
+    setIsEditing(false)
   }, [subtask?.id])
 
   useEffect(() => {
@@ -54,6 +70,17 @@ export default function TaskDetailModal({ subtask, task, onClose, onComplete }) 
       if (navigator.vibrate) {
         navigator.vibrate([200, 100, 200])
       }
+      // Browser notification
+      if ('Notification' in window && Notification.permission === 'granted') {
+        try {
+          new Notification(isBreak ? 'Istirahat Selesai! 🔔' : 'Sesi Fokus Selesai! 🎉', {
+            body: isBreak
+              ? 'Waktu istirahat habis. Siap untuk target langkah berikutnya?'
+              : 'Target langkah fokus tuntas! Ambil istirahat sejenak 5 menit.',
+          })
+        } catch (e) {}
+      }
+
       if (!isBreak) {
         setIsBreak(true)
         setTimeLeft(BREAK_SECONDS)
@@ -74,6 +101,32 @@ export default function TaskDetailModal({ subtask, task, onClose, onComplete }) 
   const handleReset = () => {
     setIsActive(false)
     setTimeLeft(isBreak ? BREAK_SECONDS : WORK_SECONDS)
+  }
+
+  const handleSaveEdit = async (e) => {
+    e.preventDefault()
+    if (!editTitle.trim()) return
+    setIsSubmitting(true)
+    try {
+      await patchSubtask(subtask.id, {
+        title: editTitle.trim(),
+        description: editDesc.trim(),
+        duration_minutes: Number(editDuration) || 25,
+      })
+      const updated = {
+        ...subtask,
+        title: editTitle.trim(),
+        description: editDesc.trim(),
+        duration_minutes: Number(editDuration) || 25,
+      }
+      if (onComplete) onComplete(updated)
+      setIsEditing(false)
+      setTimeLeft((Number(editDuration) || 25) * 60)
+    } catch (err) {
+      alert('Gagal menyimpan perubahan langkah kerja')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleToggleCompleted = async () => {
@@ -123,9 +176,21 @@ export default function TaskDetailModal({ subtask, task, onClose, onComplete }) 
             <ChevronLeft className="w-4 h-4" />
             <span>Kembali</span>
           </button>
-          <span className="text-xs font-extrabold text-slate-900">
-            Langkah {subtask?.step_number || 1}
-          </span>
+          
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-extrabold text-slate-900">
+              Langkah {subtask?.step_number || 1}
+            </span>
+            <button
+              type="button"
+              onClick={() => setIsEditing(!isEditing)}
+              className="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-violet-50 text-violet-700 border border-violet-200 hover:bg-violet-100 flex items-center gap-1 transition"
+            >
+              <Edit3 className="w-3 h-3" />
+              <span>{isEditing ? 'Batal' : 'Edit'}</span>
+            </button>
+          </div>
+
           <button
             type="button"
             onClick={onClose}
@@ -137,55 +202,125 @@ export default function TaskDetailModal({ subtask, task, onClose, onComplete }) 
 
         {/* Scrollable Content */}
         <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3.5">
-          {/* Main Title and Subject */}
-          <div>
-            <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-violet-50 text-violet-700 border border-violet-100">
-                {task?.category?.replace('_', ' ') || 'Tugas'}
-              </span>
-              {task?.subject && (
-                <span className="flex items-center gap-1 text-[11px] text-slate-500 font-semibold">
-                  <BookOpen className="w-3.5 h-3.5 text-slate-400" />
-                  {task.subject}
+          {isEditing ? (
+            /* Edit Form View */
+            <form onSubmit={handleSaveEdit} className="space-y-3 bg-white p-4 rounded-[1.5rem] border border-slate-200 shadow-2xs">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                Ubah Rincian Langkah
+              </h3>
+              
+              <div>
+                <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                  Judul Langkah
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={editTitle}
+                  onChange={(e) => setEditTitle(e.target.value)}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:outline-none focus:border-violet-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                  Estimasi Durasi (Menit)
+                </label>
+                <select
+                  value={editDuration}
+                  onChange={(e) => setEditDuration(Number(e.target.value))}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-mono text-slate-800 focus:outline-none focus:border-violet-500"
+                >
+                  <option value={15}>15 Menit</option>
+                  <option value={25}>25 Menit (Standar Pomodoro)</option>
+                  <option value={35}>35 Menit</option>
+                  <option value={45}>45 Menit</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+                  Instruksi / Panduan Pengerjaan
+                </label>
+                <textarea
+                  rows={3}
+                  value={editDesc}
+                  onChange={(e) => setEditDesc(e.target.value)}
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-medium text-slate-800 focus:outline-none focus:border-violet-500 resize-none"
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-2 pt-1">
+                <button
+                  type="button"
+                  onClick={() => setIsEditing(false)}
+                  className="px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-500 hover:text-slate-800"
+                >
+                  Batal
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="px-4 py-2 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-bold text-xs shadow-xs flex items-center gap-1.5 transition active:scale-95"
+                >
+                  <Save className="w-3.5 h-3.5" />
+                  <span>Simpan Perubahan</span>
+                </button>
+              </div>
+            </form>
+          ) : (
+            <>
+              {/* Main Title and Subject */}
+              <div>
+                <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-violet-50 text-violet-700 border border-violet-100">
+                    {task?.category?.replace('_', ' ') || 'Tugas'}
+                  </span>
+                  {task?.subject && (
+                    <span className="flex items-center gap-1 text-[11px] text-slate-500 font-semibold">
+                      <BookOpen className="w-3.5 h-3.5 text-slate-400" />
+                      {task.subject}
+                    </span>
+                  )}
+                </div>
+
+                <h2 className="text-lg font-black text-slate-900 leading-snug">
+                  {subtask?.title}
+                </h2>
+              </div>
+
+              {/* Action Instruction Box */}
+              <div className="bg-white rounded-[1.25rem] p-4 border border-slate-200/90 shadow-2xs space-y-1">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                  Panduan Pengerjaan
                 </span>
+                <p className="text-xs text-slate-700 leading-relaxed font-medium">
+                  {subtask?.description || 'Fokus pada penyelesaian target langkah ini secara runtut.'}
+                </p>
+              </div>
+
+              {/* Pomodoro Focus Timer Box */}
+              <div className="bg-white rounded-[1.5rem] p-5 border border-slate-200/90 shadow-2xs text-center space-y-2">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold tracking-tight bg-slate-100 text-slate-700">
+                  <span className={`w-2 h-2 rounded-full ${isActive ? 'bg-amber-500 animate-pulse' : 'bg-slate-400'}`} />
+                  <span>{isBreak ? 'Sesi Istirahat (5 Menit)' : isActive ? 'Fokus Berjalan' : 'Timer Fokus Pomodoro'}</span>
+                </div>
+
+                <div className="text-5xl font-black font-mono tracking-tight text-slate-950 py-1">
+                  {formatTime(timeLeft)}
+                </div>
+
+                <p className="text-[11px] text-slate-400 font-medium">
+                  {isBreak ? 'Relaksasi sejenak sebelum sesi berikutnya.' : 'Estimasi: ' + (subtask?.duration_minutes || 25) + ' menit'}
+                </p>
+              </div>
+
+              {subtask?.target_date && (
+                <div className="text-center text-[11px] text-slate-500 font-mono">
+                  Target Penyelesaian: <span className="font-bold text-slate-800">{subtask.target_date}</span>
+                </div>
               )}
-            </div>
-
-            <h2 className="text-lg font-black text-slate-900 leading-snug">
-              {subtask?.title}
-            </h2>
-          </div>
-
-          {/* Action Instruction Box */}
-          <div className="bg-white rounded-[1.25rem] p-4 border border-slate-200/90 shadow-2xs space-y-1">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-              Panduan Pengerjaan
-            </span>
-            <p className="text-xs text-slate-700 leading-relaxed font-medium">
-              {subtask?.description || 'Fokus pada penyelesaian target langkah ini secara runtut.'}
-            </p>
-          </div>
-
-          {/* Pomodoro Focus Timer Box */}
-          <div className="bg-white rounded-[1.5rem] p-5 border border-slate-200/90 shadow-2xs text-center space-y-2">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold tracking-tight bg-slate-100 text-slate-700">
-              <span className={`w-2 h-2 rounded-full ${isActive ? 'bg-amber-500 animate-pulse' : 'bg-slate-400'}`} />
-              <span>{isBreak ? 'Sesi Istirahat (5 Menit)' : isActive ? 'Fokus Berjalan' : 'Timer Fokus Pomodoro'}</span>
-            </div>
-
-            <div className="text-5xl font-black font-mono tracking-tight text-slate-950 py-1">
-              {formatTime(timeLeft)}
-            </div>
-
-            <p className="text-[11px] text-slate-400 font-medium">
-              {isBreak ? 'Relaksasi sejenak sebelum sesi berikutnya.' : 'Estimasi: ' + (subtask?.duration_minutes || 25) + ' menit'}
-            </p>
-          </div>
-
-          {subtask?.target_date && (
-            <div className="text-center text-[11px] text-slate-500 font-mono">
-              Target Penyelesaian: <span className="font-bold text-slate-800">{subtask.target_date}</span>
-            </div>
+            </>
           )}
         </div>
 

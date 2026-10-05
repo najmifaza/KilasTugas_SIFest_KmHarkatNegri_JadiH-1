@@ -33,10 +33,17 @@ class TaskPatch(BaseModel):
     is_completed: bool
 
 # ── Subtask ───────────────────────────────────────────────
+class SubtaskCreate(BaseModel):
+    title: str
+    description: Optional[str] = None
+    duration_minutes: Optional[int] = 25
+    target_date: Optional[date] = None
+
 class SubtaskPatch(BaseModel):
     is_completed: Optional[bool] = None
     title: Optional[str] = None
     description: Optional[str] = None
+    duration_minutes: Optional[int] = None
 
 class SubtaskOut(BaseModel):
     id: str

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Check, Clock, ChevronRight, ChevronDown, ChevronUp, Trash2, Sparkles, CheckCircle2 } from 'lucide-react'
+import { Check, Clock, ChevronRight, ChevronDown, ChevronUp, Trash2, Sparkles, CheckCircle2, Plus } from 'lucide-react'
 import confetti from 'canvas-confetti'
-import { getSubtasks, patchSubtask } from '../api'
+import { getSubtasks, patchSubtask, createSubtask, deleteSubtask } from '../api'
 
 const CATEGORY_MAP = {
   laporan_lab: 'Laporan Lab',
@@ -42,6 +42,39 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
       })
     } catch (e) {
       // ignore
+    }
+  }
+
+  const [isAdding, setIsAdding] = useState(false)
+  const [newStepTitle, setNewStepTitle] = useState('')
+  const [newStepDuration, setNewStepDuration] = useState(25)
+
+  const handleAddSubtask = async (e) => {
+    e.preventDefault()
+    if (!newStepTitle.trim()) return
+    try {
+      const res = await createSubtask(task.id, {
+        title: newStepTitle.trim(),
+        duration_minutes: Number(newStepDuration) || 25,
+      })
+      if (res.data) {
+        setSubtasks((prev) => [...prev, res.data])
+      }
+      setNewStepTitle('')
+      setIsAdding(false)
+    } catch (err) {
+      alert('Gagal menambah langkah kerja')
+    }
+  }
+
+  const handleDeleteSubtask = async (e, subtaskId) => {
+    e.stopPropagation()
+    if (!window.confirm('Hapus langkah kerja ini?')) return
+    try {
+      await deleteSubtask(subtaskId)
+      setSubtasks((prev) => prev.filter((s) => s.id !== subtaskId))
+    } catch (err) {
+      alert('Gagal menghapus langkah kerja')
     }
   }
 
@@ -260,13 +293,78 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
                     </div>
                   </div>
 
+                  {/* Delete subtask button */}
+                  <button
+                    type="button"
+                    onClick={(e) => handleDeleteSubtask(e, st.id)}
+                    className="w-7 h-7 rounded-lg text-slate-300 hover:text-rose-600 hover:bg-rose-50 flex items-center justify-center transition opacity-60 hover:opacity-100 flex-shrink-0"
+                    title="Hapus langkah ini"
+                    aria-label="Hapus langkah"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+
                   {/* Action chevron */}
-                  <div className="w-6 h-6 flex items-center justify-center text-slate-300 group-hover:text-violet-600 transition flex-shrink-0">
+                  <div className="w-5 h-5 flex items-center justify-center text-slate-300 group-hover:text-violet-600 transition flex-shrink-0">
                     <ChevronRight className="w-4 h-4" />
                   </div>
                 </div>
               )
             })
+          )}
+
+          {/* Add Subtask Form / Trigger */}
+          {isAdding ? (
+            <form onSubmit={handleAddSubtask} className="p-3 bg-white border border-violet-200 rounded-2xl shadow-2xs space-y-2 mt-2">
+              <input
+                type="text"
+                required
+                autoFocus
+                placeholder="Tulis langkah kerja tambahan..."
+                value={newStepTitle}
+                onChange={(e) => setNewStepTitle(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-violet-500 font-medium"
+              />
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
+                  <span className="text-[10px] uppercase font-bold text-slate-400">Durasi:</span>
+                  <select
+                    value={newStepDuration}
+                    onChange={(e) => setNewStepDuration(Number(e.target.value))}
+                    className="bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-xs text-slate-700 font-mono focus:outline-none"
+                  >
+                    <option value={15}>15 menit</option>
+                    <option value={25}>25 menit</option>
+                    <option value={35}>35 menit</option>
+                    <option value={45}>45 menit</option>
+                  </select>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setIsAdding(false)}
+                    className="px-2.5 py-1 text-xs font-semibold text-slate-500 hover:text-slate-800 rounded-lg transition"
+                  >
+                    Batal
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-3 py-1 bg-violet-600 hover:bg-violet-700 text-white font-bold text-xs rounded-lg transition active:scale-95 shadow-2xs"
+                  >
+                    Simpan
+                  </button>
+                </div>
+              </div>
+            </form>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setIsAdding(true)}
+              className="w-full py-2.5 px-3 rounded-2xl border border-dashed border-slate-300 hover:border-violet-400 bg-white/60 hover:bg-violet-50/50 text-slate-500 hover:text-violet-700 text-xs font-bold flex items-center justify-center gap-1.5 transition active:scale-[0.99] mt-2 cursor-pointer"
+            >
+              <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+              <span>Tambah Langkah Manual</span>
+            </button>
           )}
         </div>
       )}
