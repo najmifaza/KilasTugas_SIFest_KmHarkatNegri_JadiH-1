@@ -24,73 +24,39 @@ const playChime = () => {
   }
 }
 
-export default function TaskDetailModal({ subtask, task, onClose, onComplete }) {
+export default function TaskDetailModal({
+  subtask,
+  task,
+  onClose,
+  onComplete,
+  timerState,
+  onStartTimer,
+  onToggleTimer,
+  onResetTimer,
+}) {
   if (!subtask) return null
 
   const [isEditing, setIsEditing] = useState(false)
   const [editTitle, setEditTitle] = useState(subtask?.title || '')
   const [editDesc, setEditDesc] = useState(subtask?.description || '')
   const [editDuration, setEditDuration] = useState(subtask?.duration_minutes || 25)
-
-  const WORK_SECONDS = (subtask?.duration_minutes || 25) * 60
-  const BREAK_SECONDS = 5 * 60
-
-  const [timeLeft, setTimeLeft] = useState(WORK_SECONDS)
-  const [isActive, setIsActive] = useState(false)
-  const [isBreak, setIsBreak] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // Request browser notification permission once
-  useEffect(() => {
-    if ('Notification' in window && Notification.permission === 'default') {
-      Notification.requestPermission().catch(() => {})
-    }
-  }, [])
+  const isCurrentTimer = timerState?.subtask?.id === subtask.id
+  const currentDuration = Number(subtask?.duration_minutes) || 25
+  const isTimerActive = isCurrentTimer ? Boolean(timerState?.isActive) : false
+  const isTimerBreak = isCurrentTimer ? Boolean(timerState?.isBreak) : false
+  const displaySeconds = isCurrentTimer
+    ? timerState.remainingSeconds
+    : currentDuration * 60
 
-  // Reset states if subtask changes
+  // Reset local edit states if subtask changes
   useEffect(() => {
     setEditTitle(subtask?.title || '')
     setEditDesc(subtask?.description || '')
     setEditDuration(subtask?.duration_minutes || 25)
-    setTimeLeft((subtask?.duration_minutes || 25) * 60)
-    setIsActive(false)
-    setIsBreak(false)
     setIsEditing(false)
   }, [subtask?.id])
-
-  useEffect(() => {
-    let interval = null
-    if (isActive && timeLeft > 0) {
-      interval = setInterval(() => {
-        setTimeLeft((prev) => prev - 1)
-      }, 1000)
-    } else if (timeLeft === 0) {
-      setIsActive(false)
-      playChime()
-      if (navigator.vibrate) {
-        navigator.vibrate([200, 100, 200])
-      }
-      // Browser notification
-      if ('Notification' in window && Notification.permission === 'granted') {
-        try {
-          new Notification(isBreak ? 'Istirahat Selesai! 🔔' : 'Sesi Fokus Selesai! 🎉', {
-            body: isBreak
-              ? 'Waktu istirahat habis. Siap untuk target langkah berikutnya?'
-              : 'Target langkah fokus tuntas! Ambil istirahat sejenak 5 menit.',
-          })
-        } catch (e) {}
-      }
-
-      if (!isBreak) {
-        setIsBreak(true)
-        setTimeLeft(BREAK_SECONDS)
-      } else {
-        setIsBreak(false)
-        setTimeLeft(WORK_SECONDS)
-      }
-    }
-    return () => clearInterval(interval)
-  }, [isActive, timeLeft, isBreak, WORK_SECONDS])
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60)
@@ -98,9 +64,18 @@ export default function TaskDetailModal({ subtask, task, onClose, onComplete }) 
     return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`
   }
 
-  const handleReset = () => {
-    setIsActive(false)
-    setTimeLeft(isBreak ? BREAK_SECONDS : WORK_SECONDS)
+  const handleTimerAction = () => {
+    if (isCurrentTimer) {
+      if (onToggleTimer) onToggleTimer()
+    } else {
+      if (onStartTimer) onStartTimer(subtask, task, currentDuration)
+    }
+  }
+
+  const handleResetAction = () => {
+    if (isCurrentTimer && onResetTimer) {
+      onResetTimer()
+    }
   }
 
   const handleSaveEdit = async (e) => {
@@ -355,16 +330,16 @@ export default function TaskDetailModal({ subtask, task, onClose, onComplete }) 
               {/* Pomodoro Focus Timer Box */}
               <div className="bg-white rounded-[1.5rem] p-5 border border-slate-200/90 shadow-2xs text-center space-y-2">
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold tracking-tight bg-slate-100 text-slate-700">
-                  <span className={`w-2 h-2 rounded-full ${isActive ? 'bg-amber-500 animate-pulse' : 'bg-slate-400'}`} />
-                  <span>{isBreak ? 'Sesi Istirahat (5 Menit)' : isActive ? 'Fokus Berjalan' : 'Timer Fokus Pomodoro'}</span>
+                  <span className={`w-2 h-2 rounded-full ${isTimerActive ? 'bg-amber-500 animate-pulse' : 'bg-slate-400'}`} />
+                  <span>{isTimerBreak ? 'Sesi Istirahat (5 Menit)' : isTimerActive ? 'Fokus Berjalan' : 'Timer Fokus Pomodoro'}</span>
                 </div>
 
                 <div className="text-5xl font-black font-mono tracking-tight text-slate-950 py-1">
-                  {formatTime(timeLeft)}
+                  {formatTime(displaySeconds)}
                 </div>
 
                 <p className="text-[11px] text-slate-400 font-medium">
-                  {isBreak ? 'Relaksasi sejenak sebelum sesi berikutnya.' : 'Estimasi: ' + (subtask?.duration_minutes || 25) + ' menit'}
+                  {isTimerBreak ? 'Relaksasi sejenak sebelum sesi berikutnya.' : 'Estimasi: ' + currentDuration + ' menit'}
                 </p>
               </div>
 
@@ -383,14 +358,14 @@ export default function TaskDetailModal({ subtask, task, onClose, onComplete }) 
           <div className="flex items-center gap-2">
             <button
               type="button"
-              onClick={() => setIsActive(!isActive)}
-              className={`flex items-center gap-1.5 px-4 py-2.5 rounded-xl font-bold text-xs transition active:scale-95 ${
-                isActive
+              onClick={handleTimerAction}
+              className={`flex items-center gap-1.5 px-4 py-2.5 rounded-xl font-bold text-xs transition active:scale-95 cursor-pointer ${
+                isTimerActive
                   ? 'bg-amber-50 text-amber-900 border border-amber-200 hover:bg-amber-100'
                   : 'bg-slate-900 hover:bg-slate-800 text-white shadow-soft'
               }`}
             >
-              {isActive ? (
+              {isTimerActive ? (
                 <>
                   <Pause className="w-3.5 h-3.5 fill-current" />
                   <span>Jeda</span>
@@ -398,15 +373,16 @@ export default function TaskDetailModal({ subtask, task, onClose, onComplete }) 
               ) : (
                 <>
                   <Play className="w-3.5 h-3.5 fill-current" />
-                  <span>Mulai Fokus</span>
+                  <span>{isCurrentTimer && displaySeconds < currentDuration * 60 ? 'Lanjutkan' : 'Mulai Fokus'}</span>
                 </>
               )}
             </button>
 
             <button
               type="button"
-              onClick={handleReset}
-              className="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition active:scale-95"
+              onClick={handleResetAction}
+              disabled={!isCurrentTimer}
+              className="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 disabled:opacity-40 text-slate-600 flex items-center justify-center transition active:scale-95 cursor-pointer"
               title="Reset Timer"
               aria-label="Reset Timer"
             >

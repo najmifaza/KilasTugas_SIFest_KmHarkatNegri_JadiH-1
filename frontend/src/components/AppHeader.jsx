@@ -50,11 +50,11 @@ export default function AppHeader({ onOpenCreate }) {
 
         {/* Right Actions: Black Plus Button & White Bell Button (44px x 44px) */}
         <div className="flex items-center gap-2.5 shrink-0">
-          {/* Black Plus Button */}
+          {/* Black Plus Button (Hidden on mobile, visible on desktop/tablet) */}
           <button
             type="button"
             onClick={onOpenCreate}
-            className="w-11 h-11 rounded-full bg-[#1C1C1E] text-white flex items-center justify-center shadow-sm hover:scale-105 active:scale-95 transition cursor-pointer"
+            className="hidden sm:flex w-11 h-11 rounded-full bg-[#1C1C1E] text-white items-center justify-center shadow-sm hover:scale-105 active:scale-95 transition cursor-pointer"
             title="Tambah Tugas Baru"
             aria-label="Tambah tugas baru"
           >

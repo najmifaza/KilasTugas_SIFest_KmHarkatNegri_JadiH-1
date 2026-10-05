@@ -6,7 +6,27 @@ import DateStrip from './components/DateStrip'
 import TaskCard from './components/TaskCard'
 import TaskDetailModal from './components/TaskDetailModal'
 import TaskInputModal from './components/TaskInputModal'
+import FloatingTimer from './components/FloatingTimer'
 import { getTasks, initSession, deleteTask } from './api'
+
+const playChime = () => {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext
+    if (!AudioCtx) return
+    const ctx = new AudioCtx()
+    const osc = ctx.createOscillator()
+    const gain = ctx.createGain()
+    osc.type = 'sine'
+    osc.frequency.setValueAtTime(587.33, ctx.currentTime) // D5
+    osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15) // A5
+    gain.gain.setValueAtTime(0.25, ctx.currentTime)
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6)
+    osc.connect(gain)
+    gain.connect(ctx.destination)
+    osc.start()
+    osc.stop(ctx.currentTime + 0.6)
+  } catch (e) {}
+}
 
 export const isTaskCompleted = (t) => {
   if (!t) return false
@@ -23,6 +43,161 @@ export default function App() {
   const [selectedDate, setSelectedDate] = useState(null)
   const [isInputModalOpen, setIsInputModalOpen] = useState(false)
   const [activeDetail, setActiveDetail] = useState(null) // { subtask, task }
+
+  // Persistent Pomodoro Focus Timer State
+  const [timerState, setTimerState] = useState({
+    subtask: null,
+    task: null,
+    isActive: false,
+    isBreak: false,
+    remainingSeconds: 25 * 60,
+    endTime: null,
+  })
+
+  // Request browser notification permission once
+  useEffect(() => {
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission().catch(() => {})
+    }
+  }, [])
+
+  // Timer Tick Interval based on Date.now() timestamp
+  useEffect(() => {
+    if (!timerState.isActive || !timerState.endTime) return
+
+    const interval = setInterval(() => {
+      const now = Date.now()
+      const diff = Math.round((timerState.endTime - now) / 1000)
+
+      if (diff <= 0) {
+        // Pomodoro / Break Session completed
+        playChime()
+        if (navigator.vibrate) {
+          navigator.vibrate([200, 100, 200])
+        }
+
+        const wasBreak = timerState.isBreak
+        const title = wasBreak ? 'Istirahat Selesai! 🔔' : 'Sesi Fokus Selesai! 🎉'
+        const body = wasBreak
+          ? 'Waktu istirahat habis. Siap untuk target langkah berikutnya?'
+          : `Langkah "${timerState.subtask?.title}" tuntas! Istirahat sejenak 5 menit.`
+
+        if ('Notification' in window && Notification.permission === 'granted') {
+          try {
+            new Notification(title, { body, icon: '/logo.png' })
+          } catch (e) {}
+        }
+
+        if (!wasBreak) {
+          // Switch to 5 min break
+          const breakSecs = 5 * 60
+          setTimerState((prev) => ({
+            ...prev,
+            isBreak: true,
+            isActive: false,
+            remainingSeconds: breakSecs,
+            endTime: null,
+          }))
+        } else {
+          // Break finished, reset to subtask duration
+          const workSecs = (Number(timerState.subtask?.duration_minutes) || 25) * 60
+          setTimerState((prev) => ({
+            ...prev,
+            isBreak: false,
+            isActive: false,
+            remainingSeconds: workSecs,
+            endTime: null,
+          }))
+        }
+      } else {
+        setTimerState((prev) => ({ ...prev, remainingSeconds: diff }))
+      }
+    }, 1000)
+
+    return () => clearInterval(interval)
+  }, [timerState.isActive, timerState.endTime, timerState.isBreak, timerState.subtask])
+
+  // Sync countdown to browser tab title
+  useEffect(() => {
+    if (timerState.isActive && timerState.subtask) {
+      const m = Math.floor(timerState.remainingSeconds / 60)
+      const s = timerState.remainingSeconds % 60
+      const formatted = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
+      document.title = `(${formatted}) ${timerState.subtask.title} — KilasTugas`
+    } else {
+      document.title = 'KilasTugas — Perencana & Micro-Pacing Tugas Kuliah'
+    }
+  }, [timerState.isActive, timerState.remainingSeconds, timerState.subtask])
+
+  // Timer Actions
+  const handleStartTimer = (subtask, task, durationMinutes = 25) => {
+    const secs = Number(durationMinutes) * 60 || 25 * 60
+    setTimerState({
+      subtask,
+      task,
+      isActive: true,
+      isBreak: false,
+      remainingSeconds: secs,
+      endTime: Date.now() + secs * 1000,
+    })
+  }
+
+  const handleToggleTimer = () => {
+    setTimerState((prev) => {
+      if (!prev.subtask) return prev
+      if (prev.isActive) {
+        // Pause
+        const now = Date.now()
+        const remaining = prev.endTime
+          ? Math.max(0, Math.round((prev.endTime - now) / 1000))
+          : prev.remainingSeconds
+        return {
+          ...prev,
+          isActive: false,
+          remainingSeconds: remaining,
+          endTime: null,
+        }
+      } else {
+        // Resume
+        const secs =
+          prev.remainingSeconds > 0
+            ? prev.remainingSeconds
+            : (prev.isBreak ? 5 * 60 : (Number(prev.subtask.duration_minutes) || 25) * 60)
+        return {
+          ...prev,
+          isActive: true,
+          remainingSeconds: secs,
+          endTime: Date.now() + secs * 1000,
+        }
+      }
+    })
+  }
+
+  const handleResetTimer = () => {
+    setTimerState((prev) => {
+      if (!prev.subtask) return prev
+      const defaultSecs = prev.isBreak
+        ? 5 * 60
+        : (Number(prev.subtask.duration_minutes) || 25) * 60
+      return {
+        ...prev,
+        isActive: false,
+        remainingSeconds: defaultSecs,
+        endTime: null,
+      }
+    })
+  }
+
+  const handleCloseTimer = () => {
+    setTimerState({
+      subtask: null,
+      task: null,
+      isActive: false,
+      isBreak: false,
+      remainingSeconds: 25 * 60,
+      endTime: null,
+    })
+  }
 
   const loadTasks = async () => {
     try {
@@ -279,11 +454,23 @@ export default function App() {
         </main>
       </div>
 
+      {/* Floating Timer Pill when modal is closed but timer is running or active */}
+      {!activeDetail && timerState.subtask && (
+        <FloatingTimer
+          timerState={timerState}
+          onToggle={handleToggleTimer}
+          onOpenModal={() => setActiveDetail({ subtask: timerState.subtask, task: timerState.task })}
+          onCloseTimer={handleCloseTimer}
+        />
+      )}
+
       {/* Floating Action Button (FAB) on mobile for quick task creation */}
       <button
         type="button"
         onClick={() => setIsInputModalOpen(true)}
-        className="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-[#18181B] text-white shadow-xl shadow-black/25 flex items-center justify-center hover:scale-105 active:scale-95 transition-all cursor-pointer border border-white/20 sm:hidden"
+        className={`fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-[#18181B] text-white shadow-xl shadow-black/25 flex items-center justify-center hover:scale-105 active:scale-95 transition-all cursor-pointer border border-white/20 sm:hidden ${
+          !activeDetail && timerState.subtask ? 'scale-90 opacity-90' : ''
+        }`}
         title="Pecah Tugas Baru"
         aria-label="Pecah Tugas Baru"
       >
@@ -304,6 +491,10 @@ export default function App() {
           isOpen={Boolean(activeDetail)}
           onClose={() => setActiveDetail(null)}
           onComplete={() => loadTasks()}
+          timerState={timerState}
+          onStartTimer={handleStartTimer}
+          onToggleTimer={handleToggleTimer}
+          onResetTimer={handleResetTimer}
         />
       )}
     </div>
