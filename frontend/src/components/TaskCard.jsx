@@ -26,7 +26,7 @@ const CATEGORY_MAP = {
 export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
   const [subtasks, setSubtasks] = useState([])
   const [loading, setLoading] = useState(false)
-  const [expanded, setExpanded] = useState(true)
+  const [expanded, setExpanded] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
 
   const fetchSubtasks = async () => {
