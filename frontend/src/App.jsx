@@ -6,7 +6,6 @@ import DateStrip from './components/DateStrip'
 import TaskCard from './components/TaskCard'
 import TaskDetailModal from './components/TaskDetailModal'
 import TaskInputModal from './components/TaskInputModal'
-import Dock from './components/Dock'
 import { getTasks, initSession, deleteTask } from './api'
 
 export const isTaskCompleted = (t) => {
@@ -84,7 +83,7 @@ export default function App() {
       </div>
 
       {/* Main Responsive Content Frame */}
-      <div className="w-full max-w-md md:max-w-3xl lg:max-w-5xl xl:max-w-6xl mx-auto flex-1 flex flex-col px-4 sm:px-6 py-2 pb-36 md:pb-36 box-border min-w-0">
+      <div className="w-full max-w-md md:max-w-3xl lg:max-w-5xl xl:max-w-6xl mx-auto flex-1 flex flex-col px-4 sm:px-6 py-2 pb-12 md:pb-16 box-border min-w-0">
         
         {/* Hero Section: Dark Squircle Card with Radial Progress Ring */}
         <HeroOverview
@@ -269,21 +268,19 @@ export default function App() {
               ))}
             </div>
           )}
-
-          {/* Bottom dock clearance spacer */}
-          <div className="h-20 w-full shrink-0" aria-hidden="true" />
         </main>
       </div>
 
-      {/* Floating Bottom Navigation Dock */}
-      <Dock
-        activeTab={activeTab}
-        setActiveTab={(tab) => {
-          setActiveTab(tab)
-          setSelectedDate(null)
-        }}
-        onOpenCreate={() => setIsInputModalOpen(true)}
-      />
+      {/* Floating Action Button (FAB) on mobile for quick task creation */}
+      <button
+        type="button"
+        onClick={() => setIsInputModalOpen(true)}
+        className="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-[#18181B] text-white shadow-xl shadow-black/25 flex items-center justify-center hover:scale-105 active:scale-95 transition-all cursor-pointer border border-white/20 sm:hidden"
+        title="Pecah Tugas Baru"
+        aria-label="Pecah Tugas Baru"
+      >
+        <Plus className="w-6 h-6 stroke-[2.5]" />
+      </button>
 
       {/* Modals */}
       <TaskInputModal
