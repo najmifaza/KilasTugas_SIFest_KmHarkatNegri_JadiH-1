@@ -7,18 +7,10 @@ export default {
   theme: {
     extend: {
       colors: {
-        stone: {
-          850: '#201e1c',
-          950: '#0c0a09',
+        slate: {
+          850: '#151f32',
+          950: '#0b1120',
         },
-        brand: {
-          50: '#FFF7ED',
-          100: '#FFEDD5',
-          200: '#FED7AA',
-          500: '#F97316',
-          600: '#EA580C',
-          700: '#C2410C',
-        }
       },
       fontFamily: {
         sans: [
@@ -38,9 +30,18 @@ export default {
           'monospace',
         ],
       },
+      borderRadius: {
+        '2xl': '1rem',
+        '3xl': '1.5rem',
+        '4xl': '2rem',
+      },
       boxShadow: {
+        '2xs': '0 1px 2px rgba(0, 0, 0, 0.04)',
+        'xs': '0 1px 3px rgba(0, 0, 0, 0.05)',
+        'sm': '0 2px 8px rgba(0, 0, 0, 0.06)',
         'soft': '0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03)',
-        'elevated': '0 8px 24px -4px rgba(0,0,0,0.08), 0 4px 8px -2px rgba(0,0,0,0.03)',
+        'card': '0 2px 16px rgba(0, 0, 0, 0.06)',
+        'elevated': '0 8px 24px -4px rgba(0,0,0,0.08)',
         'sheet': '0 -8px 30px rgba(0,0,0,0.12)',
       }
     },

@@ -8,7 +8,7 @@ const CATEGORY_MAP = {
   makalah: 'Makalah Teori',
   coding: 'Projek Coding',
   presentasi: 'Presentasi',
-  custom: 'Tugas Lain',
+  custom: 'Tugas Kuliah',
 }
 
 export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
@@ -38,7 +38,7 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
         particleCount: 80,
         spread: 60,
         origin: { y: 0.7 },
-        colors: ['#10B981', '#F26A36', '#6366F1', '#F59E0B'],
+        colors: ['#7C3AED', '#6366F1', '#10B981', '#F59E0B'],
       })
     } catch (e) {
       // ignore
@@ -82,26 +82,26 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
   const diffDays = Math.ceil((deadlineDate - now) / (1000 * 60 * 60 * 24))
   const isOverdue = diffDays < 0 && !isAllDone
 
-  let pacing = { label: 'On Track 🟢', color: 'text-emerald-700 bg-emerald-50 border border-emerald-200' }
+  let pacing = { label: 'On Track 🟢', color: 'text-emerald-700 bg-emerald-50 border-emerald-200' }
   if (isAllDone) {
-    pacing = { label: 'Ready to Submit 🎉', color: 'text-emerald-800 bg-emerald-100 border border-emerald-300 font-bold' }
+    pacing = { label: 'Ready to Submit 🎉', color: 'text-emerald-700 bg-emerald-50 border-emerald-200 font-bold' }
   } else if (isOverdue) {
-    pacing = { label: 'Overdue Alert 🔴', color: 'text-rose-700 bg-rose-50 border border-rose-200' }
+    pacing = { label: 'Overdue Alert 🔴', color: 'text-rose-700 bg-rose-50 border-rose-200 font-bold' }
   } else if (diffDays <= 1 && percent < 60) {
-    pacing = { label: 'Behind Schedule 🟡', color: 'text-amber-800 bg-amber-50 border border-amber-200' }
+    pacing = { label: 'Behind Schedule 🟡', color: 'text-amber-800 bg-amber-50 border-amber-200' }
   }
 
   return (
-    <article className="bg-white rounded-2xl border border-stone-200/90 shadow-soft overflow-hidden transition-all">
+    <article className="bg-white rounded-[1.5rem] border border-slate-200/90 shadow-xs overflow-hidden transition-all">
       {/* Header Bar */}
       <div className="p-4 sm:p-5 pb-3">
         <div className="flex items-center justify-between gap-2 mb-2.5">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-[11px] font-semibold text-stone-700 bg-stone-100 px-2.5 py-0.5 rounded-full">
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="text-[11px] font-bold text-violet-700 bg-violet-50 border border-violet-100 px-2.5 py-0.5 rounded-full">
               {CATEGORY_MAP[task.category] || 'Tugas Kuliah'}
             </span>
 
-            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${pacing.color}`}>
+            <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${pacing.color}`}>
               {pacing.label}
             </span>
           </div>
@@ -111,7 +111,7 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
               <button
                 type="button"
                 onClick={() => onDeleteTask(task.id)}
-                className="w-8 h-8 rounded-full text-stone-400 hover:text-rose-600 hover:bg-stone-50 flex items-center justify-center transition active:scale-90"
+                className="w-8 h-8 rounded-full text-slate-400 hover:text-rose-600 hover:bg-slate-50 flex items-center justify-center transition active:scale-90"
                 title="Hapus Tugas"
                 aria-label="Hapus tugas"
               >
@@ -122,7 +122,7 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
             <button
               type="button"
               onClick={() => setExpanded(!expanded)}
-              className="w-8 h-8 rounded-full text-stone-400 hover:text-stone-800 hover:bg-stone-50 flex items-center justify-center transition active:scale-90"
+              className="w-8 h-8 rounded-full text-slate-400 hover:text-slate-800 hover:bg-slate-50 flex items-center justify-center transition active:scale-90"
               aria-label={expanded ? 'Tutup sub-tugas' : 'Buka sub-tugas'}
             >
               {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -131,19 +131,19 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
         </div>
 
         {/* Task Title & Details */}
-        <h3 className="font-semibold text-stone-950 text-base leading-snug tracking-tight">
+        <h3 className="font-extrabold text-slate-900 text-base leading-snug tracking-tight">
           {task.title}
         </h3>
 
-        <div className="flex items-center gap-2 text-xs text-stone-500 mt-1">
+        <div className="flex items-center gap-2 text-xs text-slate-500 mt-1">
           {task.subject && (
             <>
-              <span className="font-medium text-stone-700">{task.subject}</span>
-              <span className="text-stone-300">•</span>
+              <span className="font-semibold text-slate-700">{task.subject}</span>
+              <span className="text-slate-300">•</span>
             </>
           )}
           <span className="flex items-center gap-1">
-            <Clock className="w-3.5 h-3.5 text-stone-400" />
+            <Clock className="w-3.5 h-3.5 text-slate-400" />
             <span>
               {isAllDone
                 ? 'Target tercapai'
@@ -158,14 +158,16 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
 
         {/* Progress Bar */}
         <div className="mt-3.5 space-y-1.5">
-          <div className="flex items-center justify-between text-[11px] text-stone-500 font-medium">
-            <span>Rincian Pengerjaan</span>
-            <span className="font-mono text-stone-700">{completed}/{total} langkah ({percent}%)</span>
+          <div className="flex items-center justify-between text-[11px] text-slate-500 font-medium">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Rincian Pengerjaan</span>
+            <span className="font-mono text-slate-700 font-bold">{completed}/{total} langkah ({percent}%)</span>
           </div>
-          <div className="w-full bg-stone-100 rounded-full h-1.5 overflow-hidden">
+          <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
             <div
               className={`h-full rounded-full transition-all duration-300 ${
-                isAllDone ? 'bg-emerald-600' : 'bg-stone-900'
+                isAllDone
+                  ? 'bg-gradient-to-r from-emerald-500 to-teal-500'
+                  : 'bg-gradient-to-r from-violet-600 to-indigo-600'
               }`}
               style={{ width: `${percent}%` }}
             />
@@ -174,20 +176,20 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
 
         {/* Celebration Banner when 100% (PRD F-05 Ready to Submit) */}
         {isAllDone && (
-          <div className="mt-3.5 p-3 rounded-xl bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50 border border-emerald-200 flex items-center justify-between gap-3 text-emerald-950 animate-in fade-in">
+          <div className="mt-3.5 p-3 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-between gap-3 text-emerald-950 animate-in fade-in">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-sm shadow-xs flex-shrink-0">
+              <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-sm shadow-xs flex-shrink-0">
                 🎉
               </div>
               <div>
                 <h4 className="text-xs font-bold text-emerald-950">Ready to Submit!</h4>
-                <p className="text-[11px] text-emerald-700">Semua aksi harian tuntas. Tugas siap dikumpulkan.</p>
+                <p className="text-[11px] text-emerald-700 font-medium">Semua aksi harian tuntas. Tugas siap dikumpulkan.</p>
               </div>
             </div>
             <button
               type="button"
               onClick={fireConfetti}
-              className="text-xs font-semibold text-emerald-800 bg-white hover:bg-emerald-100 border border-emerald-300 px-3 py-1.5 rounded-lg transition active:scale-95 flex items-center gap-1 shadow-xs flex-shrink-0"
+              className="text-xs font-bold text-emerald-800 bg-white hover:bg-emerald-100 border border-emerald-200 px-3 py-1.5 rounded-xl transition active:scale-95 flex items-center gap-1 shadow-2xs flex-shrink-0"
             >
               <Sparkles className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
               <span>Rayakan</span>
@@ -198,13 +200,13 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
 
       {/* Subtask List */}
       {expanded && (
-        <div className="px-3 pb-3 sm:px-4 sm:pb-4 pt-1 space-y-1.5 border-t border-stone-100 bg-stone-50/50">
+        <div className="px-3 pb-3 sm:px-4 sm:pb-4 pt-1 space-y-1.5 border-t border-slate-100 bg-slate-50/50">
           {loading && subtasks.length === 0 ? (
-            <div className="text-xs text-stone-400 py-4 text-center font-medium">
+            <div className="text-xs text-slate-400 py-4 text-center font-medium">
               Memuat langkah kerja...
             </div>
           ) : subtasks.length === 0 ? (
-            <div className="text-xs text-stone-400 py-4 text-center">
+            <div className="text-xs text-slate-400 py-4 text-center">
               Belum ada langkah kerja terurai.
             </div>
           ) : (
@@ -214,24 +216,24 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
                 <div
                   key={st.id || idx}
                   onClick={() => onOpenDetail(st, task)}
-                  className={`group flex items-center gap-2 p-2.5 sm:p-3 rounded-xl border transition-all cursor-pointer select-none active:scale-[0.99] ${
+                  className={`group flex items-center gap-2.5 p-2.5 sm:p-3 rounded-2xl border transition-all cursor-pointer select-none active:scale-[0.99] ${
                     st.is_completed
-                      ? 'bg-stone-100/70 border-stone-200/60 opacity-65'
-                      : 'bg-white hover:bg-stone-50 border-stone-200 shadow-soft'
+                      ? 'bg-slate-100/70 border-slate-200/60 opacity-60'
+                      : 'bg-white hover:bg-slate-50 border-slate-200/90 shadow-2xs'
                   }`}
                 >
-                  {/* Big accessible Touch Area for Checkbox (min 44x44) */}
+                  {/* Big accessible Touch Area for Checkbox */}
                   <button
                     type="button"
                     onClick={(e) => toggleSubtask(e, st)}
-                    className="w-10 h-10 -my-1 -ml-1 flex items-center justify-center rounded-lg text-stone-400 hover:text-stone-700 active:scale-90 transition flex-shrink-0"
+                    className="w-9 h-9 -my-1 -ml-1 flex items-center justify-center rounded-xl text-slate-400 hover:text-violet-600 active:scale-90 transition flex-shrink-0"
                     aria-label={`Tandai ${st.title} ${st.is_completed ? 'belum selesai' : 'selesai'}`}
                   >
                     <div
-                      className={`w-5 h-5 rounded-md flex items-center justify-center border transition ${
+                      className={`w-5 h-5 rounded-lg flex items-center justify-center border transition ${
                         st.is_completed
-                          ? 'bg-stone-900 border-stone-900 text-white'
-                          : 'border-stone-300 bg-white hover:border-stone-500'
+                          ? 'bg-violet-600 border-violet-600 text-white'
+                          : 'border-slate-300 bg-white group-hover:border-violet-400'
                       }`}
                     >
                       {st.is_completed && <Check className="w-3.5 h-3.5 stroke-[3]" />}
@@ -239,27 +241,27 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
                   </button>
 
                   {/* Step Order Badge */}
-                  <span className="font-mono text-[10px] font-bold text-stone-400 px-1">
+                  <span className="font-mono text-[10px] font-bold text-slate-400 px-0.5">
                     {String(stepNum).padStart(2, '0')}
                   </span>
 
                   {/* Title and metadata */}
                   <div className="flex-1 min-w-0 pr-1">
                     <p
-                      className={`text-xs font-medium leading-snug line-clamp-1 ${
-                        st.is_completed ? 'line-through text-stone-400' : 'text-stone-900'
+                      className={`text-xs font-semibold leading-snug line-clamp-1 ${
+                        st.is_completed ? 'line-through text-slate-400' : 'text-slate-900'
                       }`}
                     >
                       {st.title}
                     </p>
-                    <div className="flex items-center gap-2 mt-0.5 text-[10px] text-stone-500 font-mono">
+                    <div className="flex items-center gap-2 mt-0.5 text-[10px] text-slate-500 font-mono">
                       <span>{st.duration_minutes || 25}m</span>
                       {st.target_date && <span>• {st.target_date}</span>}
                     </div>
                   </div>
 
                   {/* Action chevron */}
-                  <div className="w-6 h-6 flex items-center justify-center text-stone-300 group-hover:text-stone-600 transition flex-shrink-0">
+                  <div className="w-6 h-6 flex items-center justify-center text-slate-300 group-hover:text-violet-600 transition flex-shrink-0">
                     <ChevronRight className="w-4 h-4" />
                   </div>
                 </div>

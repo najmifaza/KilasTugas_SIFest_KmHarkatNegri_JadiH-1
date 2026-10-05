@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import { Plus, CheckCircle2, Inbox, Calendar, CheckCheck, ListFilter } from 'lucide-react'
+import { Plus, CheckCircle2, Inbox, Sparkles, Layers, Calendar } from 'lucide-react'
+import AppHeader from './components/AppHeader'
+import HeroOverview from './components/HeroOverview'
 import TaskCard from './components/TaskCard'
 import TaskDetailModal from './components/TaskDetailModal'
 import TaskInputModal from './components/TaskInputModal'
-import HealthBanner from './components/HealthBanner'
+import Dock from './components/Dock'
 import { getTasks, initSession, deleteTask } from './api'
 
 export default function App() {
   const [tasks, setTasks] = useState([])
   const [loading, setLoading] = useState(true)
-  const [filter, setFilter] = useState('upcoming') // 'upcoming' | 'all'
+  const [activeTab, setActiveTab] = useState('all') // 'today' | 'all'
   const [isInputModalOpen, setIsInputModalOpen] = useState(false)
   const [activeDetail, setActiveDetail] = useState(null) // { subtask, task }
 
@@ -39,157 +41,115 @@ export default function App() {
     }
   }
 
-  // Filter tasks
+  // Filter tasks based on activeTab
   const today = new Date()
   today.setHours(0, 0, 0, 0)
 
   const filteredTasks = tasks.filter((t) => {
-    if (filter === 'all') return true
+    if (activeTab === 'all') return true
     const d = new Date(t.deadline)
     const diffDays = Math.ceil((d - today) / (1000 * 60 * 60 * 24))
-    // Upcoming = not completed, within 5 days or already overdue
-    return !t.is_completed && diffDays <= 5
+    // Today filter = within 1-2 days or overdue
+    return !t.is_completed && diffDays <= 2
   })
 
-  // Summary counts
-  const totalCompleted = tasks.filter((t) => t.is_completed).length
-  const pendingCount = tasks.filter((t) => !t.is_completed).length
-
-  // Indonesian date formatter
-  const formattedDate = new Intl.DateTimeFormat('id-ID', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-  }).format(new Date())
-
   return (
-    <div className="min-h-screen bg-stone-100 flex justify-center selection:bg-stone-800 selection:text-white">
-      {/* Mobile-First Frame: Edge-to-edge on mobile, sleek centered container on tablet/desktop */}
-      <div className="w-full max-w-xl min-h-screen bg-[#fafaf9] flex flex-col sm:border-x sm:border-stone-200/90 sm:shadow-soft">
+    <div className="min-h-screen bg-slate-50 flex justify-center selection:bg-violet-600 selection:text-white">
+      {/* Mobile-Centric Container (Edge-to-edge on mobile, centered max-w-md on desktop) */}
+      <div className="w-full max-w-md min-h-screen bg-[#F8FAFC] flex flex-col sm:border-x sm:border-slate-200/90 sm:shadow-card relative">
         
-        {/* Top App Header */}
-        <header className="sticky top-0 z-30 bg-[#fafaf9]/95 backdrop-blur-md px-4 sm:px-6 pt-4 pb-3 border-b border-stone-200/70">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-stone-900 text-white flex items-center justify-center font-bold text-sm tracking-tight shadow-soft">
-                KT
-              </div>
-              <div>
-                <h1 className="text-sm font-bold text-stone-950 tracking-tight leading-none">
-                  KilasTugas
-                </h1>
-                <p className="text-[11px] text-stone-500 font-medium mt-0.5">
-                  {formattedDate}
-                </p>
-              </div>
-            </div>
+        {/* Top App Header (Identical to BEM-U AppHeader) */}
+        <AppHeader />
 
-            <div className="flex items-center gap-2">
-              <HealthBanner />
+        {/* Main Content Area */}
+        <main className="flex-1 px-4 sm:px-5 py-4 space-y-4 pb-28">
+          {/* Hero Overview: Gradient Card + 3 Metric Grid */}
+          <HeroOverview
+            tasks={tasks}
+            onOpenCreate={() => setIsInputModalOpen(true)}
+          />
+
+          {/* Filter Pills */}
+          <div className="flex items-center justify-between gap-2 pt-1">
+            <div className="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl">
               <button
                 type="button"
-                onClick={() => setIsInputModalOpen(true)}
-                className="w-8 h-8 rounded-full bg-stone-900 text-white flex items-center justify-center hover:bg-stone-800 transition active:scale-95 shadow-soft"
-                title="Tambah Tugas Baru"
-                aria-label="Tambah Tugas"
+                onClick={() => setActiveTab('all')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition active:scale-95 ${
+                  activeTab === 'all'
+                    ? 'bg-white text-slate-900 shadow-2xs'
+                    : 'text-slate-500 hover:text-slate-800'
+                }`}
               >
-                <Plus className="w-4 h-4 stroke-[2.5]" />
+                Semua Tugas ({tasks.length})
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setActiveTab('today')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition active:scale-95 ${
+                  activeTab === 'today'
+                    ? 'bg-white text-slate-900 shadow-2xs'
+                    : 'text-slate-500 hover:text-slate-800'
+                }`}
+              >
+                Target Mendesak ({tasks.filter((t) => !t.is_completed).length})
               </button>
             </div>
-          </div>
-
-          {/* Quick Metrics Bar */}
-          <div className="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-stone-200/60">
-            <div className="bg-white rounded-xl p-2.5 border border-stone-200/80 shadow-soft">
-              <div className="text-[10px] font-semibold text-stone-500 uppercase tracking-wider">
-                Tugas Berjalan
-              </div>
-              <div className="text-lg font-bold text-stone-950 font-mono mt-0.5">
-                {pendingCount}
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl p-2.5 border border-stone-200/80 shadow-soft">
-              <div className="text-[10px] font-semibold text-stone-500 uppercase tracking-wider">
-                Target Selesai
-              </div>
-              <div className="text-lg font-bold text-stone-950 font-mono mt-0.5">
-                {totalCompleted}
-              </div>
-            </div>
-          </div>
-
-          {/* Segmented Filter Control */}
-          <div className="flex items-center gap-1.5 mt-3 bg-stone-200/70 p-1 rounded-xl">
-            <button
-              type="button"
-              onClick={() => setFilter('upcoming')}
-              className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition active:scale-98 ${
-                filter === 'upcoming'
-                  ? 'bg-white text-stone-950 shadow-soft'
-                  : 'text-stone-600 hover:text-stone-900'
-              }`}
-            >
-              Fokus Mendatang ({tasks.filter((t) => !t.is_completed).length})
-            </button>
 
             <button
               type="button"
-              onClick={() => setFilter('all')}
-              className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition active:scale-98 ${
-                filter === 'all'
-                  ? 'bg-white text-stone-950 shadow-soft'
-                  : 'text-stone-600 hover:text-stone-900'
-              }`}
+              onClick={() => setIsInputModalOpen(true)}
+              className="text-xs font-bold text-violet-700 hover:text-violet-800 flex items-center gap-1 transition active:scale-95"
             >
-              Semua Tugas ({tasks.length})
+              <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+              <span>Tambah</span>
             </button>
           </div>
-        </header>
 
-        {/* Task Cards List Area */}
-        <main className="flex-1 px-4 sm:px-6 py-4 space-y-3.5 pb-28">
+          {/* Task Cards List Area */}
           {loading ? (
-            <div className="py-20 text-center space-y-2">
-              <div className="w-5 h-5 border-2 border-stone-300 border-t-stone-800 rounded-full animate-spin mx-auto" />
-              <p className="text-xs text-stone-500 font-medium">Memuat jadwal tugas...</p>
+            <div className="py-16 text-center space-y-2">
+              <div className="w-5 h-5 border-2 border-violet-200 border-t-violet-600 rounded-full animate-spin mx-auto" />
+              <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">
+                Menyinkronkan Tugas...
+              </p>
             </div>
           ) : tasks.length === 0 ? (
-            <div className="bg-white rounded-2xl p-8 border border-stone-200/90 text-center space-y-3 my-6 shadow-soft">
-              <div className="w-12 h-12 rounded-xl bg-stone-100 text-stone-500 flex items-center justify-center mx-auto">
-                <Inbox className="w-6 h-6 stroke-[1.5]" />
+            <div className="bg-white rounded-[1.5rem] p-7 border border-slate-200/90 text-center space-y-3 my-4 shadow-2xs">
+              <div className="w-12 h-12 rounded-2xl bg-violet-50 text-violet-600 flex items-center justify-center mx-auto">
+                <Inbox className="w-6 h-6 stroke-[1.75]" />
               </div>
               <div className="space-y-1">
-                <h3 className="font-semibold text-sm text-stone-950">
-                  Belum ada daftar tugas kuliah
+                <h3 className="font-extrabold text-sm text-slate-900">
+                  Belum ada tugas kuliah
                 </h3>
-                <p className="text-xs text-stone-500 max-w-sm mx-auto leading-relaxed">
-                  Masukkan tugas besar atau modul praktikum. KilasTugas akan membaginya ke dalam sub-tugas harian terukur.
+                <p className="text-xs text-slate-500 max-w-xs mx-auto leading-relaxed">
+                  Masukkan modul praktikum atau tugas besar. KilasTugas akan membaginya ke target harian terukur.
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setIsInputModalOpen(true)}
-                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-stone-950 text-white font-medium text-xs hover:bg-stone-850 transition active:scale-95 shadow-soft"
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-bold text-xs shadow-xs transition active:scale-95 cursor-pointer"
               >
                 <Plus className="w-4 h-4 stroke-[2.5]" />
-                <span>Tambah Tugas Pertama</span>
+                <span>Pecah Tugas Pertama</span>
               </button>
             </div>
           ) : filteredTasks.length === 0 ? (
-            <div className="bg-white rounded-2xl p-8 border border-stone-200/90 text-center space-y-2 my-6 shadow-soft">
-              <CheckCircle2 className="w-8 h-8 text-emerald-600 mx-auto stroke-[1.5]" />
-              <h3 className="font-semibold text-sm text-stone-950">
-                Tidak ada tugas mendesak
+            <div className="bg-white rounded-[1.5rem] p-7 border border-slate-200/90 text-center space-y-2 my-4 shadow-2xs">
+              <CheckCircle2 className="w-8 h-8 text-emerald-600 mx-auto stroke-[1.75]" />
+              <h3 className="font-extrabold text-sm text-slate-900">
+                Tidak ada target mendesak
               </h3>
-              <p className="text-xs text-stone-500 max-w-xs mx-auto">
-                Semua tugas dalam 5 hari ke depan telah selesai atau belum ada tenggat terdekat.
+              <p className="text-xs text-slate-500 max-w-xs mx-auto">
+                Semua tugas dalam jadwal terdekat telah tuntas atau terjadwal rapi.
               </p>
               <button
                 type="button"
-                onClick={() => setFilter('all')}
-                className="text-xs text-stone-800 underline font-medium pt-1"
+                onClick={() => setActiveTab('all')}
+                className="text-xs text-violet-700 font-bold pt-1 underline"
               >
                 Lihat Semua Tugas
               </button>
@@ -208,23 +168,12 @@ export default function App() {
           )}
         </main>
 
-        {/* Sticky Mobile Dock (Clean Ergonomics, No Content Clipping) */}
-        <div className="fixed bottom-0 inset-x-0 sm:sticky sm:bottom-0 bg-white/95 backdrop-blur-md border-t border-stone-200/80 px-4 py-3 sm:px-6 z-20 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
-          <div className="max-w-xl mx-auto flex items-center justify-between gap-3">
-            <span className="text-xs text-stone-500 font-medium">
-              {filteredTasks.length} tugas ditampilkan
-            </span>
-
-            <button
-              type="button"
-              onClick={() => setIsInputModalOpen(true)}
-              className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-stone-950 hover:bg-stone-850 text-white font-medium text-xs shadow-soft transition active:scale-95"
-            >
-              <Plus className="w-4 h-4 stroke-[2.5]" />
-              <span>Tambah Tugas</span>
-            </button>
-          </div>
-        </div>
+        {/* Floating Bottom Dock (Identical to BEM-U Dock) */}
+        <Dock
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          onOpenCreate={() => setIsInputModalOpen(true)}
+        />
 
         {/* Modals */}
         <TaskInputModal
@@ -237,6 +186,7 @@ export default function App() {
           <TaskDetailModal
             subtask={activeDetail.subtask}
             task={activeDetail.task}
+            isOpen={Boolean(activeDetail)}
             onClose={() => setActiveDetail(null)}
             onComplete={() => loadTasks()}
           />
