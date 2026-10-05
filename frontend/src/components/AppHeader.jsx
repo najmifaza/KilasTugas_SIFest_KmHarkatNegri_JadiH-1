@@ -29,17 +29,21 @@ export default function AppHeader({ onOpenCreate }) {
     <div className="w-full pt-4 sm:pt-6 pb-2 min-w-0">
       {/* Top Utility Bar: Avatar + Greeting + Quick Actions */}
       <div className="flex items-center justify-between gap-3 mb-4">
-        {/* User Identity / Avatar */}
+        {/* User Identity / Avatar with KilasTugas 3D Brand Logo */}
         <div className="flex items-center gap-3 min-w-0">
-          <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-amber-200 to-orange-300 text-slate-900 flex items-center justify-center font-bold text-sm shadow-sm ring-2 ring-white/90 shrink-0 overflow-hidden">
-            <span>KT</span>
+          <div className="w-11 h-11 rounded-2xl bg-white shadow-sm ring-1 ring-black/5 shrink-0 overflow-hidden p-1 flex items-center justify-center">
+            <img
+              src="/logo.png"
+              alt="KilasTugas"
+              className="w-full h-full object-contain"
+            />
           </div>
           <div className="min-w-0">
             <span className="text-base font-semibold text-[#1C1C1E] leading-tight block truncate">
-              Selamat Pagi,
+              KilasTugas
             </span>
-            <span className="text-[13px] font-normal text-[#71717A] leading-tight block truncate">
-              Mahasiswa
+            <span className="text-[12px] font-medium text-[#71717A] leading-tight block truncate">
+              Micro-Pacing Perencana
             </span>
           </div>
         </div>
