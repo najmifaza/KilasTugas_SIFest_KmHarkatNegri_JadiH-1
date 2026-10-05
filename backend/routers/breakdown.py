@@ -81,33 +81,75 @@ Tanggal Deadline: {deadline_naive.strftime('%A, %d %B %Y')}"""
     source = "ai"
     raw_subtasks = []
 
+    # ── Blueprint Smart Cache Check ────────────────────────────────
+    # Jika tugas dengan judul & kategori serupa sudah pernah dipecah sebelumnya
+    # langsung gunakan cetak biru yang ada (hemat kuota & waktu respons <20ms)
+    cached_found = False
     try:
-        response = await ai_client.chat.completions.create(
-            model=AI_MODEL,
-            messages=[
-                {"role": "system", "content": sys_prompt},
-                {"role": "user", "content": user_prompt},
-            ],
-            temperature=0.3,
-            max_tokens=1500,
-        )
-        raw = (response.choices[0].message.content or "").strip()
-        # strip markdown codeblocks jika model menyertakan ```
-        if "```" in raw:
-            parts = raw.split("```")
-            raw = parts[1]
-            if raw.startswith("json"):
-                raw = raw[4:]
-        raw = raw.strip()
-        parsed = json.loads(raw)
-        if isinstance(parsed, list) and len(parsed) > 0:
-            raw_subtasks = parsed
-        else:
-            raise ValueError("AI output is not a non-empty list")
-    except Exception as e:
-        logger.warning(f"AI breakdown failed ({type(e).__name__}: {e}), using template fallback")
-        source = "template"
-        raw_subtasks = get_template_by_category(req.category, days_left)
+        async with get_db() as db:
+            norm_title = req.title.strip().lower()
+            await db.execute(
+                """SELECT t.id FROM tasks t
+                   JOIN subtasks s ON s.task_id = t.id
+                   WHERE LOWER(TRIM(t.title)) = %s AND t.category = %s
+                   GROUP BY t.id
+                   HAVING COUNT(s.id) >= 2
+                   ORDER BY t.created_at DESC LIMIT 1""",
+                (norm_title, req.category),
+            )
+            matched_task = await db.fetchone()
+            if matched_task:
+                await db.execute(
+                    """SELECT step_number, title, description, duration_minutes
+                       FROM subtasks WHERE task_id = %s ORDER BY step_number ASC""",
+                    (matched_task["id"],),
+                )
+                cached_rows = await db.fetchall()
+                if cached_rows and (not target_count or len(cached_rows) == target_count):
+                    raw_subtasks = [
+                        {
+                            "step": r["step_number"],
+                            "title": r["title"],
+                            "description": r["description"],
+                            "duration_minutes": r["duration_minutes"],
+                            "target_day_offset": int((idx / max(1, len(cached_rows) - 1)) * days_left) if len(cached_rows) > 1 else 0,
+                        }
+                        for idx, r in enumerate(cached_rows)
+                    ]
+                    source = "blueprint_cache"
+                    cached_found = True
+                    logger.info(f"Blueprint cache hit for '{req.title}' -> {len(raw_subtasks)} steps (0 tokens used)")
+    except Exception as cache_err:
+        logger.warning(f"Blueprint cache check skipped: {cache_err}")
+
+    if not cached_found:
+        try:
+            response = await ai_client.chat.completions.create(
+                model=AI_MODEL,
+                messages=[
+                    {"role": "system", "content": sys_prompt},
+                    {"role": "user", "content": user_prompt},
+                ],
+                temperature=0.3,
+                max_tokens=1500,
+            )
+            raw = (response.choices[0].message.content or "").strip()
+            # strip markdown codeblocks jika model menyertakan ```
+            if "```" in raw:
+                parts = raw.split("```")
+                raw = parts[1]
+                if raw.startswith("json"):
+                    raw = raw[4:]
+            raw = raw.strip()
+            parsed = json.loads(raw)
+            if isinstance(parsed, list) and len(parsed) > 0:
+                raw_subtasks = parsed
+            else:
+                raise ValueError("AI output is not a non-empty list")
+        except Exception as e:
+            logger.warning(f"AI breakdown failed ({type(e).__name__}: {e}), using template fallback")
+            source = "template"
+            raw_subtasks = get_template_by_category(req.category, days_left)
 
     # Sanitasi data subtask agar aman masuk DB
     clean_subtasks = []

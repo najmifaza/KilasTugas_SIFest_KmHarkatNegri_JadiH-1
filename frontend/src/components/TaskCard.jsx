@@ -10,6 +10,7 @@ import {
   Calendar,
   MoreHorizontal,
   Download,
+  Share2,
 } from 'lucide-react'
 import confetti from 'canvas-confetti'
 import { getSubtasks, patchSubtask, createSubtask, deleteSubtask } from '../api'
@@ -27,6 +28,19 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
   const [loading, setLoading] = useState(false)
   const [expanded, setExpanded] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
+  const [shareCopied, setShareCopied] = useState(false)
+
+  const handleShareBlueprint = (e) => {
+    if (e) e.stopPropagation()
+    const url = `${window.location.origin}/p/${task.id}`
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url)
+      setShareCopied(true)
+      setTimeout(() => setShareCopied(false), 2500)
+    } else {
+      window.prompt('Salin link cetak biru tugas:', url)
+    }
+  }
 
   const fetchSubtasks = async () => {
     setLoading(true)
@@ -351,6 +365,18 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
                     >
                       <Download className="w-4 h-4 text-slate-500 shrink-0" />
                       <span>Unduh Berkas .ics</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        setShowMenu(false)
+                        handleShareBlueprint(e)
+                      }}
+                      className="w-full px-3.5 py-2 text-left hover:bg-purple-50 flex items-center gap-2 text-purple-700"
+                    >
+                      <Share2 className="w-4 h-4 text-purple-600 shrink-0" />
+                      <span>{shareCopied ? 'Tautan Disalin! ✓' : 'Bagikan Cetak Biru'}</span>
                     </button>
 
                     {onDeleteTask && (

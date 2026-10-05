@@ -74,3 +74,16 @@ export const triggerBreakdown = async (payload) => {
   const res = await apiClient.post('/api/breakdown', payload)
   return res.data
 }
+
+export const getBlueprint = async (taskId) => {
+  const res = await apiClient.get(`/api/blueprint/${taskId}`)
+  return res.data
+}
+
+export const cloneBlueprint = async (taskId, sessionId, targetDeadline = null) => {
+  const res = await apiClient.post(`/api/blueprint/${taskId}/clone`, {
+    session_id: sessionId,
+    target_deadline: targetDeadline,
+  })
+  return res.data
+}

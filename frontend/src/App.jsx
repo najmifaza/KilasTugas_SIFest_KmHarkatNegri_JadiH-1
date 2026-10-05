@@ -7,7 +7,8 @@ import TaskCard from './components/TaskCard'
 import TaskDetailModal from './components/TaskDetailModal'
 import TaskInputModal from './components/TaskInputModal'
 import FloatingTimer from './components/FloatingTimer'
-import { getTasks, initSession, deleteTask } from './api'
+import BlueprintModal from './components/BlueprintModal'
+import { getTasks, initSession, deleteTask, getBlueprint } from './api'
 
 const playChime = () => {
   try {
@@ -43,6 +44,33 @@ export default function App() {
   const [selectedDate, setSelectedDate] = useState(null)
   const [isInputModalOpen, setIsInputModalOpen] = useState(false)
   const [activeDetail, setActiveDetail] = useState(null) // { subtask, task }
+  const [sharedBlueprint, setSharedBlueprint] = useState(null)
+
+  // Detect shared blueprint URL: /p/:id or ?p=:id or ?share=:id
+  useEffect(() => {
+    const path = window.location.pathname
+    const searchParams = new URLSearchParams(window.location.search)
+    let blueprintId = null
+
+    if (path.startsWith('/p/')) {
+      const parts = path.split('/p/')[1]
+      blueprintId = parts ? parts.replace(/\/$/, '') : null
+    } else {
+      blueprintId = searchParams.get('p') || searchParams.get('share')
+    }
+
+    if (blueprintId) {
+      getBlueprint(blueprintId)
+        .then((res) => {
+          if (res?.data) {
+            setSharedBlueprint(res.data)
+          }
+        })
+        .catch((err) => {
+          console.warn('Gagal memuat cetak biru tugas:', err?.message)
+        })
+    }
+  }, [])
 
   // Persistent Pomodoro Focus Timer State
   const [timerState, setTimerState] = useState({
@@ -495,6 +523,22 @@ export default function App() {
           onStartTimer={handleStartTimer}
           onToggleTimer={handleToggleTimer}
           onResetTimer={handleResetTimer}
+        />
+      )}
+
+      {/* Blueprint Task Import Modal */}
+      {sharedBlueprint && (
+        <BlueprintModal
+          blueprint={sharedBlueprint}
+          onClose={() => {
+            setSharedBlueprint(null)
+            window.history.pushState({}, '', '/')
+          }}
+          onImportSuccess={() => {
+            setSharedBlueprint(null)
+            window.history.pushState({}, '', '/')
+            loadTasks()
+          }}
         />
       )}
     </div>
