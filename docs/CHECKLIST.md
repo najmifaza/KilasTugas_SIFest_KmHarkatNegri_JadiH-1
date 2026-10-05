@@ -109,6 +109,9 @@
 
 ### Prioritas 2: Penyempurnaan Produk Tambahan (Opsional / Polish)
 
+- [x] **Ekspor Jadwal ke Google / Apple Calendar (`.ics`)** (PRD F-09)
+  - Tombol *"Ekspor .ics"* langsung menghasilkan berkas standar iCalendar RFC 5545.
+  - Setiap langkah kerja menjadi event kalender mandiri lengkap dengan tanggal target, durasi fokus, deskripsi aksi, dan alarm pengingat otomatis 15 menit sebelumnya.
 - [x] **Checklist Interaktif Sub-Tugas (PRD F-03)**
   - Tampil sebagai kartu berurutan dengan durasi menit dan target hari.
   - Tambah sub-tugas manual via tombol `+ Tambah Langkah Manual`.
