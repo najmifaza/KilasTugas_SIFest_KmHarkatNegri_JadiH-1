@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { Sparkles, Zap, CheckCircle2, AlertCircle, RefreshCw } from 'lucide-react'
+import { Sparkles, Zap, Plus } from 'lucide-react'
 import { checkHealth } from '../api'
 
-export default function AppHeader() {
+export default function AppHeader({ onOpenCreate }) {
   const [status, setStatus] = useState({ loading: true, ok: false })
 
   const runCheck = async () => {
@@ -26,8 +26,8 @@ export default function AppHeader() {
   }, [])
 
   return (
-    <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 py-3">
-      <div className="max-w-md mx-auto flex items-center justify-between gap-3">
+    <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-6 py-3">
+      <div className="max-w-md md:max-w-3xl lg:max-w-5xl xl:max-w-6xl mx-auto flex items-center justify-between gap-4">
         {/* User Identity / Brand */}
         <div className="flex items-center gap-2.5 min-w-0">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-violet-600 to-indigo-600 text-white flex items-center justify-center font-black text-sm shadow-xs border border-violet-400/30 shrink-0">
@@ -43,30 +43,45 @@ export default function AppHeader() {
           </div>
         </div>
 
-        {/* Live Backend AI Pill Badge (Identical to BEM-U status badge) */}
-        <button
-          type="button"
-          onClick={runCheck}
-          title="Klik untuk cek status VPS & AI"
-          className={`shrink-0 px-2.5 py-1 rounded-full border text-[11px] font-bold shadow-2xs flex items-center gap-1.5 transition active:scale-95 ${
-            status.loading
-              ? 'border-slate-200 bg-slate-50 text-slate-500'
-              : status.ok
-              ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
-              : 'border-rose-200 bg-rose-50 text-rose-700'
-          }`}
-        >
-          <span
-            className={`w-1.5 h-1.5 rounded-full ${
+        {/* Right Actions: Status Badge & Desktop CTA Button */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          {/* Live Backend AI Pill Badge */}
+          <button
+            type="button"
+            onClick={runCheck}
+            title="Klik untuk cek status VPS & AI"
+            className={`shrink-0 px-2.5 py-1.5 rounded-full border text-[11px] font-bold shadow-2xs flex items-center gap-1.5 transition active:scale-95 ${
               status.loading
-                ? 'bg-slate-400 animate-ping'
+                ? 'border-slate-200 bg-slate-50 text-slate-500'
                 : status.ok
-                ? 'bg-emerald-500 animate-pulse'
-                : 'bg-rose-500'
+                ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+                : 'border-rose-200 bg-rose-50 text-rose-700'
             }`}
-          />
-          <span>{status.loading ? 'Checking...' : status.ok ? 'AI VPS Online' : 'Offline'}</span>
-        </button>
+          >
+            <span
+              className={`w-1.5 h-1.5 rounded-full ${
+                status.loading
+                  ? 'bg-slate-400 animate-ping'
+                  : status.ok
+                  ? 'bg-emerald-500 animate-pulse'
+                  : 'bg-rose-500'
+              }`}
+            />
+            <span>{status.loading ? 'Checking...' : status.ok ? 'AI VPS Online' : 'Offline'}</span>
+          </button>
+
+          {/* Desktop "+ Pecah Tugas" CTA */}
+          {onOpenCreate && (
+            <button
+              type="button"
+              onClick={onOpenCreate}
+              className="hidden md:flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-bold text-xs shadow-xs transition active:scale-95 cursor-pointer shrink-0"
+            >
+              <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+              <span>Pecah Tugas Baru</span>
+            </button>
+          )}
+        </div>
       </div>
     </header>
   )
