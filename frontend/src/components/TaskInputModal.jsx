@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { X, Check, Loader2, Calendar, Clock, Folder, ChevronDown } from 'lucide-react'
+import React, { useState, useEffect, useRef } from 'react'
+import { X, Check, Loader2, Calendar, Clock, Folder, ChevronDown, Minus, Plus } from 'lucide-react'
 import { createTask, triggerBreakdown, getSessionId } from '../api'
 
 const DEFAULT_TAGS = ['Design', 'UI/UX', 'Work']
@@ -13,6 +13,15 @@ const CATEGORIES = [
 ]
 
 export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
+  const [isMounted, setIsMounted] = useState(isOpen)
+  const [isVisible, setIsVisible] = useState(false)
+  const [dragY, setDragY] = useState(0)
+  const [isDragging, setIsDragging] = useState(false)
+
+  const dragStartY = useRef(0)
+  const isDraggingRef = useRef(false)
+  const currentDragY = useRef(0)
+
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [priority, setPriority] = useState('medium')
@@ -37,7 +46,77 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
     subject: 'Website Redesign',
   })
 
-  if (!isOpen) return null
+  // Handle enter and exit animation
+  useEffect(() => {
+    if (isOpen) {
+      setIsMounted(true)
+      setDragY(0)
+      currentDragY.current = 0
+      const timer = setTimeout(() => {
+        setIsVisible(true)
+      }, 20)
+      return () => clearTimeout(timer)
+    } else {
+      setIsVisible(false)
+      setIsMounted(false)
+      setDragY(0)
+      currentDragY.current = 0
+    }
+  }, [isOpen])
+
+  const handleAnimatedClose = () => {
+    if (loading) return
+    setIsVisible(false)
+    setTimeout(() => {
+      onClose()
+      setDragY(0)
+      currentDragY.current = 0
+    }, 280)
+  }
+
+  // Pointer / Drag down gestures (Supports both Touch & Mouse with pointer capture)
+  const onPointerDown = (e) => {
+    if (loading) return
+    if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId)
+    } catch (err) {}
+    const y = e.clientY || 0
+    dragStartY.current = y
+    isDraggingRef.current = true
+    setIsDragging(true)
+  }
+
+  const onPointerMove = (e) => {
+    if (!isDraggingRef.current) return
+    const y = e.clientY || 0
+    const dy = y - dragStartY.current
+    if (dy > 0) {
+      currentDragY.current = dy
+      setDragY(dy)
+    } else {
+      currentDragY.current = 0
+      setDragY(0)
+    }
+  }
+
+  const onPointerUp = (e) => {
+    if (!isDraggingRef.current) return
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId)
+    } catch (err) {}
+    const finalDy = currentDragY.current
+    isDraggingRef.current = false
+    setIsDragging(false)
+    if (finalDy > 75) {
+      handleAnimatedClose()
+    } else {
+      setDragY(0)
+      currentDragY.current = 0
+    }
+  }
+
+  if (!isMounted) return null
 
   const handlePresetDate = (days) => {
     setForm((prev) => ({ ...prev, date: getDefaultDate(days) }))
@@ -108,7 +187,7 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
           subtasks: breakdownRes.data,
         })
       }
-      onClose()
+      handleAnimatedClose()
     } catch (err) {
       setError(err?.response?.data?.detail || err?.message || 'Gagal memproses tugas')
     } finally {
@@ -116,23 +195,58 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
     }
   }
 
+  const backdropOpacity = isVisible
+    ? Math.max(0.1, 1 - (dragY / 380))
+    : 0
+
   return (
     <div
-      className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4"
+      className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 transition-opacity duration-300"
+      style={{
+        opacity: backdropOpacity,
+        pointerEvents: isVisible ? 'auto' : 'none',
+      }}
       onClick={(e) => {
-        if (e.target === e.currentTarget && !loading) onClose()
+        if (e.target === e.currentTarget && !loading) handleAnimatedClose()
       }}
     >
-      <div className="w-full max-w-lg rounded-t-[32px] sm:rounded-[32px] bg-[#F7F4EF] p-5 sm:p-6 shadow-2xl border border-white/80 max-h-[94vh] flex flex-col font-sans text-zinc-900">
-        {/* Mobile handle indicator */}
-        <div className="w-12 h-1 bg-zinc-300 rounded-full mx-auto mb-3 sm:hidden shrink-0" />
+      <div
+        style={{
+          transform: isDragging
+            ? `translateY(${Math.max(0, dragY)}px)`
+            : isVisible
+            ? 'translateY(0)'
+            : 'translateY(100%)',
+          transition: isDragging
+            ? 'none'
+            : 'transform 0.32s cubic-bezier(0.16, 1, 0.3, 1)',
+        }}
+        className="w-full max-w-lg rounded-t-[32px] sm:rounded-[32px] bg-[#F7F4EF] p-5 sm:p-6 shadow-2xl border border-white/80 max-h-[94vh] flex flex-col font-sans text-zinc-900 will-change-transform"
+      >
+        {/* Mobile handle indicator with large touch drag target */}
+        <div
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerCancel={onPointerUp}
+          className="w-full py-2.5 -mt-2 cursor-grab active:cursor-grabbing flex items-center justify-center shrink-0 touch-none select-none"
+          title="Tarik ke bawah untuk menutup"
+        >
+          <div className="w-12 h-1.5 bg-zinc-300 hover:bg-zinc-400 rounded-full transition-colors" />
+        </div>
 
-        {/* Header: White Circular Buttons + Centered Title */}
-        <header className="flex items-center justify-between pb-3 shrink-0">
+        {/* Header: White Circular Buttons + Centered Title (Also draggable) */}
+        <header
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerCancel={onPointerUp}
+          className="flex items-center justify-between pb-3 shrink-0 cursor-grab active:cursor-grabbing select-none touch-none"
+        >
           {/* Close Button (48px white circle) */}
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleAnimatedClose}
             disabled={loading}
             className="w-11 h-11 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center shadow-xs text-zinc-800 hover:bg-slate-50 transition active:scale-95 cursor-pointer shrink-0"
             aria-label="Tutup modal"
@@ -324,39 +438,80 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
 
           {/* 6. Jumlah Langkah Target (Subtasks Count) */}
           <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <label className="block text-sm font-bold text-zinc-900">
-                Pecah Menjadi Berapa Langkah?
-              </label>
-              <span className="text-[11px] font-semibold text-zinc-500">
-                {subtasksCount ? `${subtasksCount} langkah` : 'Otomatis oleh AI'}
-              </span>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {[
-                { count: null, label: 'Otomatis (AI)' },
-                { count: 3, label: '3 Langkah' },
-                { count: 4, label: '4 Langkah' },
-                { count: 5, label: '5 Langkah' },
-                { count: 6, label: '6 Langkah' },
-                { count: 8, label: '8 Langkah' },
-              ].map(({ count, label }) => {
-                const isActive = subtasksCount === count
-                return (
-                  <button
-                    key={label}
-                    type="button"
-                    onClick={() => setSubtasksCount(count)}
-                    className={`px-3 py-2 rounded-2xl text-xs font-semibold transition active:scale-95 cursor-pointer border ${
-                      isActive
-                        ? 'bg-zinc-900 text-white border-zinc-900 shadow-xs scale-[1.02]'
-                        : 'bg-white text-zinc-700 border-slate-200 hover:border-zinc-400'
-                    }`}
-                  >
-                    {label}
-                  </button>
-                )
-              })}
+            <label className="block text-sm font-bold text-zinc-900 mb-1.5">
+              Pecah Menjadi Berapa Langkah?
+            </label>
+            <div className="h-14 w-full bg-white rounded-2xl px-4 flex items-center justify-between shadow-xs border border-slate-100">
+              {/* Counter: [-] [Value / -] [+] */}
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  disabled={subtasksCount === null || subtasksCount <= 2}
+                  onClick={() => {
+                    if (subtasksCount !== null && subtasksCount > 2) {
+                      setSubtasksCount(subtasksCount - 1)
+                    }
+                  }}
+                  className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-zinc-800 disabled:opacity-35 disabled:hover:bg-slate-100 flex items-center justify-center transition active:scale-95 cursor-pointer disabled:cursor-not-allowed"
+                  aria-label="Kurangi jumlah langkah"
+                >
+                  <Minus className="w-3.5 h-3.5 stroke-[2.5]" />
+                </button>
+
+                <div className="w-16 text-center select-none">
+                  <span className="text-base font-bold text-zinc-900 leading-none">
+                    {subtasksCount === null ? '-' : subtasksCount}
+                  </span>
+                  <span className="text-[10px] text-zinc-500 block leading-none font-medium mt-0.5">
+                    {subtasksCount === null ? 'Default' : 'Langkah'}
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  disabled={subtasksCount !== null && subtasksCount >= 10}
+                  onClick={() => {
+                    if (subtasksCount === null) {
+                      setSubtasksCount(4)
+                    } else if (subtasksCount < 10) {
+                      setSubtasksCount(subtasksCount + 1)
+                    }
+                  }}
+                  className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-zinc-800 disabled:opacity-35 disabled:hover:bg-slate-100 flex items-center justify-center transition active:scale-95 cursor-pointer disabled:cursor-not-allowed"
+                  aria-label="Tambah jumlah langkah"
+                >
+                  <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+                </button>
+              </div>
+
+              {/* Vertical divider */}
+              <div className="h-7 w-px bg-slate-200 shrink-0 mx-2" />
+
+              {/* Checklist: Default / Otomatis AI */}
+              <button
+                type="button"
+                onClick={() => {
+                  if (subtasksCount === null) {
+                    setSubtasksCount(4)
+                  } else {
+                    setSubtasksCount(null)
+                  }
+                }}
+                className="flex items-center gap-2 cursor-pointer select-none py-1 group"
+              >
+                <div
+                  className={`w-5 h-5 rounded-lg border flex items-center justify-center transition-all ${
+                    subtasksCount === null
+                      ? 'bg-zinc-900 border-zinc-900 text-white shadow-2xs'
+                      : 'bg-white border-zinc-300 text-transparent group-hover:border-zinc-400'
+                  }`}
+                >
+                  <Check className="w-3.5 h-3.5 stroke-[3]" />
+                </div>
+                <span className="text-xs font-semibold text-zinc-800 group-hover:text-zinc-950">
+                  Otomatis AI
+                </span>
+              </button>
             </div>
           </div>
 
