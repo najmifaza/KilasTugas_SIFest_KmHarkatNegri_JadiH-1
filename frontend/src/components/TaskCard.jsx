@@ -269,8 +269,11 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
 
   return (
     <article className="bg-white rounded-[1.5rem] border border-slate-200/90 shadow-xs overflow-hidden transition-all">
-      {/* Card Header */}
-      <div className="p-4 sm:p-5 pb-3.5">
+      {/* Card Header (Clickable to expand / collapse) */}
+      <div
+        onClick={() => setExpanded(!expanded)}
+        className="p-4 sm:p-5 pb-3.5 cursor-pointer select-none"
+      >
         <div className="flex items-center justify-between gap-2 mb-2">
           {/* Subtle Category & Pacing Status */}
           <div className="flex items-center gap-2">
