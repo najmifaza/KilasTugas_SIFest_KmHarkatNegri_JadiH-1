@@ -54,26 +54,28 @@ export default function App() {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
 
-  const filteredTasks = tasks.filter((t) => {
-    const d = new Date(t.deadline)
-    d.setHours(0, 0, 0, 0)
+  const filteredTasks = tasks
+    .filter((t) => {
+      const d = new Date(t.deadline)
+      d.setHours(0, 0, 0, 0)
 
-    if (selectedDate) {
-      return d.getTime() === selectedDate.getTime()
-    }
+      if (selectedDate) {
+        return d.getTime() === selectedDate.getTime()
+      }
 
-    if (activeTab === 'completed') {
-      return isTaskCompleted(t)
-    }
+      if (activeTab === 'completed') {
+        return isTaskCompleted(t)
+      }
 
-    if (activeTab === 'today') {
-      const diffDays = Math.ceil((d - today) / (1000 * 60 * 60 * 24))
-      return !isTaskCompleted(t) && diffDays <= 2
-    }
+      if (activeTab === 'today') {
+        // Tampilkan semua target tugas yang belum tuntas
+        return !isTaskCompleted(t)
+      }
 
-    // Default 'all' or 'schedule'
-    return true
-  })
+      // Default 'all'
+      return true
+    })
+    .sort((a, b) => new Date(a.deadline) - new Date(b.deadline))
 
   return (
     <div className="min-h-screen bg-canvas-mesh flex flex-col selection:bg-slate-900 selection:text-white font-sans overflow-x-hidden w-full">
@@ -114,9 +116,15 @@ export default function App() {
         </div>
 
         {/* Section Header: Title + View All (Reference Screen 1: "Today's Tasks" + "View All") */}
-        <div className="flex items-center justify-between gap-2 mb-3 min-w-0">
+        <div className="flex items-center justify-between gap-3 mb-3 min-w-0">
           <h3 className="text-xl font-semibold text-[#18181B] tracking-tight truncate">
-            {selectedDate ? 'Tugas Terjadwal' : 'Tugas Hari Ini'}
+            {selectedDate
+              ? 'Tugas Terjadwal'
+              : activeTab === 'today'
+              ? 'Target Mendesak'
+              : activeTab === 'completed'
+              ? 'Tugas Tuntas'
+              : 'Semua Tugas'}
           </h3>
           <button
             type="button"
@@ -124,7 +132,7 @@ export default function App() {
               setSelectedDate(null)
               setActiveTab('all')
             }}
-            className="text-[13px] font-medium text-[#52525B] hover:text-[#18181B] shrink-0 cursor-pointer"
+            className="text-xs sm:text-[13px] font-medium text-[#52525B] hover:text-[#18181B] shrink-0 whitespace-nowrap cursor-pointer underline sm:no-underline"
           >
             Lihat Semua ({tasks.length})
           </button>
