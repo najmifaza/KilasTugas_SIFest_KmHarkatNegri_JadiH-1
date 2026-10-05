@@ -28,6 +28,7 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
   const [loading, setLoading] = useState(false)
   const [expanded, setExpanded] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
+  const [menuPlacement, setMenuPlacement] = useState('bottom')
   const [shareCopied, setShareCopied] = useState(false)
 
   const handleShareBlueprint = (e) => {
@@ -297,7 +298,11 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
     task.subject.trim().toLowerCase() !== task.title.trim().toLowerCase()
 
   return (
-    <article className="bg-white rounded-[28px] border border-white/80 shadow-[0_10px_30px_rgba(0,0,0,0.04)] overflow-hidden transition-all">
+    <article
+      className={`bg-white rounded-[28px] border border-white/80 shadow-[0_10px_30px_rgba(0,0,0,0.04)] transition-all ${
+        showMenu ? 'relative z-30 overflow-visible' : 'overflow-hidden'
+      }`}
+    >
       {/* Card Header (Clickable to expand / collapse) */}
       <div
         onClick={() => setExpanded(!expanded)}
@@ -324,6 +329,11 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation()
+                  if (!showMenu) {
+                    const rect = e.currentTarget.getBoundingClientRect()
+                    const spaceBelow = window.innerHeight - rect.bottom
+                    setMenuPlacement(spaceBelow < 210 ? 'top' : 'bottom')
+                  }
                   setShowMenu(!showMenu)
                 }}
                 className="w-9 h-9 rounded-full bg-slate-100/90 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition active:scale-95 cursor-pointer"
@@ -342,7 +352,13 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
                       setShowMenu(false)
                     }}
                   />
-                  <div className="absolute right-0 top-10 z-40 bg-white rounded-2xl shadow-elevated border border-slate-200/90 py-1.5 w-52 text-xs font-semibold text-slate-700 animate-in fade-in zoom-in-95">
+                  <div
+                    className={`absolute right-0 z-40 bg-white rounded-2xl border border-slate-200/90 py-1.5 w-52 text-xs font-semibold text-slate-700 animate-in fade-in zoom-in-95 shadow-xl ${
+                      menuPlacement === 'top'
+                        ? 'bottom-11 origin-bottom-right'
+                        : 'top-10 origin-top-right'
+                    }`}
+                  >
                     <button
                       type="button"
                       onClick={(e) => {
@@ -373,9 +389,9 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
                         setShowMenu(false)
                         handleShareBlueprint(e)
                       }}
-                      className="w-full px-3.5 py-2 text-left hover:bg-purple-50 flex items-center gap-2 text-purple-700"
+                      className="w-full px-3.5 py-2 text-left hover:bg-slate-50 flex items-center gap-2 text-slate-800"
                     >
-                      <Share2 className="w-4 h-4 text-purple-600 shrink-0" />
+                      <Share2 className="w-4 h-4 text-slate-600 shrink-0" />
                       <span>{shareCopied ? 'Tautan Disalin! ✓' : 'Bagikan Cetak Biru'}</span>
                     </button>
 
