@@ -14,6 +14,7 @@
 • Visual Pacing & Progress Ring    • Share & Clone Task Blueprint     • Collaborative Group Split
 • Pomodoro Focus Mode              • Google Calendar Direct Sync      • Cross-Device Sync (OAuth)
 • RFC 5545 iCalendar Export        • Burnout Guard & Load Meter       • PWA Offline-First
+• Persistent Floating Timer        • Always-On Web Push Notifications • Native OS Notification Daemon
 ```
 
 ---
@@ -66,6 +67,14 @@
   - Pemasangan langsung ke layar utama Android & iOS tanpa melalui App Store (_Add to Home Screen_).
   - Dukungan IndexedDB lokal: aplikasi dapat membuka jadwal, mencentang sub-tugas, dan menjalankan timer Pomodoro tanpa koneksi internet sama sekali.
   - Sinkronisasi otomatis ke server VPS saat perangkat kembali terhubung ke jaringan.
+
+### 7. ⏱️ Timer Background Persisten & Web Push Notification (_Always-On Focus Engine_)
+
+- **Masalah Pengguna:** Mahasiswa menutup tab browser atau laptop/layar ponsel mati saat sesi fokus Pomodoro berjalan. Ketika thread JavaScript browser mati, timer hilang dan alarm audio bawaan browser tidak berbunyi.
+- **Mekanisme Fitur:**
+  - **Auto-Resume via State Persistence (`localStorage`):** Menyimpan timestamp target tuntas (`endTime = Date.now() + duration`). Saat browser atau tab dibuka kembali kapan saja, timer otomatis menghitung sisa waktu nyata tanpa reset atau freeze.
+  - **Server-Side Web Push Scheduler (VAPID):** Saat timer dimulai, jadwal tuntas didaftarkan ke backend VPS. Server akan mengirimkan notifikasi Web Push berbasis Service Worker tepat saat 25 menit berakhir, memastikan alarm dan notifikasi tetap meletup di layar ponsel/laptop pengguna meskipun peramban web sedang ditutup secara total.
+  - **Native OS Calendar Alarm Fallback:** Integrasi direct sync Google Calendar & Apple Calendar (.ics) dengan alarm otomatis 0 menit & -15 menit sebagai cadangan andal di tingkat sistem operasi (_OS-level hardware alarm_).
 
 ---
 
