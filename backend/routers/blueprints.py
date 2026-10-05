@@ -104,7 +104,7 @@ async def clone_blueprint(task_id: str, body: CloneRequest):
             await db.execute(
                 """INSERT INTO subtasks
                    (id, task_id, step_number, title, description, duration_minutes, target_date, is_completed, source)
-                   VALUES (%s, %s, %s, %s, %s, %s, DATE_ADD(CURDATE(), INTERVAL %s DAY), FALSE, 'blueprint')""",
+                   VALUES (%s, %s, %s, %s, %s, %s, DATE_ADD(CURDATE(), INTERVAL %s DAY), FALSE, 'template')""",
                 (
                     sub_id,
                     new_task_id,

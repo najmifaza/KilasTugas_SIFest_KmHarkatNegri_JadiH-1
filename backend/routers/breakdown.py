@@ -169,6 +169,7 @@ Tanggal Deadline: {deadline_naive.strftime('%A, %d %B %Y')}"""
         source = "template"
 
     # Simpan ke MariaDB
+    db_source = "template" if source in ("template", "blueprint_cache", "blueprint") else "ai"
     try:
         async with get_db() as db:
             for s in clean_subtasks:
@@ -179,7 +180,7 @@ Tanggal Deadline: {deadline_naive.strftime('%A, %d %B %Y')}"""
                        VALUES (UUID(), %s, %s, %s, %s, %s,
                        DATE_ADD(CURDATE(), INTERVAL %s DAY), %s)""",
                     (req.task_id, s["step"], s["title"], s["description"],
-                     s["duration_minutes"], s["target_day_offset"], source),
+                     s["duration_minutes"], s["target_day_offset"], db_source),
                 )
     except Exception as db_err:
         logger.error(f"DB insert subtasks error: {db_err}")
