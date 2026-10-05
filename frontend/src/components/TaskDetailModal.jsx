@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { ChevronLeft, Play, Pause, RotateCcw, Check, Clock, BookOpen, X, Edit3, Save, Bell } from 'lucide-react'
+import { ChevronLeft, Play, Pause, RotateCcw, Check, Clock, BookOpen, X, Edit3, Save, Bell, Calendar } from 'lucide-react'
 import confetti from 'canvas-confetti'
 import { patchSubtask } from '../api'
 
@@ -154,6 +154,48 @@ export default function TaskDetailModal({ subtask, task, onClose, onComplete }) 
     }
   }
 
+  const openSubtaskInGoogleCalendar = () => {
+    const pad = (n) => String(n).padStart(2, '0')
+    const toUTC = (d) => {
+      return (
+        d.getUTCFullYear() +
+        pad(d.getUTCMonth() + 1) +
+        pad(d.getUTCDate()) +
+        'T' +
+        pad(d.getUTCHours()) +
+        pad(d.getUTCMinutes()) +
+        pad(d.getUTCSeconds()) +
+        'Z'
+      )
+    }
+
+    let start = new Date()
+    if (subtask?.target_date) {
+      const parts = subtask.target_date.split('-')
+      if (parts.length === 3) {
+        start = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]), 9, 0, 0)
+      }
+    } else {
+      start.setHours(9, 0, 0, 0)
+    }
+
+    const duration = (subtask?.duration_minutes || 25) * 60 * 1000
+    const end = new Date(start.getTime() + duration)
+
+    const title = `[KilasTugas] ${task?.subject ? task.subject + ': ' : ''}${subtask.title}`
+    const details = `Langkah ${subtask.step_number || 1} dari tugas: ${task?.title || ''}\n\nPanduan Pengerjaan:\n${subtask.description || '-'}\n\nEstimasi: ${subtask.duration_minutes || 25} menit Pomodoro.\nKilasTugas: https://kilastugas.vercel.app`
+
+    const params = new URLSearchParams()
+    params.set('action', 'TEMPLATE')
+    params.set('text', title)
+    params.set('dates', `${toUTC(start)}/${toUTC(end)}`)
+    params.set('details', details)
+    params.set('location', 'KilasTugas • SIFest 2026')
+
+    const url = `https://calendar.google.com/calendar/render?${params.toString()}`
+    window.open(url, '_blank', 'noopener,noreferrer')
+  }
+
   return (
     <div
       className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4"
@@ -290,13 +332,24 @@ export default function TaskDetailModal({ subtask, task, onClose, onComplete }) 
               </div>
 
               {/* Action Instruction Box */}
-              <div className="bg-white rounded-[1.25rem] p-4 border border-slate-200/90 shadow-2xs space-y-1">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                  Panduan Pengerjaan
-                </span>
-                <p className="text-xs text-slate-700 leading-relaxed font-medium">
-                  {subtask?.description || 'Fokus pada penyelesaian target langkah ini secara runtut.'}
-                </p>
+              <div className="bg-white rounded-[1.25rem] p-4 border border-slate-200/90 shadow-2xs space-y-2.5">
+                <div>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                    Panduan Pengerjaan
+                  </span>
+                  <p className="text-xs text-slate-700 leading-relaxed font-medium mt-1">
+                    {subtask?.description || 'Fokus pada penyelesaian target langkah ini secara runtut.'}
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={openSubtaskInGoogleCalendar}
+                  className="w-full py-2 px-3 rounded-xl border border-violet-200 bg-violet-50/80 hover:bg-violet-100 text-violet-800 text-xs font-bold flex items-center justify-center gap-1.5 transition active:scale-98 shadow-2xs cursor-pointer"
+                >
+                  <Calendar className="w-3.5 h-3.5 text-violet-600" />
+                  <span>Jadwalkan Langkah di Google Calendar</span>
+                </button>
               </div>
 
               {/* Pomodoro Focus Timer Box */}

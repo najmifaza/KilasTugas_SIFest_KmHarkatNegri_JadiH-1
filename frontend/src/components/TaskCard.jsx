@@ -163,6 +163,45 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
     URL.revokeObjectURL(url)
   }
 
+  const openGoogleCalendar = (e) => {
+    e.stopPropagation()
+    const pad = (n) => String(n).padStart(2, '0')
+    const toUTC = (d) => {
+      return (
+        d.getUTCFullYear() +
+        pad(d.getUTCMonth() + 1) +
+        pad(d.getUTCDate()) +
+        'T' +
+        pad(d.getUTCHours()) +
+        pad(d.getUTCMinutes()) +
+        pad(d.getUTCSeconds()) +
+        'Z'
+      )
+    }
+
+    const dDate = new Date(task.deadline)
+    const startDate = new Date(dDate.getTime() - 2 * 60 * 60 * 1000)
+    const startStr = toUTC(startDate)
+    const endStr = toUTC(dDate)
+
+    const title = `[KilasTugas] ${task.subject ? task.subject + ': ' : ''}${task.title}`
+    const stepsSummary = subtasks.length > 0
+      ? subtasks.map((s, i) => `${i + 1}. ${s.title} (${s.duration_minutes || 25}m)`).join('\n')
+      : 'Target selesai tepat waktu.'
+
+    const details = `Target Tugas: ${task.title}\nMata Kuliah: ${task.subject || '-'}\nTenggat Waktu: ${dDate.toLocaleString('id-ID')}\n\nRincian Langkah Micro-Pacing KilasTugas:\n${stepsSummary}\n\nKelola Tugas: https://kilastugas.vercel.app`
+
+    const params = new URLSearchParams()
+    params.set('action', 'TEMPLATE')
+    params.set('text', title)
+    params.set('dates', `${startStr}/${endStr}`)
+    params.set('details', details)
+    params.set('location', 'KilasTugas • SIFest 2026')
+
+    const gcalUrl = `https://calendar.google.com/calendar/render?${params.toString()}`
+    window.open(gcalUrl, '_blank', 'noopener,noreferrer')
+  }
+
   const toggleSubtask = async (e, st) => {
     e.stopPropagation()
     const nextState = !st.is_completed
@@ -227,12 +266,22 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
           <div className="flex items-center gap-1">
             <button
               type="button"
-              onClick={exportToCalendar}
-              className="px-2 py-1 rounded-xl text-[10px] font-bold text-violet-700 bg-violet-50 hover:bg-violet-100 border border-violet-200 transition active:scale-95 flex items-center gap-1 shadow-2xs"
-              title="Ekspor seluruh target langkah ke file .ics (Google Calendar / Apple Calendar)"
+              onClick={openGoogleCalendar}
+              className="px-2.5 py-1 rounded-xl text-[10px] font-bold text-violet-700 bg-violet-50 hover:bg-violet-100 border border-violet-200 transition active:scale-95 flex items-center gap-1 shadow-2xs"
+              title="Buka langsung di aplikasi Google Calendar (Android / iOS / Web)"
             >
-              <Calendar className="w-3 h-3" />
-              <span>Ekspor .ics</span>
+              <Calendar className="w-3 h-3 text-violet-600" />
+              <span>G-Calendar</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={exportToCalendar}
+              className="w-7 h-7 rounded-xl text-slate-400 hover:text-violet-700 hover:bg-slate-100 border border-slate-200 flex items-center justify-center transition active:scale-90"
+              title="Unduh berkas .ics (Apple / Outlook / Offline Calendar)"
+              aria-label="Unduh .ics"
+            >
+              <span className="text-[9px] font-mono font-bold">.ics</span>
             </button>
 
             {onDeleteTask && (
