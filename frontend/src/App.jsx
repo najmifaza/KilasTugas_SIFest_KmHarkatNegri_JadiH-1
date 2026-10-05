@@ -9,6 +9,14 @@ import TaskInputModal from './components/TaskInputModal'
 import Dock from './components/Dock'
 import { getTasks, initSession, deleteTask } from './api'
 
+export const isTaskCompleted = (t) => {
+  if (!t) return false
+  if (t.is_completed) return true
+  if (t.subtasks_total > 0 && t.subtasks_done >= t.subtasks_total) return true
+  if (t.progress_percent === 100) return true
+  return false
+}
+
 export default function App() {
   const [tasks, setTasks] = useState([])
   const [loading, setLoading] = useState(true)
@@ -56,12 +64,12 @@ export default function App() {
     }
 
     if (activeTab === 'completed') {
-      return t.is_completed
+      return isTaskCompleted(t)
     }
 
     if (activeTab === 'today') {
       const diffDays = Math.ceil((d - today) / (1000 * 60 * 60 * 24))
-      return !t.is_completed && diffDays <= 2
+      return !isTaskCompleted(t) && diffDays <= 2
     }
 
     // Default 'all' or 'schedule'
@@ -139,7 +147,7 @@ export default function App() {
             }`}
           >
             <span className="w-8 h-8 rounded-full bg-white flex items-center justify-center font-bold text-xs text-[#18181B] shadow-2xs shrink-0">
-              {tasks.filter((t) => !t.is_completed).length}
+              {tasks.filter((t) => !isTaskCompleted(t)).length}
             </span>
             <span>Target Mendesak</span>
           </button>
@@ -189,7 +197,7 @@ export default function App() {
                   : 'bg-slate-100 text-[#18181B]'
               }`}
             >
-              {tasks.filter((t) => t.is_completed).length}
+              {tasks.filter((t) => isTaskCompleted(t)).length}
             </span>
             <span>Selesai</span>
           </button>
@@ -256,6 +264,7 @@ export default function App() {
                   task={t}
                   onOpenDetail={(subtask, task) => setActiveDetail({ subtask, task })}
                   onDeleteTask={handleDeleteTask}
+                  onSubtaskChange={loadTasks}
                 />
               ))}
             </div>

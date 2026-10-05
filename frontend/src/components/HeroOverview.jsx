@@ -1,12 +1,30 @@
 import React from 'react'
 
 export default function HeroOverview({ tasks }) {
-  const totalTasks = tasks.length
-  const completedTasks = tasks.filter((t) => t.is_completed)
-  const activeTasks = tasks.filter((t) => !t.is_completed)
+  const isTaskCompleted = (t) => {
+    if (!t) return false
+    if (t.is_completed) return true
+    if (t.subtasks_total > 0 && t.subtasks_done >= t.subtasks_total) return true
+    if (t.progress_percent === 100) return true
+    return false
+  }
 
-  const percent = totalTasks > 0 ? Math.round((completedTasks.length / totalTasks) * 100) : 0
-  const progressRatio = totalTasks > 0 ? percent / 100 : 0
+  const totalTasks = tasks.length
+  const completedTasks = tasks.filter(isTaskCompleted)
+  const activeTasks = tasks.filter((t) => !isTaskCompleted(t))
+
+  // Calculate micro-pacing progress accurately from subtasks or tasks
+  const totalSubtasks = tasks.reduce((acc, t) => acc + (t.subtasks_total || 0), 0)
+  const completedSubtasks = tasks.reduce((acc, t) => acc + (t.subtasks_done || 0), 0)
+
+  let percent = 0
+  if (totalSubtasks > 0) {
+    percent = Math.round((completedSubtasks / totalSubtasks) * 100)
+  } else if (totalTasks > 0) {
+    percent = Math.round((completedTasks.length / totalTasks) * 100)
+  }
+
+  const progressRatio = percent / 100
 
   // SVG Gauge measurements
   const size = 130

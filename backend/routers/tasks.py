@@ -43,12 +43,13 @@ async def get_tasks(session_id: str):
         total = r["subtasks_total"] or 0
         done = int(r["subtasks_done"] or 0)
         pct = int((done / total * 100)) if total else 0
+        is_done = bool(r["is_completed"]) or (total > 0 and done == total)
         result.append({
             "id": r["id"],
             "title": r["title"],
             "subject": r["subject"],
             "deadline": r["deadline"],
-            "is_completed": bool(r["is_completed"]),
+            "is_completed": is_done,
             "progress_percent": pct,
             "subtasks_total": total,
             "subtasks_done": done,

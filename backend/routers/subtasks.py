@@ -82,6 +82,18 @@ async def patch_subtask(subtask_id: str, body: SubtaskPatch):
         await db.execute(
             f"UPDATE subtasks SET {', '.join(sets)} WHERE id = %s", vals
         )
+        if body.is_completed is not None:
+            # Sync parent task is_completed based on all its subtasks
+            await db.execute(
+                """UPDATE tasks
+                   SET is_completed = (
+                       SELECT IF(COUNT(id) > 0 AND SUM(is_completed) = COUNT(id), 1, 0)
+                       FROM (SELECT * FROM subtasks) AS s
+                       WHERE s.task_id = (SELECT task_id FROM (SELECT * FROM subtasks) AS s2 WHERE s2.id = %s)
+                   )
+                   WHERE id = (SELECT task_id FROM (SELECT * FROM subtasks) AS s3 WHERE s3.id = %s)""",
+                (subtask_id, subtask_id),
+            )
     return {"success": True, "message": "subtask updated"}
 
 @router.delete("/subtasks/{subtask_id}")
