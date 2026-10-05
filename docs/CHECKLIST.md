@@ -109,7 +109,13 @@
 
 ### Prioritas 2: Penyempurnaan Produk Tambahan (Opsional / Polish)
 
-- [ ] **Audio Chime & Notifikasi Timer Pomodoro:** Bunyi bel/alarm halus ketika hitungan mundur fokus 25 menit atau istirahat 5 menit selesai.
+- [x] **Status 100% "Ready to Submit 🎉" & Dopamine Feedback** (PRD F-05 & PRD 13.1)
+  - Badge otomatis berubah menjadi `Ready to Submit 🎉` saat semua sub-tugas tuntas.
+  - Banner perayaan hijau emerald muncul di dalam kartu tugas lengkap dengan tombol *"Rayakan ✨"*.
+  - Efek ledakan konfeti (*canvas-confetti*) otomatis menyala saat sub-tugas terakhir dicentang.
+- [x] **Audio Chime & Notifikasi Timer Pomodoro** (PRD F-04)
+  - Synthesizer suara bel (*Web Audio API*) otomatis berbunyi saat timer 25 menit fokus atau 5 menit istirahat selesai.
+  - Haptic feedback (*navigator.vibrate*) untuk perangkat smartphone.
 - [ ] **Input Sub-Tugas Manual:** Tombol untuk menambah sub-tugas kustom sendiri jika pengguna ingin menyisipkan langkah tambahan di luar rekomendasi AI.
 - [ ] **Penyimpanan Riwayat Sesi Pomodoro:** Sinkronisasi waktu aktual pengerjaan ke tabel `pomodoro_sessions` di basis data MariaDB untuk analitik masa depan.
 
