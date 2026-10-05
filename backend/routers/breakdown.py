@@ -40,11 +40,43 @@ async def breakdown(req: BreakdownRequest):
     now_naive = datetime.now()
     days_left = max((deadline_naive - now_naive).days + 1, 1)
 
+    target_count = req.subtasks_count if (req.subtasks_count and 2 <= req.subtasks_count <= 10) else None
+    count_instruction = (
+        f"PERSIS {target_count} sub-tugas harian"
+        if target_count
+        else "4–6 sub-tugas harian"
+    )
+
+    sys_prompt = f"""Kamu adalah asisten perencana belajar mahasiswa Indonesia yang sangat memahami pola pengerjaan tugas kuliah.
+
+Tugasmu HANYA satu: memecah instruksi tugas kuliah yang diberikan menjadi {count_instruction} yang:
+1. Konkret dan spesifik (bukan sekadar label seperti "kerjakan tugas")
+2. Berurutan secara logis (setiap sub-tugas adalah prasyarat sub-tugas berikutnya)
+3. Realistis dalam estimasi waktu (25–120 menit per sub-tugas)
+4. Berbahasa Indonesia yang santun dan mudah dipahami
+
+Keluarkan output HANYA berupa JSON array murni tanpa teks tambahan apapun, tanpa markdown, tanpa backtick.
+Format output:
+[
+  {{
+    "step": 1,
+    "title": "Judul sub-tugas singkat (max 60 karakter)",
+    "description": "Deskripsi aksi konkret yang harus dilakukan (1–3 kalimat)",
+    "duration_minutes": 45,
+    "target_day_offset": 0
+  }}
+]
+
+"target_day_offset" adalah berapa hari dari hari ini sub-tugas ini idealnya dikerjakan (0 = hari ini, 1 = besok, dst), distribusikan secara merata berdasarkan sisa hari menuju deadline."""
+
     user_prompt = f"""Judul Tugas: {req.title}
 Kategori: {req.category}
 Instruksi/Deskripsi: {req.description}
 Sisa Hari Menuju Deadline: {days_left} hari
-Tanggal Deadline: {deadline_naive.strftime('%A, %d %B %Y')}""".strip()
+Tanggal Deadline: {deadline_naive.strftime('%A, %d %B %Y')}"""
+
+    if target_count:
+        user_prompt += f"\nPermintaan Khusus Jumlah Langkah: Pecah tugas ini menjadi PERSIS {target_count} langkah kerja terurut (step 1 sampai {target_count})."
 
     source = "ai"
     raw_subtasks = []
@@ -53,7 +85,7 @@ Tanggal Deadline: {deadline_naive.strftime('%A, %d %B %Y')}""".strip()
         response = await ai_client.chat.completions.create(
             model=AI_MODEL,
             messages=[
-                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "system", "content": sys_prompt},
                 {"role": "user", "content": user_prompt},
             ],
             temperature=0.3,

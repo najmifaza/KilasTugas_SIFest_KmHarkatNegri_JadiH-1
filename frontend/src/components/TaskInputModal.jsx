@@ -16,6 +16,7 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [priority, setPriority] = useState('medium')
+  const [subtasksCount, setSubtasksCount] = useState(null)
   const [tags, setTags] = useState(DEFAULT_TAGS)
   const [newTagInput, setNewTagInput] = useState('')
   const [showAddTag, setShowAddTag] = useState(false)
@@ -84,6 +85,7 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
         description: form.description.trim() || form.title.trim(),
         category: form.category,
         deadline: deadlineISO,
+        subtasks_count: subtasksCount,
       })
 
       setForm({
@@ -94,6 +96,7 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
         category: 'coding',
         subject: 'Website Redesign',
       })
+      setSubtasksCount(null)
 
       if (onTaskCreated) {
         onTaskCreated({
@@ -319,7 +322,45 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
             </div>
           </div>
 
-          {/* 6. Tags (Removable Pills + Add) */}
+          {/* 6. Jumlah Langkah Target (Subtasks Count) */}
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-sm font-bold text-zinc-900">
+                Pecah Menjadi Berapa Langkah?
+              </label>
+              <span className="text-[11px] font-semibold text-zinc-500">
+                {subtasksCount ? `${subtasksCount} langkah` : 'Otomatis oleh AI'}
+              </span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {[
+                { count: null, label: 'Otomatis (AI)' },
+                { count: 3, label: '3 Langkah' },
+                { count: 4, label: '4 Langkah' },
+                { count: 5, label: '5 Langkah' },
+                { count: 6, label: '6 Langkah' },
+                { count: 8, label: '8 Langkah' },
+              ].map(({ count, label }) => {
+                const isActive = subtasksCount === count
+                return (
+                  <button
+                    key={label}
+                    type="button"
+                    onClick={() => setSubtasksCount(count)}
+                    className={`px-3 py-2 rounded-2xl text-xs font-semibold transition active:scale-95 cursor-pointer border ${
+                      isActive
+                        ? 'bg-zinc-900 text-white border-zinc-900 shadow-xs scale-[1.02]'
+                        : 'bg-white text-zinc-700 border-slate-200 hover:border-zinc-400'
+                    }`}
+                  >
+                    {label}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
+          {/* 7. Tags (Removable Pills + Add) */}
           <div>
             <label className="block text-sm font-bold text-zinc-900 mb-1.5">
               Tags

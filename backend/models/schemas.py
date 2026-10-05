@@ -62,6 +62,7 @@ class BreakdownRequest(BaseModel):
     description: str
     category: str
     deadline: datetime
+    subtasks_count: Optional[int] = None
 
 class SubtaskItem(BaseModel):
     step: int
