@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Sparkles, Zap, Plus } from 'lucide-react'
+import { Plus, Bell } from 'lucide-react'
 import { checkHealth } from '../api'
 
 export default function AppHeader({ onOpenCreate }) {
@@ -14,7 +14,7 @@ export default function AppHeader({ onOpenCreate }) {
       } else {
         setStatus({ loading: false, ok: false })
       }
-    } catch (e) {
+    } catch {
       setStatus({ loading: false, ok: false })
     }
   }
@@ -26,63 +26,68 @@ export default function AppHeader({ onOpenCreate }) {
   }, [])
 
   return (
-    <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-6 py-3">
-      <div className="max-w-md md:max-w-3xl lg:max-w-5xl xl:max-w-6xl mx-auto flex items-center justify-between gap-4">
-        {/* User Identity / Brand */}
-        <div className="flex items-center gap-2.5 min-w-0">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-violet-600 to-indigo-600 text-white flex items-center justify-center font-black text-sm shadow-xs border border-violet-400/30 shrink-0">
-            <Zap className="w-5 h-5 fill-white text-white" />
+    <div className="w-full pt-4 sm:pt-6 pb-2 min-w-0">
+      {/* Top Utility Bar: Avatar + Greeting + Quick Actions */}
+      <div className="flex items-center justify-between gap-3 mb-4">
+        {/* User Identity / Avatar */}
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-amber-200 to-orange-300 text-slate-900 flex items-center justify-center font-bold text-sm shadow-sm ring-2 ring-white/90 shrink-0 overflow-hidden">
+            <span>KT</span>
           </div>
           <div className="min-w-0">
-            <h1 className="text-[15px] font-black text-slate-900 tracking-tight leading-none truncate">
-              Halo, Mahasiswa! 👋
-            </h1>
-            <p className="text-[11px] font-semibold text-slate-500 leading-none mt-1 truncate">
-              KilasTugas • SIFest 2026
-            </p>
+            <span className="text-base font-semibold text-[#1C1C1E] leading-tight block truncate">
+              Selamat Pagi,
+            </span>
+            <span className="text-[13px] font-normal text-[#71717A] leading-tight block truncate">
+              Mahasiswa
+            </span>
           </div>
         </div>
 
-        {/* Right Actions: Status Badge & Desktop CTA Button */}
-        <div className="flex items-center gap-2 sm:gap-3">
-          {/* Live Backend AI Pill Badge */}
+        {/* Right Actions: Black Plus Button & White Bell Button (44px x 44px) */}
+        <div className="flex items-center gap-2.5 shrink-0">
+          {/* Black Plus Button */}
+          <button
+            type="button"
+            onClick={onOpenCreate}
+            className="w-11 h-11 rounded-full bg-[#1C1C1E] text-white flex items-center justify-center shadow-sm hover:scale-105 active:scale-95 transition cursor-pointer"
+            title="Tambah Tugas Baru"
+            aria-label="Tambah tugas baru"
+          >
+            <Plus className="w-5 h-5 stroke-[2.5]" />
+          </button>
+
+          {/* White Bell / Connection Status Button */}
           <button
             type="button"
             onClick={runCheck}
-            title="Klik untuk cek status VPS & AI"
-            className={`shrink-0 px-2.5 py-1.5 rounded-full border text-[11px] font-bold shadow-2xs flex items-center gap-1.5 transition active:scale-95 ${
-              status.loading
-                ? 'border-slate-200 bg-slate-50 text-slate-500'
-                : status.ok
-                ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
-                : 'border-rose-200 bg-rose-50 text-rose-700'
-            }`}
+            title={status.ok ? 'Server tersambung' : 'Server terputus, klik untuk cek'}
+            className="w-11 h-11 rounded-full bg-white text-[#1C1C1E] flex items-center justify-center shadow-sm border border-black/5 hover:scale-105 active:scale-95 transition cursor-pointer relative"
+            aria-label="Status koneksi dan notifikasi"
           >
+            <Bell className="w-5 h-5 text-[#1C1C1E]" strokeWidth={2} />
             <span
-              className={`w-1.5 h-1.5 rounded-full ${
+              className={`absolute top-2.5 right-2.5 w-2 h-2 rounded-full ${
                 status.loading
-                  ? 'bg-slate-400 animate-ping'
+                  ? 'bg-amber-400 animate-pulse'
                   : status.ok
-                  ? 'bg-emerald-500 animate-pulse'
-                  : 'bg-rose-500'
+                  ? 'bg-[#C7F263] ring-1 ring-black/10'
+                  : 'bg-rose-500 ring-1 ring-black/10'
               }`}
             />
-            <span>{status.loading ? 'Checking...' : status.ok ? 'AI VPS Online' : 'Offline'}</span>
           </button>
-
-          {/* Desktop "+ Pecah Tugas" CTA */}
-          {onOpenCreate && (
-            <button
-              type="button"
-              onClick={onOpenCreate}
-              className="hidden md:flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-bold text-xs shadow-xs transition active:scale-95 cursor-pointer shrink-0"
-            >
-              <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
-              <span>Pecah Tugas Baru</span>
-            </button>
-          )}
         </div>
       </div>
-    </header>
+
+      {/* Hero Display Headline (Two-line font-medium 32px) */}
+      <div className="pt-2 pb-1">
+        <h1
+          className="text-[32px] sm:text-[34px] text-[#18181B] leading-[1.18] tracking-tight"
+          style={{ fontWeight: 500 }}
+        >
+          Yuk, Bikin<br />Hari Ini Produktif
+        </h1>
+      </div>
+    </div>
   )
 }

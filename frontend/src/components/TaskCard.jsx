@@ -6,7 +6,6 @@ import {
   ChevronDown,
   ChevronUp,
   Trash2,
-  Sparkles,
   Plus,
   Calendar,
   MoreHorizontal,
@@ -253,13 +252,29 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
   const diffDays = Math.ceil((deadlineDate - now) / (1000 * 60 * 60 * 24))
   const isOverdue = diffDays < 0 && !isAllDone
 
-  let pacing = { label: 'On Track 🟢', color: 'text-emerald-700 bg-emerald-50 border border-emerald-200' }
+  let pacing = {
+    label: 'Tepat Waktu',
+    color: 'text-emerald-800 bg-[#D1F2D9]/70 border border-[#B3E8C0]',
+    dot: 'bg-emerald-600',
+  }
   if (isAllDone) {
-    pacing = { label: 'Siap Kumpul 🎉', color: 'text-emerald-700 bg-emerald-50 border border-emerald-200 font-bold' }
+    pacing = {
+      label: 'Selesai',
+      color: 'text-emerald-800 bg-[#D1F2D9] border border-[#B3E8C0]',
+      dot: 'bg-emerald-600',
+    }
   } else if (isOverdue) {
-    pacing = { label: 'Overdue Alert 🔴', color: 'text-rose-700 bg-rose-50 border border-rose-200 font-bold' }
+    pacing = {
+      label: 'Terlambat',
+      color: 'text-rose-800 bg-[#FFD9D9] border border-[#FFBFBF]',
+      dot: 'bg-rose-600',
+    }
   } else if (diffDays <= 1 && percent < 60) {
-    pacing = { label: 'Behind Schedule 🟡', color: 'text-amber-800 bg-amber-50 border border-amber-200' }
+    pacing = {
+      label: 'Mendekati Deadline',
+      color: 'text-amber-800 bg-[#FFE8CC] border border-[#FFD6A3]',
+      dot: 'bg-amber-600',
+    }
   }
 
   // Hide duplicated subject if it's identical to title
@@ -268,26 +283,27 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
     task.subject.trim().toLowerCase() !== task.title.trim().toLowerCase()
 
   return (
-    <article className="bg-white rounded-[1.5rem] border border-slate-200/90 shadow-xs overflow-hidden transition-all">
+    <article className="bg-white rounded-[28px] border border-white/80 shadow-[0_10px_30px_rgba(0,0,0,0.04)] overflow-hidden transition-all">
       {/* Card Header (Clickable to expand / collapse) */}
       <div
         onClick={() => setExpanded(!expanded)}
-        className="p-4 sm:p-5 pb-3.5 cursor-pointer select-none"
+        className="p-5 pb-4 cursor-pointer select-none"
       >
-        <div className="flex items-center justify-between gap-2 mb-2">
+        <div className="flex items-center justify-between gap-2 mb-2.5">
           {/* Subtle Category & Pacing Status */}
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+            <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
               {CATEGORY_MAP[task.category] || 'Tugas'}
             </span>
             <span className="text-slate-300">•</span>
-            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${pacing.color}`}>
-              {pacing.label}
+            <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${pacing.color}`}>
+              <span className={`w-1.5 h-1.5 rounded-full ${pacing.dot}`} />
+              <span>{pacing.label}</span>
             </span>
           </div>
 
           {/* Minimal Actions Menu & Expand */}
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1.5">
             {/* Options Dropdown */}
             <div className="relative">
               <button
@@ -296,7 +312,7 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
                   e.stopPropagation()
                   setShowMenu(!showMenu)
                 }}
-                className="w-8 h-8 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 flex items-center justify-center transition active:scale-90"
+                className="w-9 h-9 rounded-full bg-slate-100/90 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition active:scale-95 cursor-pointer"
                 title="Opsi Tugas"
                 aria-label="Opsi tugas"
               >
@@ -312,7 +328,7 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
                       setShowMenu(false)
                     }}
                   />
-                  <div className="absolute right-0 top-9 z-40 bg-white rounded-2xl shadow-elevated border border-slate-200/90 py-1.5 w-52 text-xs font-semibold text-slate-700 animate-in fade-in zoom-in-95">
+                  <div className="absolute right-0 top-10 z-40 bg-white rounded-2xl shadow-elevated border border-slate-200/90 py-1.5 w-52 text-xs font-semibold text-slate-700 animate-in fade-in zoom-in-95">
                     <button
                       type="button"
                       onClick={(e) => {
@@ -321,7 +337,7 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
                       }}
                       className="w-full px-3.5 py-2 text-left hover:bg-slate-50 flex items-center gap-2 text-slate-800"
                     >
-                      <Calendar className="w-4 h-4 text-violet-600 shrink-0" />
+                      <Calendar className="w-4 h-4 text-slate-700 shrink-0" />
                       <span>Buka di Google Calendar</span>
                     </button>
 
@@ -361,7 +377,7 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
             <button
               type="button"
               onClick={() => setExpanded(!expanded)}
-              className="w-8 h-8 rounded-full text-slate-400 hover:text-slate-800 hover:bg-slate-100 flex items-center justify-center transition active:scale-90"
+              className="w-9 h-9 rounded-full bg-slate-100/90 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition active:scale-95 cursor-pointer"
               aria-label={expanded ? 'Tutup rincian' : 'Buka rincian'}
             >
               {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -369,8 +385,8 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
           </div>
         </div>
 
-        {/* Task Title */}
-        <h3 className="font-black text-slate-900 text-lg leading-snug tracking-tight">
+        {/* Task Title (Reference: 17px font-semibold) */}
+        <h3 className="font-semibold text-[#18181B] text-[17px] leading-snug tracking-tight">
           {task.title}
         </h3>
 
@@ -407,9 +423,8 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
                 <button
                   type="button"
                   onClick={fireConfetti}
-                  className="text-[11px] font-bold text-emerald-600 hover:text-emerald-700 flex items-center gap-1 active:scale-95 transition"
+                  className="text-[11px] font-semibold text-emerald-700 hover:text-emerald-800 flex items-center gap-1 active:scale-95 transition"
                 >
-                  <Sparkles className="w-3 h-3 text-amber-500 fill-amber-500" />
                   <span>Rayakan</span>
                 </button>
               )}
@@ -424,7 +439,7 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
               className={`h-full rounded-full transition-all duration-500 ${
                 isAllDone
                   ? 'bg-emerald-500'
-                  : 'bg-violet-600'
+                  : 'bg-slate-900'
               }`}
               style={{ width: `${percent}%` }}
             />
@@ -460,14 +475,14 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
                   <button
                     type="button"
                     onClick={(e) => toggleSubtask(e, st)}
-                    className="w-9 h-9 -my-1 -ml-1 flex items-center justify-center rounded-xl text-slate-400 hover:text-violet-600 active:scale-90 transition flex-shrink-0"
+                    className="w-9 h-9 -my-1 -ml-1 flex items-center justify-center rounded-xl text-slate-400 hover:text-slate-800 active:scale-90 transition flex-shrink-0"
                     aria-label={`Tandai ${st.title} ${st.is_completed ? 'belum selesai' : 'selesai'}`}
                   >
                     <div
                       className={`w-5 h-5 rounded-lg flex items-center justify-center border transition ${
                         st.is_completed
-                          ? 'bg-violet-600 border-violet-600 text-white'
-                          : 'border-slate-300 bg-white group-hover:border-violet-400'
+                          ? 'bg-slate-900 border-slate-900 text-white'
+                          : 'border-slate-300 bg-white group-hover:border-slate-400'
                       }`}
                     >
                       {st.is_completed && <Check className="w-3.5 h-3.5 stroke-[3]" />}
@@ -506,7 +521,7 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
                   </button>
 
                   {/* Action chevron */}
-                  <div className="w-5 h-5 flex items-center justify-center text-slate-300 group-hover:text-violet-600 transition flex-shrink-0">
+                  <div className="w-5 h-5 flex items-center justify-center text-slate-300 group-hover:text-slate-700 transition flex-shrink-0">
                     <ChevronRight className="w-4 h-4" />
                   </div>
                 </div>
@@ -516,7 +531,7 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
 
           {/* Add Subtask Form / Trigger */}
           {isAdding ? (
-            <form onSubmit={handleAddSubtask} className="p-3 bg-white border border-violet-200 rounded-2xl shadow-2xs space-y-2 mt-2">
+            <form onSubmit={handleAddSubtask} className="p-3 bg-white border border-slate-200 rounded-2xl shadow-2xs space-y-2 mt-2">
               <input
                 type="text"
                 required
@@ -524,7 +539,7 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
                 placeholder="Tulis langkah kerja tambahan..."
                 value={newStepTitle}
                 onChange={(e) => setNewStepTitle(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-violet-500 font-medium"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-slate-800 font-medium"
               />
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
@@ -550,7 +565,7 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
                   </button>
                   <button
                     type="submit"
-                    className="px-3 py-1 bg-violet-600 hover:bg-violet-700 text-white font-bold text-xs rounded-lg transition active:scale-95 shadow-2xs"
+                    className="px-3 py-1 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-lg transition active:scale-95 shadow-soft"
                   >
                     Simpan
                   </button>
@@ -561,7 +576,7 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
             <button
               type="button"
               onClick={() => setIsAdding(true)}
-              className="w-full py-2.5 px-3 rounded-2xl border border-dashed border-slate-300 hover:border-violet-400 bg-white/60 hover:bg-violet-50/50 text-slate-500 hover:text-violet-700 text-xs font-bold flex items-center justify-center gap-1.5 transition active:scale-[0.99] mt-2 cursor-pointer"
+              className="w-full py-2 px-3 rounded-xl border border-dashed border-slate-300 hover:border-slate-400 bg-white/60 hover:bg-slate-50 text-slate-500 hover:text-slate-800 text-xs font-semibold flex items-center justify-center gap-1.5 transition active:scale-[0.99] mt-2 cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
               <span>Tambah Langkah Manual</span>

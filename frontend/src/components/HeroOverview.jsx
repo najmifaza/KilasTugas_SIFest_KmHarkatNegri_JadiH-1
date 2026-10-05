@@ -1,90 +1,117 @@
 import React from 'react'
-import { Sparkles, ArrowUpRight, Layers, CheckCircle2, Clock } from 'lucide-react'
+import { ClipboardList, CheckCircle2, Clock } from 'lucide-react'
 
-export default function HeroOverview({ tasks, onOpenCreate }) {
+export default function HeroOverview({ tasks }) {
   const totalTasks = tasks.length
+  const completedTasks = tasks.filter((t) => t.is_completed)
   const activeTasks = tasks.filter((t) => !t.is_completed)
 
+  const percent = totalTasks > 0 ? Math.round((completedTasks.length / totalTasks) * 100) : 0
+
+  // SVG circular gauge math: r = 40 -> circumference = 2 * PI * 40 ≈ 251.33
+  const radius = 40
+  const circumference = 2 * Math.PI * radius
+  const strokeDashoffset = circumference - (percent / 100) * circumference
+
   return (
-    <div className="space-y-3.5 md:space-y-0 md:grid md:grid-cols-12 md:gap-4 mb-5">
-      {/* Hero Action Card (Gradient Banner) */}
-      <div
-        onClick={onOpenCreate}
-        className="md:col-span-7 lg:col-span-8 relative overflow-hidden p-5 sm:p-6 rounded-[1.5rem] sm:rounded-[2rem] bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 text-white shadow-sm border border-violet-400/30 transition-all duration-200 active:scale-[0.99] hover:shadow-md hover:shadow-violet-500/20 group cursor-pointer flex flex-col justify-between min-h-[145px] sm:min-h-[160px]"
-      >
-        {/* Ambient Decorative Blurs */}
-        <div className="absolute -right-8 -top-8 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-500" />
-        <div className="absolute -left-6 -bottom-6 w-28 h-28 bg-pink-500/15 rounded-full blur-xl pointer-events-none" />
+    <div className="bg-[#1E1E22] text-white rounded-[32px] p-5 sm:p-6 shadow-2xl relative overflow-hidden mb-5 border border-zinc-800/80">
+      {/* Subtle top-left radial glow highlight */}
+      <div className="absolute -left-12 -top-12 w-44 h-44 bg-zinc-700/20 rounded-full blur-2xl pointer-events-none" />
 
-        <div className="relative z-10 flex items-start justify-between gap-3">
-          <div>
-            <div className="flex items-center gap-1.5 text-violet-200 text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1">
-              <Sparkles className="w-3.5 h-3.5 text-amber-300 fill-amber-300" />
-              <span>AI Micro-Pacing Engine</span>
-            </div>
-            <h2 className="font-black text-white text-xl sm:text-2xl lg:text-3xl tracking-tight leading-tight">
-              Pecah Tugas Kuliah
-            </h2>
-          </div>
-          <div className="p-2 sm:p-2.5 rounded-full bg-white/15 text-white/90 group-hover:bg-white group-hover:text-violet-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0">
-            <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
-          </div>
-        </div>
-
-        <div className="relative z-10 flex items-end justify-between gap-2 mt-3">
-          <p className="text-xs sm:text-sm text-violet-100 font-medium leading-relaxed max-w-[340px]">
-            Hancurkan modul praktikum atau tugas besar jadi aksi harian 25–45 menit.
-          </p>
-          <span className="text-[10px] sm:text-xs font-bold text-violet-100 bg-white/20 px-2.5 py-1 rounded-full shrink-0 backdrop-blur-xs">
-            + Tambah
-          </span>
-        </div>
+      {/* Header inside card (Reference: "Today's Progress") */}
+      <div className="relative z-10 mb-2">
+        <h2 className="text-[15px] font-medium text-white tracking-tight">
+          Progres Hari Ini
+        </h2>
       </div>
 
-      {/* 3 Metric Summary Grid */}
-      <div className="md:col-span-5 lg:col-span-4 grid grid-cols-3 md:grid-cols-1 gap-2 sm:gap-2.5 w-full">
-        {/* Metric 1 */}
-        <div className="bg-white border border-slate-200/90 rounded-[1.25rem] p-3 sm:p-3.5 shadow-2xs flex flex-col justify-between">
-          <div className="flex items-center justify-between mb-1">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-              Total Tugas
+      {/* Main Split Layout: Gauge + Vertical Divider + 3 Stat Rows */}
+      <div className="relative z-10 flex items-center justify-between sm:justify-start sm:gap-6 pt-1">
+        {/* Left: Circular Progress Ring (104px diameter) */}
+        <div className="relative w-[104px] h-[104px] flex items-center justify-center shrink-0">
+          <svg className="w-full h-full -rotate-90" viewBox="0 0 96 96">
+            {/* Background Track */}
+            <circle
+              cx="48"
+              cy="48"
+              r={radius}
+              fill="none"
+              stroke="#2E2E33"
+              strokeWidth="9"
+            />
+            {/* Foreground Active Ring */}
+            <circle
+              cx="48"
+              cy="48"
+              r={radius}
+              fill="none"
+              stroke="#C7F263"
+              strokeWidth="9"
+              strokeLinecap="round"
+              strokeDasharray={circumference}
+              strokeDashoffset={strokeDashoffset}
+              style={{ filter: 'drop-shadow(0 0 6px rgba(199, 242, 99, 0.4))' }}
+              className="transition-all duration-700 ease-out"
+            />
+          </svg>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="text-2xl font-semibold text-white tracking-tight">
+              {percent}
             </span>
-            <div className="p-1 rounded-lg bg-violet-50 text-violet-600">
-              <Layers className="w-3.5 h-3.5" />
-            </div>
-          </div>
-          <div className="text-lg sm:text-xl font-black text-slate-900 leading-none">
-            {totalTasks}
+            <span className="text-sm font-medium text-white ml-0.5 mt-0.5">
+              %
+            </span>
           </div>
         </div>
 
-        {/* Metric 2 */}
-        <div className="bg-white border border-slate-200/90 rounded-[1.25rem] p-3 sm:p-3.5 shadow-2xs flex flex-col justify-between">
-          <div className="flex items-center justify-between mb-1">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-              Tugas Aktif
-            </span>
-            <div className="p-1 rounded-lg bg-emerald-50 text-emerald-600">
-              <CheckCircle2 className="w-3.5 h-3.5" />
-            </div>
-          </div>
-          <div className="text-lg sm:text-xl font-black text-slate-900 leading-none">
-            {activeTasks.length}
-          </div>
-        </div>
+        {/* Center: Vertical Divider Line */}
+        <div className="w-px h-28 bg-white/10 shrink-0 mx-2 sm:mx-4" />
 
-        {/* Metric 3 */}
-        <div className="bg-white border border-slate-200/90 rounded-[1.25rem] p-3 sm:p-3.5 shadow-2xs flex flex-col justify-between">
-          <div className="flex items-center justify-between mb-1">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-              Metode Fokus
-            </span>
-            <div className="p-1 rounded-lg bg-amber-50 text-amber-600">
-              <Clock className="w-3.5 h-3.5" />
+        {/* Right: 3 Stat Rows with Circular Icon Plate */}
+        <div className="flex-1 space-y-3 min-w-0">
+          {/* Row 1: Total Tasks */}
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+              <ClipboardList className="w-3.5 h-3.5 text-zinc-400" />
+            </div>
+            <div className="min-w-0">
+              <span className="text-sm font-semibold text-white leading-tight block">
+                {totalTasks}
+              </span>
+              <span className="text-[11px] font-normal text-[#A1A1AA] leading-tight block">
+                Total Tugas
+              </span>
             </div>
           </div>
-          <div className="text-xs sm:text-sm font-black text-slate-800 leading-none truncate">
-            25m Pomodoro
+
+          {/* Row 2: Completed Tasks */}
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+              <CheckCircle2 className="w-3.5 h-3.5 text-[#C7F263]" />
+            </div>
+            <div className="min-w-0">
+              <span className="text-sm font-semibold text-white leading-tight block">
+                {completedTasks.length}
+              </span>
+              <span className="text-[11px] font-normal text-[#A1A1AA] leading-tight block">
+                Tugas Selesai
+              </span>
+            </div>
+          </div>
+
+          {/* Row 3: Active / Pending Tasks */}
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+              <Clock className="w-3.5 h-3.5 text-zinc-400" />
+            </div>
+            <div className="min-w-0">
+              <span className="text-sm font-semibold text-white leading-tight block">
+                {activeTasks.length}
+              </span>
+              <span className="text-[11px] font-normal text-[#A1A1AA] leading-tight block">
+                Tugas Berjalan
+              </span>
+            </div>
           </div>
         </div>
       </div>

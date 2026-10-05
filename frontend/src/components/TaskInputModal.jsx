@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { X, Loader2, Sparkles, Calendar, BookOpen, Clock } from 'lucide-react'
+import { X, Check, Loader2 } from 'lucide-react'
 import { createTask, triggerBreakdown, getSessionId } from '../api'
 
 const CATEGORIES = [
@@ -10,9 +10,16 @@ const CATEGORIES = [
   { id: 'custom', label: 'Lainnya' },
 ]
 
+const PRIORITIES = [
+  { id: 'low', label: 'Rendah', active: 'bg-[#D1F2D9] text-[#1E6B37] border-[#B3E8C0]' },
+  { id: 'medium', label: 'Sedang', active: 'bg-[#FFE8CC] text-[#B25900] border-[#FFD6A3]' },
+  { id: 'high', label: 'Tinggi', active: 'bg-[#FFD9D9] text-[#C41C1C] border-[#FFBFBF]' },
+]
+
 export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [priority, setPriority] = useState('medium')
 
   const getFutureISO = (daysAhead, hours = 23, minutes = 59) => {
     const d = new Date()
@@ -38,7 +45,7 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    if (e) e.preventDefault()
     if (!form.title.trim()) {
       setError('Judul tugas wajib diisi')
       return
@@ -101,28 +108,36 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
         if (e.target === e.currentTarget && !loading) onClose()
       }}
     >
-      <div className="bg-white w-full max-w-lg rounded-t-[2rem] sm:rounded-[2rem] p-5 sm:p-6 shadow-sheet sm:shadow-elevated border border-slate-200/90 max-h-[92vh] flex flex-col">
+      <div className="bg-white w-full max-w-lg rounded-t-[28px] sm:rounded-[28px] p-5 sm:p-6 shadow-2xl border border-slate-200/90 max-h-[92vh] flex flex-col">
         {/* Mobile handle indicator */}
         <div className="w-12 h-1 bg-slate-200 rounded-full mx-auto mb-3 sm:hidden" />
 
-        {/* Modal Header */}
+        {/* Modal Header: Close (X) left, Title center, Submit (Check) right */}
         <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 flex-shrink-0">
-          <div>
-            <h2 className="text-base font-extrabold text-slate-900 tracking-tight">
-              Pecah Tugas Baru
-            </h2>
-            <p className="text-xs text-slate-500 mt-0.5">
-              AI akan menguraikan tugas menjadi target harian 25–45 menit.
-            </p>
-          </div>
           <button
             type="button"
             onClick={onClose}
             disabled={loading}
-            className="w-8 h-8 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 flex items-center justify-center transition active:scale-95"
+            className="w-8 h-8 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 flex items-center justify-center transition active:scale-95 cursor-pointer"
             aria-label="Tutup modal"
           >
             <X className="w-4 h-4" />
+          </button>
+
+          <div className="text-center">
+            <h2 className="text-base font-bold text-slate-900 tracking-tight">
+              Buat Tugas Baru
+            </h2>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleSubmit}
+            disabled={loading}
+            className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-900 flex items-center justify-center transition active:scale-95 cursor-pointer"
+            aria-label="Simpan tugas"
+          >
+            <Check className="w-4 h-4 stroke-[2.5]" />
           </button>
         </div>
 
@@ -132,10 +147,10 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
           </div>
         )}
 
-        {/* Form Body with BEM-U styled inputs */}
+        {/* Form Body */}
         <form onSubmit={handleSubmit} className="space-y-3.5 mt-4 overflow-y-auto flex-1 pr-1">
           {/* Judul Tugas */}
-          <div className="rounded-[1.25rem] bg-slate-50 border border-slate-200/90 p-3.5 shadow-2xs focus-within:ring-2 focus-within:ring-violet-500/20 focus-within:border-violet-500 transition-all">
+          <div className="rounded-[16px] bg-slate-50 border border-slate-200/80 p-3.5 focus-within:ring-2 focus-within:ring-slate-900/10 focus-within:border-slate-800 transition-all">
             <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
               Judul Tugas <span className="text-rose-500">*</span>
             </label>
@@ -149,9 +164,23 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
             />
           </div>
 
+          {/* Deskripsi */}
+          <div className="rounded-[16px] bg-slate-50 border border-slate-200/80 p-3.5 focus-within:ring-2 focus-within:ring-slate-900/10 focus-within:border-slate-800 transition-all">
+            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
+              Instruksi / Catatan Dosen (Opsional)
+            </label>
+            <textarea
+              rows={2}
+              placeholder="Tempelkan poin penting silabus atau modul praktikum..."
+              value={form.description}
+              onChange={(e) => setForm({ ...form, description: e.target.value })}
+              className="w-full bg-transparent text-slate-900 placeholder-slate-400 font-medium text-xs focus:outline-none resize-none"
+            />
+          </div>
+
           {/* Mata Kuliah & Deadline */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="rounded-[1.25rem] bg-slate-50 border border-slate-200/90 p-3.5 shadow-2xs focus-within:ring-2 focus-within:ring-violet-500/20 focus-within:border-violet-500 transition-all">
+            <div className="rounded-[16px] bg-slate-50 border border-slate-200/80 p-3.5 focus-within:ring-2 focus-within:ring-slate-900/10 focus-within:border-slate-800 transition-all">
               <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
                 Mata Kuliah
               </label>
@@ -164,7 +193,7 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
               />
             </div>
 
-            <div className="rounded-[1.25rem] bg-slate-50 border border-slate-200/90 p-3.5 shadow-2xs focus-within:ring-2 focus-within:ring-violet-500/20 focus-within:border-violet-500 transition-all">
+            <div className="rounded-[16px] bg-slate-50 border border-slate-200/80 p-3.5 focus-within:ring-2 focus-within:ring-slate-900/10 focus-within:border-slate-800 transition-all">
               <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
                 Tenggat Waktu <span className="text-rose-500">*</span>
               </label>
@@ -179,21 +208,21 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
                 <button
                   type="button"
                   onClick={() => handlePresetDeadline(1)}
-                  className="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-white border border-slate-200 text-slate-600 hover:border-violet-300 transition"
+                  className="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-white border border-slate-200 text-slate-600 hover:border-slate-400 transition cursor-pointer"
                 >
                   Besok
                 </button>
                 <button
                   type="button"
                   onClick={() => handlePresetDeadline(3)}
-                  className="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-white border border-slate-200 text-slate-600 hover:border-violet-300 transition"
+                  className="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-white border border-slate-200 text-slate-600 hover:border-slate-400 transition cursor-pointer"
                 >
                   3 Hari
                 </button>
                 <button
                   type="button"
                   onClick={() => handlePresetDeadline(7)}
-                  className="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-white border border-slate-200 text-slate-600 hover:border-violet-300 transition"
+                  className="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-white border border-slate-200 text-slate-600 hover:border-slate-400 transition cursor-pointer"
                 >
                   1 Minggu
                 </button>
@@ -201,8 +230,34 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
             </div>
           </div>
 
+          {/* Segmented Priority Selector (Screen 3 style) */}
+          <div className="rounded-[16px] bg-slate-50 border border-slate-200/80 p-3.5">
+            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">
+              Prioritas Pengerjaan
+            </label>
+            <div className="grid grid-cols-3 gap-2">
+              {PRIORITIES.map((p) => {
+                const isSelected = priority === p.id
+                return (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => setPriority(p.id)}
+                    className={`py-2 rounded-full text-xs font-semibold border transition-all cursor-pointer ${
+                      isSelected
+                        ? p.active + ' shadow-2xs'
+                        : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
+                    }`}
+                  >
+                    {p.label}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+
           {/* Kategori Pills */}
-          <div className="rounded-[1.25rem] bg-slate-50 border border-slate-200/90 p-3.5 shadow-2xs">
+          <div className="rounded-[16px] bg-slate-50 border border-slate-200/80 p-3.5">
             <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">
               Kategori Tugas
             </label>
@@ -212,9 +267,9 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
                   type="button"
                   key={cat.id}
                   onClick={() => setForm({ ...form, category: cat.id })}
-                  className={`text-xs px-3 py-1.5 rounded-xl border transition font-bold ${
+                  className={`text-xs px-3.5 py-1.5 rounded-full border transition font-medium cursor-pointer ${
                     form.category === cat.id
-                      ? 'bg-violet-600 text-white border-violet-600 shadow-2xs'
+                      ? 'bg-[#18181B] text-white border-[#18181B] shadow-2xs'
                       : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
                   }`}
                 >
@@ -224,37 +279,20 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
             </div>
           </div>
 
-          {/* Deskripsi / Prompt Tambahan */}
-          <div className="rounded-[1.25rem] bg-slate-50 border border-slate-200/90 p-3.5 shadow-2xs focus-within:ring-2 focus-within:ring-violet-500/20 focus-within:border-violet-500 transition-all">
-            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
-              Catatan / Instruksi Dosen (Opsional)
-            </label>
-            <textarea
-              rows={2}
-              placeholder="Tempelkan poin penting silabus atau modul praktikum..."
-              value={form.description}
-              onChange={(e) => setForm({ ...form, description: e.target.value })}
-              className="w-full bg-transparent text-slate-900 placeholder-slate-400 font-medium text-xs focus:outline-none resize-none"
-            />
-          </div>
-
-          {/* Submit Action */}
+          {/* Full-width Black Pill Submit CTA */}
           <div className="pt-2">
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 py-3.5 rounded-[1.25rem] bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 active:scale-[0.98] disabled:opacity-50 text-white font-extrabold text-xs tracking-wide shadow-sm shadow-violet-500/20 transition cursor-pointer"
+              className="w-full flex items-center justify-center gap-2 py-4 rounded-full bg-[#18181B] hover:bg-black active:scale-[0.98] disabled:opacity-50 text-white font-bold text-sm tracking-wide shadow-lg shadow-black/15 transition cursor-pointer"
             >
               {loading ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin text-violet-200" />
+                  <Loader2 className="w-4 h-4 animate-spin text-zinc-400" />
                   <span>Sedang Menguraikan Target Harian...</span>
                 </>
               ) : (
-                <>
-                  <Sparkles className="w-4 h-4 fill-white" />
-                  <span>Pecah Tugas dengan AI</span>
-                </>
+                <span>Buat &amp; Pecah Tugas</span>
               )}
             </button>
           </div>
