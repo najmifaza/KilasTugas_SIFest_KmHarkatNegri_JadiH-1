@@ -1,47 +1,57 @@
 import React, { useState } from 'react'
-import { X, Check, Loader2 } from 'lucide-react'
+import { X, Check, Loader2, Calendar, Clock, Folder, ChevronDown } from 'lucide-react'
 import { createTask, triggerBreakdown, getSessionId } from '../api'
 
-const CATEGORIES = [
-  { id: 'laporan_lab', label: 'Laporan Lab' },
-  { id: 'makalah', label: 'Makalah Teori' },
-  { id: 'coding', label: 'Projek Coding' },
-  { id: 'presentasi', label: 'Presentasi' },
-  { id: 'custom', label: 'Lainnya' },
-]
+const DEFAULT_TAGS = ['Design', 'UI/UX', 'Work']
 
-const PRIORITIES = [
-  { id: 'low', label: 'Rendah', active: 'bg-[#D1F2D9] text-[#1E6B37] border-[#B3E8C0]' },
-  { id: 'medium', label: 'Sedang', active: 'bg-[#FFE8CC] text-[#B25900] border-[#FFD6A3]' },
-  { id: 'high', label: 'Tinggi', active: 'bg-[#FFD9D9] text-[#C41C1C] border-[#FFBFBF]' },
+const CATEGORIES = [
+  { id: 'coding', label: 'Website Redesign' },
+  { id: 'laporan_lab', label: 'Laporan Praktikum' },
+  { id: 'makalah', label: 'Makalah Teori' },
+  { id: 'presentasi', label: 'Presentasi Proyek' },
+  { id: 'custom', label: 'Lainnya' },
 ]
 
 export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [priority, setPriority] = useState('medium')
+  const [tags, setTags] = useState(DEFAULT_TAGS)
+  const [newTagInput, setNewTagInput] = useState('')
+  const [showAddTag, setShowAddTag] = useState(false)
 
-  const getFutureISO = (daysAhead, hours = 23, minutes = 59) => {
+  // Split date and time defaults
+  const getDefaultDate = (daysAhead = 3) => {
     const d = new Date()
     d.setDate(d.getDate() + daysAhead)
-    d.setHours(hours, minutes, 0, 0)
-    const offset = d.getTimezoneOffset() * 60000
-    const localISOTime = new Date(d.getTime() - offset).toISOString().slice(0, 16)
-    return localISOTime
+    return d.toISOString().slice(0, 10)
   }
 
   const [form, setForm] = useState({
     title: '',
-    subject: '',
-    category: 'coding',
-    deadline: getFutureISO(3),
     description: '',
+    date: getDefaultDate(3),
+    time: '10:00',
+    category: 'coding',
+    subject: 'Website Redesign',
   })
 
   if (!isOpen) return null
 
-  const handlePresetDeadline = (days) => {
-    setForm((prev) => ({ ...prev, deadline: getFutureISO(days) }))
+  const handlePresetDate = (days) => {
+    setForm((prev) => ({ ...prev, date: getDefaultDate(days) }))
+  }
+
+  const handleRemoveTag = (tagToRemove) => {
+    setTags((prev) => prev.filter((t) => t !== tagToRemove))
+  }
+
+  const handleAddTag = () => {
+    if (newTagInput.trim() && !tags.includes(newTagInput.trim())) {
+      setTags((prev) => [...prev, newTagInput.trim()])
+      setNewTagInput('')
+      setShowAddTag(false)
+    }
   }
 
   const handleSubmit = async (e) => {
@@ -55,13 +65,14 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
 
     try {
       const sessionId = getSessionId()
+      const deadlineISO = new Date(`${form.date}T${form.time}:00`).toISOString()
 
       const taskRes = await createTask({
         session_id: sessionId,
         title: form.title.trim(),
         subject: form.subject.trim() || null,
         category: form.category,
-        deadline: new Date(form.deadline).toISOString(),
+        deadline: deadlineISO,
         description: form.description.trim() || null,
       })
 
@@ -72,15 +83,16 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
         title: form.title.trim(),
         description: form.description.trim() || form.title.trim(),
         category: form.category,
-        deadline: new Date(form.deadline).toISOString(),
+        deadline: deadlineISO,
       })
 
       setForm({
         title: '',
-        subject: '',
-        category: 'coding',
-        deadline: getFutureISO(3),
         description: '',
+        date: getDefaultDate(3),
+        time: '10:00',
+        category: 'coding',
+        subject: 'Website Redesign',
       })
 
       if (onTaskCreated) {
@@ -88,7 +100,7 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
           id: taskId,
           title: form.title,
           subject: form.subject,
-          deadline: form.deadline,
+          deadline: deadlineISO,
           source: breakdownRes.source,
           subtasks: breakdownRes.data,
         })
@@ -103,200 +115,288 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4"
+      className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4"
       onClick={(e) => {
         if (e.target === e.currentTarget && !loading) onClose()
       }}
     >
-      <div className="bg-white w-full max-w-lg rounded-t-[28px] sm:rounded-[28px] p-5 sm:p-6 shadow-2xl border border-slate-200/90 max-h-[92vh] flex flex-col">
+      <div className="w-full max-w-lg rounded-t-[32px] sm:rounded-[32px] bg-[#F7F4EF] p-5 sm:p-6 shadow-2xl border border-white/80 max-h-[94vh] flex flex-col font-sans text-zinc-900">
         {/* Mobile handle indicator */}
-        <div className="w-12 h-1 bg-slate-200 rounded-full mx-auto mb-3 sm:hidden" />
+        <div className="w-12 h-1 bg-zinc-300 rounded-full mx-auto mb-3 sm:hidden shrink-0" />
 
-        {/* Modal Header: Close (X) left, Title center, Submit (Check) right */}
-        <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 flex-shrink-0">
+        {/* Header: White Circular Buttons + Centered Title */}
+        <header className="flex items-center justify-between pb-3 shrink-0">
+          {/* Close Button (48px white circle) */}
           <button
             type="button"
             onClick={onClose}
             disabled={loading}
-            className="w-8 h-8 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 flex items-center justify-center transition active:scale-95 cursor-pointer"
+            className="w-11 h-11 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center shadow-xs text-zinc-800 hover:bg-slate-50 transition active:scale-95 cursor-pointer shrink-0"
             aria-label="Tutup modal"
           >
-            <X className="w-4 h-4" />
+            <X className="w-5 h-5 stroke-[2]" />
           </button>
 
-          <div className="text-center">
-            <h2 className="text-base font-bold text-slate-900 tracking-tight">
-              Buat Tugas Baru
-            </h2>
-          </div>
+          {/* Centered Title */}
+          <h2 className="text-[17px] font-bold text-zinc-900 tracking-tight">
+            Add New Task
+          </h2>
 
+          {/* Submit Button (48px white circle) */}
           <button
             type="button"
             onClick={handleSubmit}
             disabled={loading}
-            className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-900 flex items-center justify-center transition active:scale-95 cursor-pointer"
+            className="w-11 h-11 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center shadow-xs text-zinc-800 hover:bg-slate-50 transition active:scale-95 cursor-pointer shrink-0"
             aria-label="Simpan tugas"
           >
-            <Check className="w-4 h-4 stroke-[2.5]" />
+            <Check className="w-5 h-5 stroke-[2.5]" />
           </button>
-        </div>
+        </header>
 
         {error && (
-          <div className="mt-3 text-xs text-rose-700 bg-rose-50 border border-rose-200/80 p-3 rounded-2xl flex-shrink-0">
+          <div className="my-2 text-xs text-rose-700 bg-rose-50 border border-rose-200 p-3 rounded-2xl shrink-0">
             {error}
           </div>
         )}
 
-        {/* Form Body */}
-        <form onSubmit={handleSubmit} className="space-y-3.5 mt-4 overflow-y-auto flex-1 pr-1">
-          {/* Judul Tugas */}
-          <div className="rounded-[16px] bg-slate-50 border border-slate-200/80 p-3.5 focus-within:ring-2 focus-within:ring-slate-900/10 focus-within:border-slate-800 transition-all">
-            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
-              Judul Tugas <span className="text-rose-500">*</span>
+        {/* Form Body (Scrollable fields) */}
+        <form id="task-form" onSubmit={handleSubmit} className="space-y-3.5 overflow-y-auto flex-1 pr-1 pt-2 no-scrollbar">
+          {/* 1. Task Title */}
+          <div>
+            <label className="block text-sm font-bold text-zinc-900 mb-1.5">
+              Task Title
             </label>
             <input
               type="text"
               required
-              placeholder="Contoh: Implementasi RSA & Diffie-Hellman"
+              placeholder="Finish landing page design"
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
-              className="w-full bg-transparent text-slate-900 placeholder-slate-400 font-semibold text-sm focus:outline-none"
+              className="w-full h-12 bg-white rounded-2xl px-4 text-sm text-zinc-800 font-medium shadow-xs focus:outline-none border border-slate-100 placeholder-zinc-400"
             />
           </div>
 
-          {/* Deskripsi */}
-          <div className="rounded-[16px] bg-slate-50 border border-slate-200/80 p-3.5 focus-within:ring-2 focus-within:ring-slate-900/10 focus-within:border-slate-800 transition-all">
-            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
-              Instruksi / Catatan Dosen (Opsional)
+          {/* 2. Description */}
+          <div>
+            <label className="block text-sm font-bold text-zinc-900 mb-1.5">
+              Description
             </label>
             <textarea
               rows={2}
-              placeholder="Tempelkan poin penting silabus atau modul praktikum..."
+              placeholder="Design the new landing page for the product launch."
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
-              className="w-full bg-transparent text-slate-900 placeholder-slate-400 font-medium text-xs focus:outline-none resize-none"
+              className="w-full bg-white rounded-2xl p-3.5 text-sm text-zinc-800 font-medium shadow-xs focus:outline-none resize-none border border-slate-100 placeholder-zinc-400"
             />
           </div>
 
-          {/* Mata Kuliah & Deadline */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="rounded-[16px] bg-slate-50 border border-slate-200/80 p-3.5 focus-within:ring-2 focus-within:ring-slate-900/10 focus-within:border-slate-800 transition-all">
-              <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
-                Mata Kuliah
-              </label>
-              <input
-                type="text"
-                placeholder="Contoh: Keamanan Info"
-                value={form.subject}
-                onChange={(e) => setForm({ ...form, subject: e.target.value })}
-                className="w-full bg-transparent text-slate-900 placeholder-slate-400 font-semibold text-sm focus:outline-none"
-              />
-            </div>
+          {/* 3. Due Date & Time */}
+          <div>
+            <label className="block text-sm font-bold text-zinc-900 mb-1.5">
+              Due Date & time
+            </label>
+            <div className="grid grid-cols-2 gap-3">
+              {/* Date Box */}
+              <div className="h-12 bg-white rounded-2xl px-4 flex items-center gap-2 text-sm text-zinc-700 font-medium shadow-xs border border-slate-100 relative">
+                <Calendar className="w-4 h-4 text-zinc-800 shrink-0 pointer-events-none" />
+                <input
+                  type="date"
+                  required
+                  value={form.date}
+                  onChange={(e) => setForm({ ...form, date: e.target.value })}
+                  className="w-full bg-transparent text-sm text-zinc-800 font-medium focus:outline-none [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+                />
+              </div>
 
-            <div className="rounded-[16px] bg-slate-50 border border-slate-200/80 p-3.5 focus-within:ring-2 focus-within:ring-slate-900/10 focus-within:border-slate-800 transition-all">
-              <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">
-                Tenggat Waktu <span className="text-rose-500">*</span>
-              </label>
-              <input
-                type="datetime-local"
-                required
-                value={form.deadline}
-                onChange={(e) => setForm({ ...form, deadline: e.target.value })}
-                className="w-full bg-transparent text-slate-900 font-semibold text-xs focus:outline-none"
-              />
-              <div className="flex items-center gap-1.5 mt-2">
-                <button
-                  type="button"
-                  onClick={() => handlePresetDeadline(1)}
-                  className="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-white border border-slate-200 text-slate-600 hover:border-slate-400 transition cursor-pointer"
-                >
-                  Besok
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handlePresetDeadline(3)}
-                  className="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-white border border-slate-200 text-slate-600 hover:border-slate-400 transition cursor-pointer"
-                >
-                  3 Hari
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handlePresetDeadline(7)}
-                  className="px-2 py-0.5 rounded-lg text-[10px] font-bold bg-white border border-slate-200 text-slate-600 hover:border-slate-400 transition cursor-pointer"
-                >
-                  1 Minggu
-                </button>
+              {/* Time Box */}
+              <div className="h-12 bg-white rounded-2xl px-4 flex items-center gap-2 text-sm text-zinc-700 font-medium shadow-xs border border-slate-100 relative">
+                <Clock className="w-4 h-4 text-zinc-800 shrink-0 pointer-events-none" />
+                <input
+                  type="time"
+                  required
+                  value={form.time}
+                  onChange={(e) => setForm({ ...form, time: e.target.value })}
+                  className="w-full bg-transparent text-sm text-zinc-800 font-medium focus:outline-none [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+                />
               </div>
             </div>
-          </div>
 
-          {/* Segmented Priority Selector (Screen 3 style) */}
-          <div className="rounded-[16px] bg-slate-50 border border-slate-200/80 p-3.5">
-            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">
-              Prioritas Pengerjaan
-            </label>
-            <div className="grid grid-cols-3 gap-2">
-              {PRIORITIES.map((p) => {
-                const isSelected = priority === p.id
-                return (
-                  <button
-                    key={p.id}
-                    type="button"
-                    onClick={() => setPriority(p.id)}
-                    className={`py-2 rounded-full text-xs font-semibold border transition-all cursor-pointer ${
-                      isSelected
-                        ? p.active + ' shadow-2xs'
-                        : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
-                    }`}
-                  >
-                    {p.label}
-                  </button>
-                )
-              })}
+            {/* Instant Shortcut Pills */}
+            <div className="flex items-center gap-1.5 mt-2">
+              <button
+                type="button"
+                onClick={() => handlePresetDate(1)}
+                className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-white border border-slate-200 text-zinc-700 hover:border-zinc-400 transition cursor-pointer"
+              >
+                Besok
+              </button>
+              <button
+                type="button"
+                onClick={() => handlePresetDate(3)}
+                className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-white border border-slate-200 text-zinc-700 hover:border-zinc-400 transition cursor-pointer"
+              >
+                3 Hari
+              </button>
+              <button
+                type="button"
+                onClick={() => handlePresetDate(7)}
+                className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-white border border-slate-200 text-zinc-700 hover:border-zinc-400 transition cursor-pointer"
+              >
+                1 Minggu
+              </button>
             </div>
           </div>
 
-          {/* Kategori Pills */}
-          <div className="rounded-[16px] bg-slate-50 border border-slate-200/80 p-3.5">
-            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">
-              Kategori Tugas
+          {/* 4. Priority (3 Colored Selection Pills, matching reference Screen 3) */}
+          <div>
+            <label className="block text-sm font-bold text-zinc-900 mb-1.5">
+              Priority
             </label>
-            <div className="flex flex-wrap gap-1.5">
-              {CATEGORIES.map((cat) => (
+            <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
+              {/* Low (Always green tint) */}
+              <button
+                type="button"
+                onClick={() => setPriority('low')}
+                className={`py-2.5 rounded-2xl text-sm font-semibold transition active:scale-95 cursor-pointer text-center bg-[#E5F4E3] border text-[#2E7D32] ${
+                  priority === 'low'
+                    ? 'border-[#7CB685] ring-2 ring-[#7CB685]/40 shadow-xs font-bold scale-[1.02]'
+                    : 'border-[#7CB685]/60 opacity-90'
+                }`}
+              >
+                Low
+              </button>
+
+              {/* Medium (Always orange/peach tint) */}
+              <button
+                type="button"
+                onClick={() => setPriority('medium')}
+                className={`py-2.5 rounded-2xl text-sm font-semibold transition active:scale-95 cursor-pointer text-center bg-[#FDEBD2] border text-[#E76F51] ${
+                  priority === 'medium'
+                    ? 'border-[#F4A261] ring-2 ring-[#F4A261]/40 shadow-xs font-bold scale-[1.02]'
+                    : 'border-[#F4A261]/60 opacity-90'
+                }`}
+              >
+                Medium
+              </button>
+
+              {/* High (Always red/pink tint) */}
+              <button
+                type="button"
+                onClick={() => setPriority('high')}
+                className={`py-2.5 rounded-2xl text-sm font-semibold transition active:scale-95 cursor-pointer text-center bg-[#FCDAD7] border text-[#D90429] ${
+                  priority === 'high'
+                    ? 'border-[#E76F51] ring-2 ring-[#E76F51]/40 shadow-xs font-bold scale-[1.02]'
+                    : 'border-[#E76F51]/60 opacity-90'
+                }`}
+              >
+                High
+              </button>
+            </div>
+          </div>
+
+          {/* 5. Project (Dropdown Bar with Folder Icon) */}
+          <div>
+            <label className="block text-sm font-bold text-zinc-900 mb-1.5">
+              Project
+            </label>
+            <div className="h-14 w-full bg-white rounded-2xl px-4 flex items-center justify-between shadow-xs border border-slate-100 relative">
+              <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                <Folder className="w-5 h-5 text-indigo-600 shrink-0 fill-indigo-100" />
+                <select
+                  value={form.category}
+                  onChange={(e) => setForm({ ...form, category: e.target.value })}
+                  className="w-full bg-transparent text-sm font-semibold text-zinc-900 focus:outline-none cursor-pointer appearance-none pr-6"
+                >
+                  {CATEGORIES.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <ChevronDown className="w-4 h-4 text-zinc-800 shrink-0 pointer-events-none" />
+            </div>
+          </div>
+
+          {/* 6. Tags (Removable Pills + Add) */}
+          <div>
+            <label className="block text-sm font-bold text-zinc-900 mb-1.5">
+              Tags
+            </label>
+            <div className="flex flex-wrap gap-2 items-center">
+              {tags.map((tag, idx) => (
+                <span
+                  key={idx}
+                  className="px-3 py-1.5 bg-[#DFD8FD] border border-[#9D8DF1] text-[#5A4FCF] text-xs font-semibold rounded-2xl flex items-center gap-1.5 shadow-2xs"
+                >
+                  <span>{tag}</span>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveTag(tag)}
+                    className="hover:text-indigo-950 transition cursor-pointer"
+                    aria-label={`Hapus tag ${tag}`}
+                  >
+                    <X className="w-3.5 h-3.5 stroke-[2.5]" />
+                  </button>
+                </span>
+              ))}
+
+              {showAddTag ? (
+                <div className="flex items-center gap-1.5">
+                  <input
+                    type="text"
+                    placeholder="Tag baru"
+                    value={newTagInput}
+                    onChange={(e) => setNewTagInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault()
+                        handleAddTag()
+                      }
+                    }}
+                    className="w-24 px-3 py-1 bg-white border border-zinc-300 rounded-2xl text-xs font-medium text-zinc-800 focus:outline-none"
+                    autoFocus
+                  />
+                  <button
+                    type="button"
+                    onClick={handleAddTag}
+                    className="px-2.5 py-1 bg-zinc-900 text-white text-xs font-semibold rounded-2xl cursor-pointer"
+                  >
+                    +
+                  </button>
+                </div>
+              ) : (
                 <button
                   type="button"
-                  key={cat.id}
-                  onClick={() => setForm({ ...form, category: cat.id })}
-                  className={`text-xs px-3.5 py-1.5 rounded-full border transition font-medium cursor-pointer ${
-                    form.category === cat.id
-                      ? 'bg-[#18181B] text-white border-[#18181B] shadow-2xs'
-                      : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
-                  }`}
+                  onClick={() => setShowAddTag(true)}
+                  className="px-3 py-1.5 bg-white/80 border border-zinc-200 text-zinc-600 hover:text-zinc-900 text-xs font-semibold rounded-2xl flex items-center gap-1 transition cursor-pointer"
                 >
-                  {cat.label}
+                  <span>+ Add</span>
                 </button>
-              ))}
+              )}
             </div>
           </div>
-
-          {/* Full-width Black Pill Submit CTA */}
-          <div className="pt-2">
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full flex items-center justify-center gap-2 py-4 rounded-full bg-[#18181B] hover:bg-black active:scale-[0.98] disabled:opacity-50 text-white font-bold text-sm tracking-wide shadow-lg shadow-black/15 transition cursor-pointer"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin text-zinc-400" />
-                  <span>Sedang Menguraikan Target Harian...</span>
-                </>
-              ) : (
-                <span>Buat &amp; Pecah Tugas</span>
-              )}
-            </button>
-          </div>
         </form>
+
+        {/* 7. Bottom CTA (Fixed at base, always in view) */}
+        <div className="pt-3 pb-1 shrink-0 border-t border-zinc-200/40">
+          <button
+            type="submit"
+            form="task-form"
+            disabled={loading}
+            className="w-full h-14 bg-zinc-950 hover:bg-black text-white rounded-full text-base font-semibold shadow-xl flex items-center justify-center active:scale-[0.99] transition disabled:opacity-50 cursor-pointer"
+          >
+            {loading ? (
+              <div className="flex items-center gap-2">
+                <Loader2 className="w-5 h-5 animate-spin text-zinc-400" />
+                <span>Creating Task...</span>
+              </div>
+            ) : (
+              <span>Create Task</span>
+            )}
+          </button>
+        </div>
       </div>
     </div>
   )
