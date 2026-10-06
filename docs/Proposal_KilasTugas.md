@@ -231,8 +231,8 @@ Tim menjamin bahwa AI tidak digunakan untuk memalsukan data empiris, tidak digun
 
 ## 8. Rencana Implementasi & Status Pengembangan Saat Ini
 
-### 8.1 Status Progres Saat Ini (~50% dari Roadmap Menuju Grand Final)
-Saat ini sistem telah menyelesaikan seluruh fondasi MVP fungsional Online Round (fase 1 dari total roadmap pengembangan):
+### 8.1 Status Progres Saat Ini (~50% Total Roadmap Pengembangan)
+Saat ini sistem telah menyelesaikan seluruh fondasi MVP fungsional Online Round (fase 1), sementara fitur lanjutan dialokasikan untuk Grand Final Sprint:
 - [x] Repositori GitHub terkonfigurasi dengan struktur monorepo terstandar (`backend/` & `frontend/`).
 - [x] Antarmuka Form Input Tugas terpadu dengan opsi custom target langkah (3–8 langkah atau AI otomatis).
 - [x] Endpoint Backend `/api/breakdown` terintegrasi 9Router AI + Fallback Template + Smart Caching.
@@ -240,8 +240,12 @@ Saat ini sistem telah menyelesaikan seluruh fondasi MVP fungsional Online Round 
 - [x] Engine Pomodoro Focus Mode terpasang dengan persistent background timer, floating pill, dan audio chime.
 - [x] Ekspor kalender otomatis via RFC 5545 iCalendar (`.ics`) dan Google Calendar direct intent.
 - [x] Fitur viral Task Blueprint Sharing (`/p/:id`) dengan impor satu detik.
-- [ ] Implementasi fitur lanjutan sesuai roadmap `docs/FUTURE.md` (AI Syllabus & PDF Reader, Collaborative Group Task Split, PWA Offline-First, dan Web Push Notification) yang dialokasikan pada fase Sprint Grand Final.
 - [x] Video walkthrough demonstrasi produk siap diakses panitia dan juri.
+- [ ] Fitur AI Syllabus & PDF Reader (ekstraksi otomatis instruksi modul tugas dari berkas PDF/DOCX tebal).
+- [ ] Fitur Collaborative Group Task Split (pembagian porsi kerja kelompok anti free-rider).
+- [ ] Progressive Web App (PWA) & IndexedDB Offline-First Mode untuk akses nir-kuota.
+- [ ] Always-On Background Timer & Web Push Notification via VAPID Service Worker saat peramban ditutup.
+- [ ] Pengujian kegunaan formal (SUS Testing) dan pilot deployment ke 50+ mahasiswa lintas fakultas.
 
 ### 8.2 Rencana Pengembangan Sesi Grand Final & Roadmap (11 Oktober 2026)
 1. **Product Sprint Sesi I (09.00–12.00 WIB):**
