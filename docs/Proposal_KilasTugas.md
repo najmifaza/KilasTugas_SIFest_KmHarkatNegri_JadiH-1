@@ -1,4 +1,4 @@
-# PROPOSAL RINGKAS INOVASI DIGITAL
+# PROPOSAL INOVASI DIGITAL
 ## SIFest Digital Innovation Challenge 2026: Track Education
 
 ---
