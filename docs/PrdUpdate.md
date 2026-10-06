@@ -1,223 +1,290 @@
-# Product Requirement Document (PRD) — Versi 2.0 (Terkini)
-## KilasTugas: Smart Actionable Task Breakdown & Micro-Pacing for Students
+# Spesifikasi Kebutuhan Teknis Sistem (Technical PRD)
+## KilasTugas: Smart Actionable Task Breakdown & Micro-Pacing
 
 ---
 
-> **Versi Dokumen:** 2.0.0 (Production & Submission Ready)  
-> **Penyusun:** Tim KilasTugas (Adridinan Najmi Faza, Timotius Willy Narendra, Fardizza Finda Rahman)  
-> **Institusi:** Jurusan Informatika, Universitas Jenderal Soedirman  
-> **Kompetisi:** SIFest Digital Innovation Challenge 2026 (Track: Education)  
-> **Batas Akhir Online Round:** 8 Oktober 2026 pukul 23.59 WIB  
-> **Jadwal Grand Final (Zoom):** 11 Oktober 2026  
-> **Tautan Repositori:** https://github.com/najmifaza/KilasTugas_SIFest_KmHarkatNegri_JadiH-1  
-> **Live Demo Vercel:** https://kilastugas.vercel.app  
-> **Live API VPS:** https://api-kilastugas.najmifaza.my.id  
+## 1. Arsitektur Sistem & Topologi Infrastruktur
 
----
+Sistem KilasTugas mengadopsi arsitektur terdistribusi *Decoupled Client-Server* dengan tiga simpul utama: Client SPA (Vercel), Backend Engine (Ubuntu VPS), dan AI Gateway (9Router Proxy).
 
-## 1. Executive Summary
-
-**KilasTugas** adalah platform produktivitas akademik berbasis web cerdas yang mentransformasikan instruksi tugas kuliah yang panjang, padat, dan abstrak menjadi urutan rencana aksi harian konkret, berbobot mikro, dan langsung dapat dieksekusi oleh mahasiswa.
-
-Platform ini memecahkan sindrom psikologis **Task Paralysis** (kondisi di mana mahasiswa menunda pengerjaan bukan karena malas, melainkan akibat *cognitive overload* saat membaca silabus tugas tebal belasan halaman). KilasTugas memadukan mesin inferensi kecerdasan buatan (*9Router ag/gemini-3.7-flash-medium*), *Smart Caching* instan (<20ms), *Deterministic Fallback Engine* kurikulum, visualisasi *Micro-Pacing*, *Floating Pomodoro Focus Engine* persisten, integrasi kalender otomatis (Google Calendar & RFC 5545 iCalendar), serta fitur viral *Task Blueprint Sharing* (/p/:id).
-
-**Filosofi Inti Produk:** *"Problem First, Technology Second: Jangan tanya 'kapan selesai', tanyakan 'apa aksi konkret yang dikerjakan hari ini'."*
-
----
-
-## 2. Problem Statement & Background
-
-### 2.1 Konteks Masalah
-Mahasiswa aktif perguruan tinggi rata-rata menempuh 4 hingga 7 mata kuliah per semester dengan variasi beban penugasan: makalah riset, laporan praktikum, proyek pemrograman perangkat lunak, dan presentasi kelompok.
-
-Sebagian besar tugas diserahkan dosen dalam silabus panjang 5–15 halaman tanpa struktur tahapan kerja. Hal ini memicu kebuntuan kognitif (*Task Paralysis / Overwhelm Freeze*). Mahasiswa terjebak dalam pertanyaan *"Mulai dari mana?"* yang memicu ilusi waktu luang semu hingga berujung pada sistem kebut semalam di malam H-1 deadline.
-
-### 2.2 Gap Analisis Alat Produktivitas Eksisting
-1. **Pasif & Deadline-Centric (Notion, Google Tasks, Todoist):** Hanya mencatat nama tugas dan tanggal tenggat, menyerahkan 100% beban perincian langkah kepada mahasiswa yang sedang kewalahan.
-2. **Ketiadaan Pacing Harian:** Tidak ada instrumen yang menghitung ritme kerja harian aman berdasarkan selisih hari menuju tenggat waktu.
-3. **Friksi Awal Terlalu Tinggi:** Aplikasi manajemen proyek formal (Trello, Jira, Asana) menuntut registrasi dan konfigurasi database yang melelahkan mahasiswa sebelum mulai bekerja.
-
-### 2.3 Rumusan Masalah Formal
-> *"Bagaimana merancang platform digital yang mampu mengeliminasi Task Paralysis pada mahasiswa dengan mengonversi instruksi tugas kuliah tebal menjadi rencana aksi harian mikro yang konkret, terdistribusi merata, serta terintegrasi langsung dengan timer eksekusi fokus dan sistem berbagi rencana kerja?"*
-
----
-
-## 3. Validasi Masalah & Data Empiris
-
-Validasi masalah KilasTugas mengadopsi triangulasi data:
-1. **Kajian Literatur Akademis Internasional:**
-   - *American Psychological Association (APA / Onwuegbuzie & Jiao, 2000):* Prokrastinasi akademik dialami 80%–95% mahasiswa perguruan tinggi.
-   - *Journal of Educational Psychology:* Teknik pemecahan tugas bertahap (*Task Chunking*) meningkatkan rasio penyelesaian tugas hingga 60%.
-   - *Stanford d.school Research:* Konsep *Micro-Commitment* (tindakan mikro 25–45 menit) mereduksi kecemasan tugas dan memicu *action momentum*.
-2. **Survei Lapangan Kuantitatif (28 Mahasiswa Aktif Sains & Teknologi):**
-   - **78,6%** mahasiswa sering mengerjakan tugas pada malam H-1 / H-0 deadline.
-   - **64,3%** menunda tugas karena bingung mulai dari mana dan kewalahan membaca instruksi panjang.
-   - **53,6%** pernah gagal mengumpulkan tugas tepat waktu minimal 1 kali per semester.
-   - **57,1%** pengguna to-do list konvensional merasa alat mereka tidak efektif mendorong eksekusi.
-3. **Wawancara Kualitatif Langsung:**
-   - Mahasiswa Informatika Semester 5: *"Masalah utamanya bukan tidak mau mengerjakan, tapi pas buka modul 15 halaman langsung pusing. Andai ada yang kasih tahu 'Hari ini kamu cukup tulis pendahuluan 30 menit dulu', pasti langsung dikerjakan."*
-
----
-
-## 4. Target Pengguna & Karakteristik
-
-- **Target Primer:** Mahasiswa aktif D3/D4/S1 perguruan tinggi (usia 18–24 tahun) dengan beban praktikum dan proyek padat.
-- **Target Sekunder:** Siswa SMA/SMK sederajat dan peserta program pelatihan intensif (*coding bootcamp*).
-- **Karakteristik Akses:**
-  - Mengutamakan akses instan peramban web ponsel pintar dan laptop.
-  - Membutuhkan antarmuka yang ringan (<100KB gzip), hemat kuota, dan cepat.
-  - Desain editorial terang (*clean light mode*) yang fokus pada keterbacaan teks tanpa gangguan elemen visual generik.
-
----
-
-## 5. Spesifikasi Fitur Produk
-
-### 5.1 Fitur Aktif MVP (Tahap 1: Online Round Submission — Selesai)
-
-| ID Fitur | Nama Fitur | Deskripsi Teknis & Fungsionalitas | Status |
-|:---|:---|:---|:---:|
-| **F-01** | **Form Input Tugas Cerdas** | Input terpadu: Judul, Mata Kuliah, Tanggal & Jam Deadline, Kategori (Praktikum, Makalah, Coding, Presentasi, Custom), Deskripsi Instruksi, serta Selektor Langkah Kerja (Otomatis AI atau custom 3/4/5/6/8 langkah). | Selesai |
-| **F-02** | **AI Task Decomposition** | Terhubung ke 9Router gateway port 20128 (`ag/gemini-3.7-flash-medium`). Menghasilkan JSON array sub-tugas terstruktur dengan kata kerja aktif, panduan 1–2 kalimat, estimasi 25–90 menit, dan distribusi hari merata. Respon < 2 detik. | Selesai |
-| **F-03** | **Smart Caching Engine** | Jika instruksi atau judul tugas serupa pernah dipecahkan mahasiswa seangkatan, sistem menyajikan cetak biru instan dari MariaDB (<20ms, 0 konsumsi token AI). | Selesai |
-| **F-04** | **Deterministic Fallback Engine** | Kurasi template lokal untuk 5 kategori tugas akademik. Menjamin zero downtime jika jaringan internet atau API AI mengalami gangguan. | Selesai |
-| **F-05** | **Checklist Sub-Tugas Interaktif** | Kartu sub-tugas harian dengan checkbox bulat instan, tombol tambah langkah manual inline, tombol hapus langkah, dan modal inline edit teks/durasi. | Selesai |
-| **F-06** | **Visual Micro-Pacing & Progress Ring** | Hero Circular Progress Gauge menghitung rasio penyelesaian riil. Kartu tugas dilengkapi badge dinamis: On Track (hijau), Behind Schedule (kuning), Overdue (merah). | Selesai |
-| **F-07** | **Persistent Floating Pomodoro Engine** | Timer 25 menit kerja fokus / 5 menit istirahat berjalan di background dengan akurasi timestamp `Date.now()`. Dilengkapi Floating Mini-Timer pill melayang di bawah layar, countdown di judul tab browser, audio chime synthesizer Web Audio API, haptic feedback ponsel, dan Web Notification API desktop. | Selesai |
-| **F-08** | **Integrasi Kalender Nyata** | Tombol ekspor berkas `.ics` standar RFC 5545 dengan alarm 15 menit, serta Direct Google Calendar web/app intent di ponsel pintar. | Selesai |
-| **F-09** | **Task Blueprint Sharing (/p/:id)** | Fitur viral berbagi rencana tugas via URL unik `/p/:id`. Rekan sekelas dapat melihat pratinjau langkah dan mengimpor rencana tugas ke jadwal pribadi dalam 1 detik. | Selesai |
-| **F-10** | **Zero-Barrier Guest Mode** | Akses instan tanpa kewajiban registrasi akun. Identitas dikelola via UUID anonim dengan sinkronisasi dual-layer antara browser `localStorage` dan MariaDB VPS. | Selesai |
-| **F-11** | **Dopamine Feedback System** | Letupan konfeti visual (*canvas-confetti*) dan status otomatis `Ready to Submit 🎉` saat seluruh sub-tugas berhasil diselesaikan. | Selesai |
-
----
-
-### 5.2 Fitur Pengembangan Grand Final (Tahap 2: Grand Final Product Sprint)
-
-Fitur-fitur lanjutan ini dialokasikan untuk dikembangkan pada sesi Product Sprint Grand Final (11 Oktober 2026), mewakili sisa ~50% peta jalan inovasi:
-
-| ID Fitur | Nama Fitur | Deskripsi Teknis & Mekanisme Kerja | Prioritas |
-|:---|:---|:---|:---:|
-| **GF-01** | **AI Syllabus & PDF/DOCX Reader** | Komponen unggah drag-and-drop berkas modul/silabus dosen (PDF/DOCX tebal 5–15 halaman). Parser backend membaca teks in-memory stream, mengekstrak rubrik penugasan, dan langsung membedahnya menjadi sub-tugas nir-ketik. | P1 |
-| **GF-02** | **Collaborative Group Task Split** | Pembagian porsi kerja kelompok anti *free-rider*. Ketua memasukkan anggota dan peran (Analis, Programmer, Penulis Laporan). AI membagi porsi kerja secara proporsional dengan dasbor ketergantungan tugas (*task dependency*). | P1 |
-| **GF-03** | **PWA Offline-First Mode** | Dukungan Progressive Web App (*Add to Home Screen*) dan IndexedDB lokal. Mahasiswa dapat membuka jadwal, mencentang tugas, dan menjalankan timer tanpa koneksi internet sama sekali, dengan sinkronisasi otomatis ke VPS saat online. | P2 |
-| **GF-04** | **Always-On Focus Engine & Web Push** | Integrasi Server-Side Web Push Scheduler (VAPID Service Worker) di backend VPS. Server mengirim notifikasi tepat saat sesi fokus berakhir meskipun peramban web pengguna ditutup total. | P2 |
-| **GF-05** | **Analitik Pomodoro ke Basis Data** | Pencatatan durasi riwayat fokus aktual ke tabel `pomodoro_sessions` di basis data MariaDB untuk evaluasi ritme produktivitas harian mahasiswa. | P3 |
-
----
-
-## 6. Arsitektur Sistem & Ekosistem Teknologi
-
-### 6.1 Topologi Sistem
 ```
-┌────────────────────────────────────────────────────────┐
-│                   CLIENT LAYER (SPA)                   │
-│      React 18 + Vite + Tailwind CSS + Lucide React     │
-│      Hosted on Vercel Edge Global Content Delivery     │
-└───────────────────────────┬────────────────────────────┘
-                            │ HTTPS REST API / JSON
-                            ▼
-┌────────────────────────────────────────────────────────┐
-│                  BACKEND ENGINE LAYER                  │
-│       Python 3.12 + FastAPI Async Web Framework        │
-│    Deployed on Ubuntu VPS via Nginx + Let's Encrypt    │
-└─────────────┬────────────────────────────┬─────────────┘
-              │                            │
-              ▼                            ▼
-┌──────────────────────────┐  ┌──────────────────────────┐
-│   AI INFERENCE ENGINE    │  │     PERSISTENCE DATA     │
-│  9Router Proxy (v1 API)  │  │  MariaDB Enterprise RDBMS │
-│  ag/gemini-3.7-flash-med │  │  (Tasks + Smart Cache)   │
-└──────────────────────────┘  └──────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────┐
+│                        CLIENT LAYER (SPA)                              │
+│       React 18 + Vite 5 + Tailwind CSS + Lucide Icons + Axios          │
+│       Hosting: Vercel Global Edge Network (kilastugas.vercel.app)      │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    │ HTTPS REST API / JSON
+                                    ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│                        BACKEND ENGINE LAYER                            │
+│     Python 3.12 + FastAPI + Pydantic v2 + aiomysql Connection Pool     │
+│     Web Server: Nginx (Reverse Proxy) + SSL Let's Encrypt              │
+│     Host: Ubuntu VPS (IP 48.193.41.19 / api-kilastugas.najmifaza.my.id)│
+└───────────────┬────────────────────────────────────────┬───────────────┘
+                │                                        │
+                ▼ Local HTTP (Port 20128)                ▼ Unix Socket / TCP 3306
+┌───────────────────────────────┐        ┌───────────────────────────────┐
+│      AI INFERENCE GATEWAY     │        │       PERSISTENCE LAYER       │
+│  9Router Proxy (v1 Endpoint)  │        │     MariaDB 10.x Enterprise   │
+│  Model: ag/gemini-3.7-flash   │        │     Database: kilastugas_db   │
+│  Latensi: <2.0 detik          │        │     Smart Cache Latensi: <20ms│
+└───────────────────────────────┘        └───────────────────────────────┘
 ```
 
-### 6.2 Rincian Tech Stack
-- **Frontend:** React 18, Vite 5, Tailwind CSS, Lucide React, Axios, Canvas Confetti. (Bundle size <90KB gzip, render instan).
-- **Backend:** FastAPI (Python 3.12), Pydantic v2 validation, aiomysql async pool, Uvicorn ASGI server.
-- **AI Gateway:** 9Router local reverse proxy port 20128 (`ag/gemini-3.7-flash-medium`), latensi respons <2 detik.
-- **Database:** MariaDB 10.x Enterprise RDBMS dengan konfigurasi hemat memori `99-lowmem.cnf`.
-- **Infrastruktur Produksi:**
-  - Frontend: Vercel Edge Global Network (`https://kilastugas.vercel.app`).
-  - Backend: Ubuntu VPS Host (IP 48.193.41.19), Nginx reverse proxy port 8001, SSL Let's Encrypt (`https://api-kilastugas.najmifaza.my.id`).
+---
+
+## 2. Rincian Stack Teknologi & Dependensi
+
+| Layer | Komponen / Pustaka | Versi | Peran Teknis |
+|---|---|---|---|
+| **Frontend** | React | 18.3.1 | Komponen antarmuka deklaratif |
+| | Vite | 5.4.2 | Bundler dan build tool modern (output <90KB gzip) |
+| | Tailwind CSS | 3.4.1 | Utility-first styling (Light Mode Editorial) |
+| | Lucide React | 0.446.0 | Ikonografi SVG berbasis komponen |
+| | Axios | 1.7.7 | HTTP Client asinkronus dengan interceptor |
+| | Canvas Confetti | 1.9.4 | Animasi umpan balik mikro (*dopamine reward*) |
+| **Backend** | Python | 3.12.3 | Runtime lingkungan komputasi |
+| | FastAPI | 0.115.0 | Web framework asinkronus berkinerja tinggi |
+| | Uvicorn (Standard) | 0.30.6 | ASGI Server dengan worker berbasis asyncio |
+| | Pydantic | 2.9.2 | Validasi skema request/response dan parsing tipe |
+| | aiomysql | 0.2.0 | Non-blocking MySQL client pool untuk MariaDB |
+| | OpenAI SDK | 1.45.0 | Klien API penghubung ke gateway 9Router |
+| **Database** | MariaDB Server | 10.11.x | RDBMS relasional ACID dengan utf8mb4 |
+| **Infrastruktur** | Nginx | 1.24.x | Reverse proxy, kompresi gzip, dan SSL termination |
+| | Let's Encrypt Certbot | 2.9.0 | Manajemen otomatis sertifikat TLS/HTTPS |
+| | Systemd | Linux Core | Daemon manager untuk auto-restart servis FastAPI |
 
 ---
 
-## 7. Skema Basis Data Relasional (MariaDB)
+## 3. Skema Basis Data Relasional (MariaDB DDL)
+
+Skema database terstruktur penuh dengan aturan integritas referensial dan indeks pencarian:
 
 ```sql
--- Tabel Sesi Pengguna Anonim
+CREATE DATABASE IF NOT EXISTS kilastugas_db
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+USE kilastugas_db;
+
+-- 1. Sesi Anonim (Guest Mode)
 CREATE TABLE IF NOT EXISTS sessions (
-    id VARCHAR(64) PRIMARY KEY,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
+    id          VARCHAR(36)  PRIMARY KEY,
+    user_agent  VARCHAR(512),
+    created_at  TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
+    last_active TIMESTAMP    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
 
--- Tabel Tugas Utama
+-- 2. Entitas Tugas Utama
 CREATE TABLE IF NOT EXISTS tasks (
-    id VARCHAR(64) PRIMARY KEY,
-    session_id VARCHAR(64) NOT NULL,
-    title VARCHAR(255) NOT NULL,
-    subject VARCHAR(100),
-    category ENUM('lab', 'paper', 'coding', 'presentation', 'custom') DEFAULT 'custom',
-    deadline DATETIME NOT NULL,
-    description TEXT,
-    source ENUM('ai', 'template', 'shared', 'manual') DEFAULT 'ai',
-    is_completed BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (session_id) REFERENCES sessions(id) ON DELETE CASCADE
-);
+    id           VARCHAR(36)  PRIMARY KEY,
+    session_id   VARCHAR(36)  NOT NULL,
+    title        VARCHAR(255) NOT NULL,
+    description  TEXT,
+    subject      VARCHAR(100),
+    category     ENUM('laporan_lab', 'makalah', 'coding', 'presentasi', 'custom') DEFAULT 'custom',
+    deadline     DATETIME     NOT NULL,
+    is_completed BOOLEAN      DEFAULT FALSE,
+    created_at   TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
+    updated_at   TIMESTAMP    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (session_id) REFERENCES sessions(id) ON DELETE CASCADE,
+    INDEX idx_session_id (session_id),
+    INDEX idx_deadline   (deadline),
+    INDEX idx_cache_lookup (title, category)
+) ENGINE=InnoDB;
 
--- Tabel Sub-Tugas Harian
+-- 3. Entitas Sub-Tugas Harian
 CREATE TABLE IF NOT EXISTS subtasks (
-    id VARCHAR(64) PRIMARY KEY,
-    task_id VARCHAR(64) NOT NULL,
-    title VARCHAR(255) NOT NULL,
-    duration INT NOT NULL,
-    day_offset INT NOT NULL,
-    guide TEXT,
-    order_index INT NOT NULL,
-    is_completed BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE
-);
+    id               VARCHAR(36)  PRIMARY KEY,
+    task_id          VARCHAR(36)  NOT NULL,
+    step_number      INT          NOT NULL,
+    title            VARCHAR(255) NOT NULL,
+    description      TEXT,
+    duration_minutes INT          DEFAULT 25,
+    target_date      DATE,
+    is_completed     BOOLEAN      DEFAULT FALSE,
+    completed_at     TIMESTAMP    NULL,
+    source           ENUM('ai', 'template', 'manual') DEFAULT 'ai',
+    created_at       TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
+    updated_at       TIMESTAMP    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
+    INDEX idx_task_id     (task_id),
+    INDEX idx_target_date (target_date)
+) ENGINE=InnoDB;
 
--- Tabel Riwayat Sesi Fokus Pomodoro
+-- 4. Log Riwayat Sesi Fokus Pomodoro
 CREATE TABLE IF NOT EXISTS pomodoro_sessions (
-    id VARCHAR(64) PRIMARY KEY,
-    subtask_id VARCHAR(64) NOT NULL,
-    duration INT NOT NULL,
-    completed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    id                      VARCHAR(36) PRIMARY KEY,
+    subtask_id              VARCHAR(36) NOT NULL,
+    started_at              TIMESTAMP   DEFAULT CURRENT_TIMESTAMP,
+    ended_at                TIMESTAMP   NULL,
+    duration_actual_minutes INT,
+    is_completed            BOOLEAN     DEFAULT FALSE,
     FOREIGN KEY (subtask_id) REFERENCES subtasks(id) ON DELETE CASCADE
-);
+) ENGINE=InnoDB;
 ```
 
 ---
 
-## 8. Spesifikasi Antarmuka & Desain Sistem
+## 4. Spesifikasi Kontrak API (Endpoints)
 
-### 8.1 Standar Desain Editorial Minimalis (Anti-Slop)
-- **Skema Warna:** Bersih netral (*Light Mode Editorial*). Background putih/slate-50, teks Slate-900 kontras tinggi, aksen border Slate-200, dan status bar emerald/amber/rose.
-- **Tanpa Bottom Dock:** Navigasi mobile menggunakan Floating Action Button (FAB `+`) hitam melingkar di pojok kanan bawah yang hemat ruang pandang.
-- **Tipografi Rapi:** Inter / Segoe UI modern, bebas gradien artifisial ungu/pink klise AI marketing.
+Base URL: `https://api-kilastugas.najmifaza.my.id`
 
-### 8.2 Layout Responsif
-- **Ponsel Pintar (<768px):** Layar penuh tepi-ke-tepi (*edge-to-edge*), FAB `+` kanan bawah, Floating Mini-Timer melayang di bagian bawah dengan safe padding.
-- **Tablet (768px–1024px):** Layout grid tugas 2-kolom seimbang dengan hero progress ring proporsional.
-- **Desktop (>1024px):** Container terpusat max-w-6xl, tombol tambah tugas di navbar atas, dan modal fokus tengah layar.
+### 4.1 Sesi Pengguna
+- **`POST /api/session`**
+  - **Body:** `{ "session_id": "optional-uuid", "user_agent": "browser-str" }`
+  - **Respon (200):** `{ "session_id": "36-char-uuid" }`
+  - **Logika:** Menggunakan `INSERT IGNORE INTO sessions` agar session idempotent dan aman dari race condition.
+
+### 4.2 Tri-Engine Task Breakdown
+- **`POST /api/breakdown`**
+  - **Body:**
+    ```json
+    {
+      "task_id": "uuid",
+      "title": "Laporan Praktikum Jarkom",
+      "description": "Konfigurasi OSPF 5 router dan subnetting VLSM",
+      "category": "laporan_lab",
+      "deadline": "2026-10-10T23:59:00",
+      "subtasks_count": 5
+    }
+    ```
+  - **Respon (200):**
+    ```json
+    {
+      "success": true,
+      "source": "ai",
+      "data": [
+        {
+          "step": 1,
+          "title": "Hitung Alokasi Subnet VLSM",
+          "description": "Tentukan rentang CIDR dan IP host untuk 4 subnet jaringan laboratorium.",
+          "duration_minutes": 45,
+          "target_day_offset": 0
+        }
+      ]
+    }
+    ```
+  - **Header Nilai `source`:**
+    - `"cache"`: Hasil diambil dari Smart Cache MariaDB (<20ms).
+    - `"ai"`: Hasil inferensi model 9Router (<2.0s).
+    - `"template"`: Fallback deterministik kurikulum saat AI offline.
+
+### 4.3 Manajemen Tugas (CRUD)
+- **`GET /api/tasks/{session_id}`**
+  - **Respon (200):** Mengembalikan array objek task beserta metrik kalkulasi `progress_percent`, `subtasks_total`, dan `subtasks_done`.
+- **`POST /api/tasks`**
+  - **Body:** `{ session_id, title, description, subject, category, deadline }`
+  - **Respon (200):** Objek task terbuat dengan ID unik.
+- **`PATCH /api/tasks/{task_id}`**
+  - **Body:** `{ "is_completed": true }`
+- **`DELETE /api/tasks/{task_id}`**
+  - **Respon (200):** Menghapus tugas beserta seluruh sub-tugas terkait secara cascade.
+
+### 4.4 Manajemen Sub-Tugas Mandiri
+- **`POST /api/tasks/{task_id}/subtasks`**
+  - **Body:** `{ "title": "str", "duration_minutes": 30, "target_date": "YYYY-MM-DD" }`
+- **`PATCH /api/subtasks/{subtask_id}`**
+  - **Body (Partial):** `{ "is_completed": bool, "title": "str", "duration_minutes": int }`
+- **`DELETE /api/subtasks/{subtask_id}`**
+  - **Respon (200):** `{ "success": true }`
+
+### 4.5 Task Blueprint Sharing (/p/:id)
+- **`GET /api/blueprint/{task_id}`**
+  - **Respon (200):** Mengembalikan metadata tugas dan daftar langkah sub-tugas terurut untuk pratinjau publik anonim.
+- **`POST /api/blueprint/{task_id}/clone`**
+  - **Body:** `{ "session_id": "target-user-session", "target_deadline": "ISO-Date" }`
+  - **Respon (200):** Menduplikasi seluruh skema sub-tugas ke session pengguna penerima dengan penyesuaian tanggal proporsional dalam 1 operasi transaksi DB.
+
+### 4.6 Sistem Health Check
+- **`GET /health` & `GET /`**
+  - **Respon (200):** `{ "status": "ok", "service": "kilastugas-backend" }`
 
 ---
 
-## 9. Rencana Implementasi & Deliverables Lomba
+## 5. Logika Komputasi Kunci (Core Application Logic)
 
-### 9.1 Status Deliverables Online Round (Batas Akhir: 8 Oktober 2026 23.59 WIB)
-1. **Proposal Ringkas (PDF):** `docs/TimKilasTugas_KilasTugas_ProposalRingkas.pdf` (Tepat 7 halaman: 1 cover + 6 halaman isi sesuai Bab 7.2 Guidebook).
-2. **Repositori GitHub Publik:** `https://github.com/najmifaza/KilasTugas_SIFest_KmHarkatNegri_JadiH-1` (Akses publik juri).
-3. **Video Walkthrough Demo Produk:** Berkas `TimKilasTugas_KilasTugas_VideoDemo.mp4` dirender berbasis Remotion dengan naskah terstruktur di `docs/SCRIPT_VIDEO_DEMO.md` (durasi ~5 menit 45 detik, di bawah batas maksimal 10 menit).
-4. **Live Deployment:** Frontend aktif di Vercel dan backend aktif di VPS Ubuntu dengan sertifikat SSL resmi.
+### 5.1 Alur Kerja Tri-Engine Breakdown
+1. **Lapisan 1: Smart Cache Lookup (MariaDB):**
+   Sistem mengeksekusi query pencocokan string normalisasi `LOWER(TRIM(title))` dan `category` pada tugas dengan `COUNT(subtasks) >= 2`.
+   Jika ditemukan (*Cache Hit*), tanggal langkah disesuaikan terhadap deadline baru, dan data dikembalikan langsung tanpa request LLM (<20ms).
+2. **Lapisan 2: AI Inference (9Router ag/gemini-3.7-flash-medium):**
+   Jika *Cache Miss*, backend memicu OpenAI-compatible completion ke `http://127.0.0.1:20128/v1` dengan parameter:
+   - `temperature: 0.3` (deterministik tinggi).
+   - `max_tokens: 1500`.
+   - Format: Strict JSON Array dengan validasi skema Pydantic.
+3. **Lapisan 3: Deterministic Fallback Engine:**
+   Jika gateway 9Router mengalami network timeout (>10s) atau error parsing JSON, exception handler mengalihkan aliran eksekusi ke `templates/presets.py` sesuai kategori tugas.
 
-### 9.2 Timeline Grand Final (11 Oktober 2026)
-- **09.00–12.00 WIB (Product Sprint Sesi I):** Implementasi modul ekstraksi modul silabus PDF/DOCX (GF-01) dan Collaborative Task Split (GF-02).
-- **13.00–15.00 WIB (Product Sprint Sesi II):** Penerapan offline-first PWA (GF-03) dan penyempurnaan analitik Pomodoro ke MariaDB (GF-05).
-- **15.45–18.00 WIB (Demo Day & Product Defense):** Walkthrough langsung solusi end-to-end dan pemaparan pitch deck 10 slide di hadapan dewan juri Zoom.
+### 5.2 Algoritma Visual Micro-Pacing
+Status kemajuan tugas dievaluasi secara dinamis berdasarkan formula waktu:
+```
+Target Hari Ini = Tanggal Hari Ini (00:00:00)
+Subtasks Pending = Daftar subtask dengan is_completed == false
+
+Kondisi Evaluasi:
+1. OVERDUE: now() > deadline_task AND terdapat subtask belum selesai.
+2. BEHIND SCHEDULE: terdapat subtask pending dengan target_date < Target Hari Ini.
+3. ON TRACK: seluruh subtask pending memiliki target_date >= Target Hari Ini.
+```
+
+### 5.3 Persistent Focus Engine (Pomodoro Math)
+1. **Timestamp Integrity:**
+   Waktu Pomodoro tidak mengandalkan interval JavaScript murni (yang mengalami *drifting* atau mati saat tab diminimalkan), melainkan menyimpan `endTime = Date.now() + (sisa_detik * 1000)`.
+2. **Title Bar Synchronization:**
+   Setiap detik, `document.title` dimutasi: `(${formatMMSS(remaining)}) Fokus - KilasTugas`.
+3. **Synthesizer Web Audio API:**
+   Menggunakan `AudioContext` lokal untuk menghasilkan dual-tone chime (frekuensi 587.33Hz D5 dilanjutkan 880Hz A5) tanpa perlu mengunduh file MP3 eksternal.
+
+### 5.4 Algoritma Ekspor Kalender
+1. **RFC 5545 iCalendar (`.ics`):**
+   Dibuat in-memory di sisi peramban menggunakan data MIME `text/calendar`. Setiap sub-tugas menghasilkan blok `VEVENT` dengan penanda `UID`, `DTSTART`, `DTEND`, dan komponen alarm pengingat:
+   ```
+   BEGIN:VALARM
+   TRIGGER:-PT15M
+   ACTION:DISPLAY
+   DESCRIPTION:Waktunya fokus mengerjakan langkah ini!
+   END:VALARM
+   ```
+2. **Direct Google Calendar Intent:**
+   Menghasilkan URI intent:
+   `https://calendar.google.com/calendar/render?action=TEMPLATE&text={title}&dates={start}/{end}&details={guide}`
+   yang langsung mentrigger aplikasi Google Calendar di Android/iOS atau membuka tab baru di peramban web desktop.
 
 ---
 
-*Dokumen ini merupakan spesifikasi kebutuhan produk resmi yang menjadi acuan integrasi teknis, evaluasi desain, dan penilaian dewan juri SIFest Digital Innovation Challenge 2026.*
+## 6. Desain Sistem & Arsitektur Frontend
+
+### 6.1 State Management & Persistensi Dual-Layer
+- **Lapisan 1 (Browser Storage):** UUID sesi dan preferensi disimpan pada `localStorage.getItem('kilastugas_session_id')`.
+- **Lapisan 2 (Remote Server):** Setiap mutasi checklist atau penambahan tugas menerapkan *Optimistic UI Update* di sisi React, lalu mengirim patch asinkronus ke server MariaDB.
+
+### 6.2 Sistem Responsivitas Breakpoints
+- **Mobile (<768px):** Tampilan kartu tunggal *edge-to-edge*, navigasi aksi via Floating Action Button (FAB `+` diameter 56px di koordinat `bottom-6 right-6`), modal input bertipe bottom-sheet / drawer.
+- **Tablet (768px–1024px):** Layout grid tugas 2-kolom seimbang dengan hero circular gauge di posisi sentral.
+- **Desktop (>1024px):** Max container `max-w-6xl`, tombol tambah tugas di navbar atas, dan modal fokus Pomodoro terpusat di layar.
+
+---
+
+## 7. Spesifikasi Teknis Fitur Masa Depan (Grand Final Scope)
+
+### 7.1 GF-01: In-Memory AI Syllabus & PDF/DOCX Parser
+- **Mekanisme:** Endpoint baru `POST /api/syllabus/extract` menerima multipart upload berkas PDF/DOCX maksimal 5 MB.
+- **Pengolahan VPS:** File diproses via `pypdf` dan `python-docx` langsung di memori RAM (in-memory byte stream, tidak disimpan ke disk storage VPS).
+- **Ekstraksi:** Teks instruksi disaring menjadi <3.000 karakter, lalu diproses oleh 9Router AI untuk menghasilkan rantai tugas nir-ketik.
+
+### 7.2 GF-02: Collaborative Group Task Split
+- **Skema DB Tambahan:** Tabel `task_members (id, task_id, member_name, role)` dan foreign key `assigned_to` pada tabel `subtasks`.
+- **Distribusi AI:** Model AI membagi porsi kerja berdasarkan estimasi jam kerja yang seimbang antar anggota tim.
+
+### 7.3 GF-03: PWA Offline-First Engine
+- **Service Worker:** Registrasi manifest web app dan caching aset statis (HTML, JS, CSS, Lucide icons).
+- **IndexedDB Sync:** Menggunakan pustaka ringan `idb` untuk menyimpan antrean mutasi offline (*mutation queue*), yang otomatis disinkronkan ke endpoint `/api/tasks` saat event `navigator.onLine` aktif.
+
+### 7.4 GF-04: Server-Side Web Push Scheduler (VAPID)
+- **Protokol:** Web Push RFC 8291 / RFC 8292 menggunakan pustaka Python `pywebpush`.
+- **Eksekusi:** Saat sesi fokus dimulai, backend menjadwalkan task delay 25 menit. Server menembakkan push payload ke peramban pengguna melalui Push Service vendor (Google FCM / Mozilla autopush) sehingga notifikasi tetap meletup meskipun tab browser telah ditutup.
+
+---
+
+*Dokumen ini merupakan spesifikasi teknis resmi arsitektur sistem KilasTugas v2.0.*
