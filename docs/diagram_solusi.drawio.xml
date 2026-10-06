@@ -1,0 +1,110 @@
+<mxfile host="app.diagrams.net" modified="2026-10-06T00:00:00.000Z" agent="Hermes Agent" version="24.7.5">
+  <diagram id="diagram_solusi_kilastugas" name="Alur Solusi KilasTugas">
+    <mxGraphModel dx="1000" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- 1. INPUT MAHASISWA -->
+        <mxCell id="box_input" value="&lt;b&gt;MASUKAN MAHASISWA&lt;/b&gt;&lt;br&gt;Instruksi Tugas Kuliah (Silabus/Modul 5–15 Hlm)&lt;br&gt;&lt;i&gt;Parameter: Judul, Deadline, Pilihan Target Langkah&lt;/i&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=11;align=center;" vertex="1" parent="1">
+          <mxGeometry x="174" y="40" width="480" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow Input to Engine -->
+        <mxCell id="arr_1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="box_input" target="engine_container">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- 2. ENGINE CONTAINER -->
+        <mxCell id="engine_container" value="ENGINE KILASTUGAS (TRI-ENGINE SYSTEM)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=11;fontStyle=1;startSize=26;align=center;collapsible=0;" vertex="1" parent="1">
+          <mxGeometry x="174" y="140" width="480" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Sub-Engine 1: Smart Cache -->
+        <mxCell id="sub_cache" value="&lt;b&gt;1. Smart Cache&lt;/b&gt;&lt;br&gt;&amp;lt;20ms / 0 Token AI&lt;br&gt;Cetak Biru Seangkatan" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;fontFamily=Times New Roman;fontSize=10;align=center;" vertex="1" parent="engine_container">
+          <mxGeometry x="20" y="38" width="130" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Sub-Engine 2: AI Breakdown -->
+        <mxCell id="sub_ai" value="&lt;b&gt;2. AI Breakdown&lt;/b&gt;&lt;br&gt;9Router Gateway&lt;br&gt;ag/gemini-3.7-flash-med" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;fontFamily=Times New Roman;fontSize=10;align=center;" vertex="1" parent="engine_container">
+          <mxGeometry x="175" y="38" width="130" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Sub-Engine 3: Fallback Engine -->
+        <mxCell id="sub_fallback" value="&lt;b&gt;3. Fallback Engine&lt;/b&gt;&lt;br&gt;Kurasi Kurikulum&lt;br&gt;Zero Single Point of Failure" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1;fontFamily=Times New Roman;fontSize=10;align=center;" vertex="1" parent="engine_container">
+          <mxGeometry x="330" y="38" width="130" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow Engine to Pillar Splitter Hub -->
+        <mxCell id="hub" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="411" y="275" width="6" height="6" as="geometry" />
+        </mxCell>
+
+        <mxCell id="arr_to_hub" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.5;endArrow=none;" edge="1" parent="1" source="engine_container" target="hub">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- 3. EMPAT PILAR SOLUSI -->
+        <!-- Pillar 1 -->
+        <mxCell id="p_1" value="&lt;b&gt;1. Actionable Chunking&lt;/b&gt;&lt;br&gt;3–8 Sub-Tugas Harian&lt;br&gt;Estimasi 25–90 Menit&lt;br&gt;Distribusi Menuju Tenggat" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=10;align=center;" vertex="1" parent="1">
+          <mxGeometry x="44" y="310" width="170" height="75" as="geometry" />
+        </mxCell>
+
+        <!-- Pillar 2 -->
+        <mxCell id="p_2" value="&lt;b&gt;2. Visual Micro-Pacing&lt;/b&gt;&lt;br&gt;Status Real-Time&lt;br&gt;On Track / Behind / Overdue&lt;br&gt;Circular Progress Gauge" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=10;align=center;" vertex="1" parent="1">
+          <mxGeometry x="234" y="310" width="170" height="75" as="geometry" />
+        </mxCell>
+
+        <!-- Pillar 3 -->
+        <mxCell id="p_3" value="&lt;b&gt;3. Deep Focus Engine&lt;/b&gt;&lt;br&gt;Floating Pomodoro 25/5&lt;br&gt;Timestamp Date.now()&lt;br&gt;Audio Chime &amp;amp; Web Push" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=10;align=center;" vertex="1" parent="1">
+          <mxGeometry x="424" y="310" width="170" height="75" as="geometry" />
+        </mxCell>
+
+        <!-- Pillar 4 -->
+        <mxCell id="p_4" value="&lt;b&gt;4. Blueprint Sharing&lt;/b&gt;&lt;br&gt;Tautan Unik (/p/:id)&lt;br&gt;1-Detik Impor Jadwal&lt;br&gt;Kolaborasi Teman Sekelas" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=10;align=center;" vertex="1" parent="1">
+          <mxGeometry x="614" y="310" width="170" height="75" as="geometry" />
+        </mxCell>
+
+        <!-- Distribution Branch Arrows -->
+        <mxCell id="arr_p1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="hub" target="p_1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr_p2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="hub" target="p_2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr_p3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="hub" target="p_3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr_p4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="hub" target="p_4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- 4. HASIL DAMPAK AKHIR -->
+        <mxCell id="box_output" value="&lt;b&gt;HASIL &amp;amp; DAMPAK BAGI MAHASISWA&lt;/b&gt;&lt;br&gt;Eliminasi Task Paralysis • Budaya Mencicil Tugas • Bebas Panik H-1 • Integritas Akademik Terjaga" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;fontFamily=Times New Roman;fontSize=11;align=center;" vertex="1" parent="1">
+          <mxGeometry x="44" y="420" width="740" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Connecting Pillars to Final Output -->
+        <mxCell id="hub2" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="411" y="398" width="6" height="6" as="geometry" />
+        </mxCell>
+        <mxCell id="arr_out_1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1;endArrow=none;" edge="1" parent="1" source="p_1" target="hub2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr_out_2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1;endArrow=none;" edge="1" parent="1" source="p_2" target="hub2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr_out_3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1;endArrow=none;" edge="1" parent="1" source="p_3" target="hub2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr_out_4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1;endArrow=none;" edge="1" parent="1" source="p_4" target="hub2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr_hub_to_out" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="hub2" target="box_output">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
