@@ -83,11 +83,11 @@
 
 ### Prioritas 1: Syarat Berkas Online Round (Deadline 8 Okt 23.59 WIB)
 
-- [ ] **1. Export Dokumen Proposal Ringkas ke PDF**
-  - Sumber naskah: `docs/Proposal_KilasTugas.md`.
-  - Nama file wajib: `TimKilasTugas_KilasTugas_ProposalRingkas.pdf`.
-  - Ketentuan Guidebook: Maksimal 6 halaman (tidak termasuk cover).
-  - Simpan di Google Drive dengan opsi berbagi *"Anyone with the link can view"*.
+- [x] **1. Export Dokumen Proposal Ringkas ke PDF**
+  - Sumber naskah: `docs/Proposal_KilasTugasFIKS.docx` & `docs/Proposal_KilasTugas.md`.
+  - Nama file resmi: `docs/TimKilasTugas_KilasTugas_ProposalRingkas.pdf`.
+  - Ketentuan Guidebook: Tepat 7 halaman (1 cover + 6 halaman isi).
+  - Status: Selesai dan siap diunggah ke Google Drive dengan akses *"Anyone with the link can view"*.
 
 - [ ] **2. Perekaman & Upload Video Demo Produk**
   - Durasi maksimal: 10 menit (disarankan 5–7 menit padat).
