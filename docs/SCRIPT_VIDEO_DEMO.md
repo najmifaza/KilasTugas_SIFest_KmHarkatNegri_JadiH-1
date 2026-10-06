@@ -1,11 +1,11 @@
 # Naskah & Panduan Perekaman Video Demo KilasTugas
 ## SIFest Digital Innovation Challenge 2026 (Track: Education)
 
-* **Nama Berkas Video Final:** `TimKilasTugas_KilasTugas_VideoDemo.mp4`
+* **Nama Berkas Video Final:** `JadiH-1_KilasTugas_VideoDemo.mp4`
 * **Target Durasi:** 5 menit 30 detik – 6 menit (Batas maksimal Guidebook: 10 menit)
 * **Format Video:** 1080p (1920x1080), 30/60 fps, Aspek Rasio 16:9
 * **Platform Upload:** YouTube (Setelan Privasi: *Unlisted*)
-* **Presenter:** Adridinan Najmi Faza (Ketua Tim) / Perwakilan Tim KilasTugas
+* **Presenter:** Adridinan Najmi Faza (Ketua Tim Jadi H-1) / Perwakilan Tim
 
 ---
 
@@ -96,7 +96,7 @@
 | Waktu | Aksi Visual di Layar | Naskah Pembicara (Kata per Kata) |
 |---|---|---|
 | **05:15 - 05:35** | Tampilkan poin roadmap Grand Final: 1. AI Syllabus PDF/DOCX Reader, 2. Collaborative Group Task Split, 3. Offline PWA. | *"Saat ini KilasTugas telah berfungsi penuh sebagai MVP Online Round sekitar 50% dari total roadmap produk. Pada tahap Grand Final Product Sprint mendatang, kami siap menyempurnakannya dengan modul AI Syllabus Reader untuk mengekstrak tugas langsung dari berkas PDF/DOCX dosen, serta fitur Collaborative Group Task Split untuk pembagian kerja kelompok."* |
-| **05:35 - 05:45** | Teks penutup: Nama Tim KilasTugas, Universitas Jenderal Soedirman, link repo & Vercel. | *"KilasTugas hadir agar tidak ada lagi mahasiswa yang gagal mencapai potensi akademiknya hanya karena bingung harus mulai dari mana. Terima kasih kepada dewan juri SIFest 2026. Dari Tim KilasTugas Universitas Jenderal Soedirman, salam inovasi!"* |
+| **05:35 - 05:45** | Teks penutup: Nama Tim Jadi H-1, Universitas Jenderal Soedirman, link repo & Vercel. | *"KilasTugas hadir agar tidak ada lagi mahasiswa yang gagal mencapai potensi akademiknya hanya karena bingung harus mulai dari mana. Terima kasih kepada dewan juri SIFest 2026. Dari Tim Jadi H-1 Universitas Jenderal Soedirman, salam inovasi!"* |
 
 ---
 

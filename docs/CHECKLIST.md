@@ -85,14 +85,14 @@
 
 - [x] **1. Export Dokumen Proposal Ringkas ke PDF**
   - Sumber naskah: `docs/Proposal_KilasTugasFIKS.docx` & `docs/Proposal_KilasTugas.md`.
-  - Nama file resmi: `docs/TimKilasTugas_KilasTugas_ProposalRingkas.pdf`.
+  - Nama file resmi: `docs/JadiH-1_KilasTugas_ProposalRingkas.pdf`.
   - Ketentuan Guidebook: Tepat 7 halaman (1 cover + 6 halaman isi).
   - Status: Selesai dan siap diunggah ke Google Drive dengan akses *"Anyone with the link can view"*.
 
 - [ ] **2. Perekaman & Upload Video Demo Produk**
   - Durasi maksimal: 10 menit (disarankan 5–7 menit padat).
   - Platform upload: YouTube (status *Unlisted*).
-  - Penamaan video: `TimKilasTugas_KilasTugas_VideoDemo`.
+  - Penamaan video: `JadiH-1_KilasTugas_VideoDemo`.
   - Alur isi video (merangkap *informal pitch* sesuai Guidebook Bab 7.2):
     1. **Masalah (1-2 menit):** Pengenalan fenomena *Task Paralysis* / *Overwhelm Freeze* pada mahasiswa saat menerima modul tugas tebal.
     2. **Solusi & Demo Live (4-5 menit):**

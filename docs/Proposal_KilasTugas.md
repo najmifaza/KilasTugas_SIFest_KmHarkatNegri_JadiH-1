@@ -13,7 +13,7 @@
 
 | Komponen | Keterangan |
 |---|---|
-| **Nama Tim** | Tim KilasTugas |
+| **Nama Tim** | Jadi H-1 |
 | **Ketua Tim (Team Leader)** | Adridinan Najmi Faza (Informatika, Universitas Jenderal Soedirman) |
 | **Anggota Tim** | 1. Timotius Willy Narendra (Informatika, Universitas Jenderal Soedirman)<br>2. Fardizza Finda Rahman (Informatika, Universitas Jenderal Soedirman) |
 | **Judul Produk** | **KilasTugas** |
