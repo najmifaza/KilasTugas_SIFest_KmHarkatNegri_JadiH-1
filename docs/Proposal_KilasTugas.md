@@ -73,35 +73,40 @@ KilasTugas hadir dengan filosofi dasar: **"Problem First, Technology Second: Jan
 [ Instruksi Tugas Kuliah yang Panjang & Abstrak ]
                        │
                        ▼
-[ Engine KilasTugas: AI Breakdown + Template Fallback ]
+[ Engine KilasTugas: AI Breakdown + Smart Cache + Template Fallback ]
                        │
                        ▼
 ┌────────────────────────────────────────────────────────┐
-│               Tiga Pilar Solusi KilasTugas            │
+│               Empat Pilar Solusi KilasTugas           │
 ├────────────────────────┬───────────────────────────────┤
-│ 1. Actionable Chunking │ 4–6 sub-tugas konkret harian  │
+│ 1. Actionable Chunking │ 3–8 sub-tugas konkret harian  │
 │ 2. Visual Micro-Pacing │ Status On Track / Behind      │
-│ 3. Deep Focus Mode     │ Pomodoro Timer 25/5 terpadu   │
+│ 3. Deep Focus Engine   │ Floating Pomodoro Timer 25/5  │
+│ 4. Blueprint Sharing   │ 1-Click Import Rencana Tugas  │
 └────────────────────────┴───────────────────────────────┘
 ```
 
 ### 3.1 Nilai Inovasi & Fitur Unggulan
-1. **Dekomposisi Tugas Terarah Berbasis AI:**
-   Pengguna cukup memasukkan judul, instruksi dosen, mata kuliah, dan tanggal deadline. Mesin inferensi AI membedah instruksi menjadi 4–6 sub-tugas terstruktur. Tiap langkah memuat:
+1. **Dekomposisi Tugas Terarah Berbasis AI & Kustomisasi Langkah:**
+   Pengguna cukup memasukkan judul, instruksi dosen, mata kuliah, tanggal deadline, dan opsi pilihan target langkah kerja (Otomatis AI atau 3, 4, 5, 6, 8 langkah). Mesin inferensi AI membedah instruksi secara terstruktur. Tiap langkah memuat:
    - Judul aksi spesifik (<60 karakter, kata kerja aktif).
    - Panduan eksekusi konkret (1–2 kalimat petunjuk praktis).
    - Estimasi waktu pengerjaan realistis (25–90 menit).
    - Target hari pelaksanaan (*day offset*) yang didistribusikan merata menuju deadline.
-2. **Deterministic Fallback Engine (Zero Single Point of Failure):**
-   Jika terjadi gangguan jaringan internet atau latensi API, sistem secara otomatis beralih (*graceful fallback*) ke template kurasi berbasis kategori tugas (*Laporan Lab, Makalah Teori, Coding Project, Presentasi*).
-3. **Visual Micro-Pacing & Pacing Bar:**
+2. **Smart Caching & Deterministic Fallback Engine (Zero Downtime):**
+   Jika tugas serupa pernah dipecah oleh rekan seangkatan, sistem menyajikan cetak biru instan (<20ms, 0 konsumsi token AI). Jika terjadi gangguan koneksi internet, sistem otomatis beralih (*graceful fallback*) ke template kurasi kurikulum kategori tugas (*Laporan Lab, Makalah Teori, Coding Project, Presentasi*).
+3. **Visual Micro-Pacing & Circular Progress Gauge:**
    Status pengerjaan divisualisasikan secara real-time:
    - 🟢 **On Track:** Pengerjaan berada di depan atau sesuai target ideal harian.
    - 🟡 **Behind Schedule:** Terdapat sub-tugas tertunda sebelum target hari ini.
    - 🔴 **Overdue Alert:** Melewati batas waktu deadline.
-4. **Distraction-Free Focus Mode (Pomodoro Timer Terpadu):**
-   Tombol *"Mulai Kerjakan"* pada sub-tugas langsung membuka antarmuka layar penuh fokus Pomodoro (25 menit kerja mendalam, 5 menit istirahat teratur), meminimalisir distraksi media sosial.
-5. **Zero-Barrier Guest Mode:**
+4. **Persistent Focus Engine & Floating Mini-Timer:**
+   Pomodoro Timer (25 menit fokus mendalam, 5 menit istirahat) berjalan persisten di latar belakang aplikasi dengan floating mini-pill di bawah layar, perhitungan akurasi timestamp `Date.now()`, countdown di judul tab browser, audio synthesizer Web Audio API, serta notifikasi desktop saat sesi tuntas.
+5. **Integrasi Kalender Nyata (Google Calendar & RFC 5545 iCalendar):**
+   Tombol ekspor berkas standar iCalendar (`.ics`) dilengkapi alarm pengingat 15 menit otomatis, serta tautan langsung (*direct intent*) ke Google Calendar di ponsel pintar tanpa perlu input jadwal manual.
+6. **Task Blueprint Sharing (/p/:id) & 1-Click Import:**
+   Mahasiswa dapat membagikan rencana aksi tugas ke grup kelas melalui tautan unik. Teman sekelas dapat mengimpor seluruh rantai sub-tugas ke jadwal pribadinya dalam 1 detik.
+7. **Zero-Barrier Guest Mode:**
    Pengguna dapat langsung menggunakan aplikasi tanpa hambatan registrasi/login (*Guest Mode* berbasis UUID anonim dan sinkronisasi dual-layer antara `localStorage` browser dan MariaDB).
 
 ---
@@ -144,8 +149,8 @@ Inovasi KilasTugas dirancang untuk memberikan dampak terukur terhadap ekosistem 
 |---|:---:|
 | **Task Initiation Rate** | >85% pengguna mengeksekusi sub-tugas pertama dalam <24 jam sejak tugas diinput. |
 | **Task Completion Rate** | Peningkatan tingkat penyelesaian tugas tepat waktu dari 50% menjadi **>80%**. |
-| **Response Latency AI Breakdown** | Penguraian tugas selesai dalam **<3 detik** via model inferensi lokal. |
-| **System Reliability & Availability** | **100% uptime ketersediaan fitur** berkat dual-engine (AI + Fallback Template). |
+| **Response Latency AI Breakdown** | Penguraian tugas instan (<2 detik via 9Router; <20 milidetik via Smart Cache). |
+| **System Reliability & Availability** | **100% uptime ketersediaan fitur** berkat tri-engine (AI + Smart Cache + Fallback Template). |
 | **Usability / User Satisfaction** | Skor SUS (*System Usability Scale*) **>80 (Kategori Excellent)**. |
 
 ---
@@ -172,7 +177,7 @@ Arsitektur KilasTugas mengadopsi prinsip efisiensi komputasi, keandalan data (*h
 ┌──────────────────────────┐  ┌──────────────────────────┐
 │   AI INFERENCE ENGINE    │  │     PERSISTENCE DATA     │
 │  9Router Proxy (v1 API)  │  │  MariaDB Enterprise RDBMS │
-│  ag/gemini-3.7-flash-med │  │  Structured Relational DB│
+│  ag/gemini-3.7-flash-med │  │  (Tasks + Smart Cache)   │
 └──────────────────────────┘  └──────────────────────────┘
 ```
 
@@ -185,7 +190,7 @@ Arsitektur KilasTugas mengadopsi prinsip efisiensi komputasi, keandalan data (*h
   - **FastAPI (Python 3.12):** Framework backend asinkronus dengan latensi transmisi rendah, validasi skema otomatis via *Pydantic v2*, serta dokumentasi interaktif OpenAPI/Swagger.
   - **aiomysql:** Driver non-blocking asinkron untuk operasi basis data berkecepatan tinggi.
 - **Database & Storage Layer:**
-  - **MariaDB 10.x:** Penyimpanan relasional skema terstruktur (`sessions`, `tasks`, `subtasks`, `pomodoro_sessions`) yang mendukung integritas data penuh (*ACID compliant*).
+  - **MariaDB 10.x:** Penyimpanan relasional skema terstruktur (`sessions`, `tasks`, `subtasks`, `pomodoro_sessions`) yang mendukung integritas data penuh (*ACID compliant*), sekaligus menjadi basis data *Smart Caching* cetak biru tugas antar-mahasiswa.
   - **Browser LocalStorage:** Lapisan persistensi lokal sekunder untuk menjamin data tugas tetap dapat diakses pengguna Guest bahkan saat luring (*offline capability*).
 - **Infrastruktur & Delivery:**
   - **Nginx Reverse Proxy & SSL Let's Encrypt:** Jalur transmisi aman HTTPS berkecepatan tinggi pada domain `api-kilastugas.najmifaza.my.id` dengan manajemen service `systemd` terisolasi.
