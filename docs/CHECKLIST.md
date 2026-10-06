@@ -24,12 +24,14 @@
 - [x] **Scaffolding Backend FastAPI (Python 3.12)**
   - Endpoint session guest (`/api/session`).
   - Endpoint CRUD tugas (`/api/tasks`, `/api/tasks/{session_id}`, `/api/tasks/{task_id}`).
-  - Endpoint subtask update (`/api/subtasks/{subtask_id}`).
-  - Endpoint AI breakdown (`/api/breakdown`).
+  - Endpoint CRUD subtask mandiri (`/api/tasks/{task_id}/subtasks`, `/api/subtasks/{subtask_id}`).
+  - Endpoint AI breakdown (`/api/breakdown`) dengan opsi kustomisasi jumlah langkah (3–8 langkah).
+  - Endpoint Task Blueprint Sharing & 1-Click Clone (`/api/blueprint/{task_id}`, `/api/blueprint/{task_id}/clone`).
   - Endpoint health check (`/health` & `/`).
-- [x] **Integrasi AI Inference 9Router**
+- [x] **Integrasi AI Inference 9Router & Smart Cache**
   - Terhubung ke 9Router lokal VPS (`http://127.0.0.1:20128/v1`).
   - Model inferensi: `ag/gemini-3.7-flash-medium` (kecepatan respon < 2 detik).
+  - Smart Caching MariaDB: jika tugas serupa pernah dipecah seangkatan, pakai cetak biru instan (<20ms, 0 token).
   - System prompt tervalidasi menghasilkan JSON array terstruktur.
 - [x] **Mesin Fallback Template Deterministik**
   - Template bawaan untuk 5 kategori: *Laporan Lab, Makalah, Coding, Presentasi, Custom*.
@@ -46,21 +48,34 @@
 
 ### 3. Frontend Client (React + Vite + Tailwind)
 - [x] **Scaffolding Proyek Frontend**
-  - React 18, Vite 5, Tailwind CSS, Lucide Icons, Axios.
-- [x] **Desain Antarmuka Mobile-First (Anti AI-Slop)**
-  - Tampilan terang (*light mode*) bersih bernuansa editorial minimalis ala Notion/Linear.
-  - Layout responsif: native-app view di smartphone dan smartphone container frame modern di desktop.
+  - React 18, Vite 5, Tailwind CSS, Lucide Icons, Axios, Canvas Confetti.
+- [x] **Desain Antarmuka Mobile-First Editorial (Anti AI-Slop)**
+  - Tampilan terang (*clean light mode*) bebas glitch/slop bernuansa editorial minimalis ala Linear/Notion.
+  - Branding resmi logo 3D K: favicon multi-ukuran (16x16 s/d 64x64, `.ico`, `.png`), apple-touch-icon 180x180, dan logo app header.
+  - Layout responsif 3 breakpoint: Mobile (<768px edge-to-edge + FAB), Tablet (768–1024px grid 2-kolom), Desktop (>1024px container max-w-6xl).
 - [x] **Fitur Utama Antarmuka**
-  - **Status Indicator Header:** Deteksi koneksi langsung (*live ping*) ke backend VPS.
-  - **Filter Navigasi:** Tab *Hari Ini*, *Semua Tugas*, dan tombol bulat oranye `+`.
-  - **Modal Input Tugas (Sliding Bottom Sheet):** Form input judul, matakuliah, kategori, deadline, dan instruksi modul dosen.
-  - **Kartu Tugas Terstruktur:** Status pacing (*On Track* 🟢, *Behind Schedule* 🟡, *Overdue* 🔴), progress bar tipis, dan tombol hapus tugas.
-  - **Subtask Checklist Interaktif:** Checkbox bulat untuk menyelesaikan langkah kerja secara instan (optimistic UI update).
-  - **Detail & Focus Modal Screen:** Halaman detail sub-tugas berisikan panduan eksekusi AI, Pomodoro Timer terpadu (`25:00`), serta *floating dark bottom bar* dengan tombol Mulai, Jeda, Reset, dan Tandai Selesai.
-  - **Zero-Barrier Guest Mode:** UUID anonim tersimpan otomatis di `localStorage` per peramban tanpa wajib registrasi.
+  - **Status Indicator Header:** Deteksi koneksi langsung (*live ping*) ke backend VPS + branding logo 3D K.
+  - **Hero Circular Progress Gauge:** Visualisasi lingkaran progres dinamis berbasis rasio total subtask riil.
+  - **DateStrip Interaktif:** Carousel strip tanggal horizontal (-2 s/d +4 hari) dengan penanda hari ini.
+  - **Filter Navigasi Ringkas:** Tab chips *Target Mendesak*, *Semua Tugas*, dan *Selesai*.
+  - **Modal Input Tugas:** Form input judul, matakuliah, kategori, split date/time picker, instruksi, dan selektor jumlah langkah kerja (Otomatis AI vs 3/4/5/6/8 langkah).
+  - **Kartu Tugas Terstruktur (Default Collapsed):** Progress bar ramping, status tenggat, dropdown menu `•••` bebas clutter, dan tombol konfeti mini.
+  - **Subtask Checklist Interaktif:** Checkbox bulat instan, tombol tambah manual inline, dan tombol hapus langkah.
+  - **Persistent Pomodoro Focus Engine:**
+    - Timer berjalan di background aplikasi (`Date.now()` timestamp accuracy).
+    - Floating Mini-Timer Pill melayang di bawah layar saat modal ditutup.
+    - Sinkronisasi countdown langsung ke tab title browser.
+    - Bel audio synthesizer Web Audio API, haptic feedback, dan Browser Desktop Notification saat timer tuntas.
+  - **Integrasi Eksternal Kalender:**
+    - Direct Google Calendar intent (langsung buka app G-Calendar di HP / tab web di PC).
+    - Ekspor berkas standar iCalendar RFC 5545 (`.ics`) dengan alarm reminder 15 menit otomatis.
+  - **Task Blueprint Sharing:**
+    - Salin link unik rencana kerja (`/p/:id`).
+    - Modal pratinjau cetak biru + tombol impor satu detik ke jadwal mahasiswa penerima.
+  - **Zero-Barrier Guest Mode:** UUID anonim tersimpan otomatis di `localStorage` per peramban tanpa registrasi.
 - [x] **Deploy Production Frontend**
   - Live di Vercel: `https://kilastugas.vercel.app/`.
-  - Berhasil diuji coba end-to-end: input tugas → AI breakdown → subtask checklist → timer Pomodoro.
+  - Berhasil diuji coba end-to-end secara live.
 
 ---
 
@@ -110,31 +125,34 @@
 ### Prioritas 2: Penyempurnaan Produk Tambahan (Opsional / Polish)
 
 - [x] **Responsivitas Multi-Device (Mobile, Tablet, Desktop)**
-  - Mobile (<768px): Full-width layar native, bottom dock navigation ber-inset safe area notch.
-  - Tablet (768px–1024px): Layout cockpit 2-kolom kartu tugas, hero banner & 3 metrik seimbang.
-  - Desktop (>1024px): Max-width 6xl, grid 2-kolom tugas, floating pill dock centered di bawah, tombol CTA langsung di navbar atas.
+  - Mobile (<768px): Layar edge-to-edge, single-column task cards, Floating Action Button (FAB `+`) pojok kanan bawah.
+  - Tablet (768px–1024px): Layout cockpit 2-kolom kartu tugas, hero banner & progress ring seimbang.
+  - Desktop (>1024px): Max-width 6xl, grid 2-kolom tugas, floating mini-timer centered di bawah, tombol CTA langsung di navbar atas.
 - [x] **Ekspor Jadwal ke Google / Apple Calendar (`.ics` & Direct G-Calendar Intent)** (PRD F-09)
-  - Tombol *"Ekspor .ics"* langsung menghasilkan berkas standar iCalendar RFC 5545.
-  - Setiap langkah kerja menjadi event kalender mandiri lengkap dengan tanggal target, durasi fokus, deskripsi aksi, dan alarm pengingat otomatis 15 menit sebelumnya.
-- [x] **Checklist Interaktif Sub-Tugas (PRD F-03)**
+  - Tombol *"Unduh Berkas .ics"* menghasilkan berkas standar iCalendar RFC 5545 dengan reminder 15 menit otomatis.
+  - Tombol *"Buka di Google Calendar"* membuka template web/app intent langsung di perangkat.
+- [x] **Checklist Interaktif & Manajemen Sub-Tugas Mandiri (PRD F-03)**
   - Tampil sebagai kartu berurutan dengan durasi menit dan target hari.
-  - Tambah sub-tugas manual via tombol `+ Tambah Langkah Manual`.
-  - Hapus sub-tugas secara selektif via icon trash.
+  - Tambah sub-tugas manual via tombol `+ Tambah Langkah Manual` di dalam kartu.
+  - Hapus sub-tugas secara selektif via icon trash merah.
   - Edit inline teks sub-tugas (judul, estimasi durasi, dan panduan) via modal detail.
+  - Pilihan jumlah langkah saat pembuatan tugas (Otomatis AI atau 3–8 langkah).
   - Optimistic UI updates terhubung ke API backend (`/api/subtasks`).
-- [x] **Focus Mode Pomodoro Timer & Notifikasi (PRD F-04)**
-  - Hitungan mundur 25 menit fokus / 5 menit istirahat dengan format waktu MM:SS.
+- [x] **Focus Mode Pomodoro Timer & Background Persistence (PRD F-04)**
+  - Hitungan mundur 25 menit fokus / 5 menit istirahat dengan format waktu MM:SS berbasis timestamp `Date.now()`.
+  - Floating mini-timer pill melayang di bawah layar saat modal fokus ditutup, memungkinkan navigasi bebas.
+  - Judul tab browser otomatis menampilkan sisa waktu detik demi detik.
   - Synthesizer suara bel (*Web Audio API*) saat timer selesai.
   - Haptic feedback (*navigator.vibrate*) untuk smartphone.
-  - Web Browser Notification API saat timer tuntas (ketika user berpindah tab).
+  - Web Browser Notification API saat timer tuntas (ketika user membuka aplikasi lain).
+- [x] **Task Blueprint Sharing & 1-Click Clone**
+  - Tombol *"Bagikan Cetak Biru"* di menu `•••` menghasilkan link unik `/p/:id`.
+  - Pratinjau langkah kerja dan tombol *"Impor ke Jadwalku (1 Detik)"* bagi teman sekelas.
+  - Smart Cache di server MariaDB: nol token LLM dan latensi <20ms untuk tugas yang sama di angkatan.
 - [x] **Status 100% "Ready to Submit 🎉" & Dopamine Feedback** (PRD F-05 & PRD 13.1)
   - Badge otomatis berubah menjadi `Ready to Submit 🎉` saat semua sub-tugas tuntas.
-  - Banner perayaan hijau emerald muncul di dalam kartu tugas lengkap dengan tombol *"Rayakan ✨"*.
+  - Progress bar hijau penuh dan tombol mini *"Rayakan 🎉"* untuk letupan konfeti ulang.
   - Efek ledakan konfeti (*canvas-confetti*) otomatis menyala saat sub-tugas terakhir dicentang.
-- [x] **Audio Chime & Notifikasi Timer Pomodoro** (PRD F-04)
-  - Synthesizer suara bel (*Web Audio API*) otomatis berbunyi saat timer 25 menit fokus atau 5 menit istirahat selesai.
-  - Haptic feedback (*navigator.vibrate*) untuk perangkat smartphone.
-- [ ] **Input Sub-Tugas Manual:** Tombol untuk menambah sub-tugas kustom sendiri jika pengguna ingin menyisipkan langkah tambahan di luar rekomendasi AI.
 - [ ] **Penyimpanan Riwayat Sesi Pomodoro:** Sinkronisasi waktu aktual pengerjaan ke tabel `pomodoro_sessions` di basis data MariaDB untuk analitik masa depan.
 
 ---

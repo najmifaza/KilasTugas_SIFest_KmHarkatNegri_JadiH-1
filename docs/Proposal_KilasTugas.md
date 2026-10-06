@@ -111,7 +111,7 @@ KilasTugas hadir dengan filosofi dasar: **"Problem First, Technology Second — 
 ### 4.1 Target Pengguna
 - **Target Primer:** Mahasiswa aktif D3/D4/S1 (usia 18–24 tahun) yang memiliki beban penugasan multi-matakuliah padat.
 - **Target Sekunder:** Pelajar SMA/SMK/sederajat dan *fresh graduate* yang sedang menempuh *bootcamp*/pelatihan mandiri.
-- **Karakteristik Akses:** Mengutamakan akses cepat mobile & web browser, kuota hemat, dan antarmuka ramah mode malam (*dark mode*).
+- **Karakteristik Akses:** Mengutamakan akses cepat mobile & web browser, kuota hemat, dan antarmuka *light mode* editorial minimalis yang nyaman dibaca berjam-jam tanpa kelelahan mata.
 
 ### 4.2 User Persona
 
@@ -157,7 +157,7 @@ Arsitektur KilasTugas mengadopsi prinsip efisiensi komputasi, keandalan data (*h
 ```
 ┌────────────────────────────────────────────────────────┐
 │                   CLIENT LAYER (SPA)                   │
-│   React 18 + Vite + Tailwind CSS + shadcn/ui + Zustand │
+│      React 18 + Vite + Tailwind CSS + Lucide React     │
 │      Hosted on Vercel Edge Global Content Delivery     │
 └───────────────────────────┬────────────────────────────┘
                             │ HTTPS REST API
@@ -165,7 +165,7 @@ Arsitektur KilasTugas mengadopsi prinsip efisiensi komputasi, keandalan data (*h
 ┌────────────────────────────────────────────────────────┐
 │                  BACKEND ENGINE LAYER                  │
 │       Python 3.12 + FastAPI Async Web Framework        │
-│          Deployed on VPS via Cloudflare Tunnel         │
+│    Deployed on Ubuntu VPS via Nginx + Let's Encrypt    │
 └─────────────┬────────────────────────────┬─────────────┘
               │                            │
               ▼                            ▼
@@ -178,9 +178,9 @@ Arsitektur KilasTugas mengadopsi prinsip efisiensi komputasi, keandalan data (*h
 
 ### 6.1 Rincian Tech Stack
 - **Frontend Layer:**
-  - **React 18 + Vite:** Menghasilkan Single Page Application (SPA) yang sangat ringan (<150KB gzip), responsif di perangkat seluler dengan render instan.
-  - **Tailwind CSS & shadcn/ui:** Desain antarmuka modern bernuansa *dark-mode native*, palet warna ergonomis (*Zinc 900 background, Indigo 500 accent*), dan komponen aksesibel.
-  - **Zustand & Axios:** Pengelolaan state interaktif dan komunikasi asinkronus ke server backend.
+  - **React 18 + Vite:** Menghasilkan Single Page Application (SPA) yang sangat ringan (<90KB gzip), responsif di perangkat seluler dengan render instan.
+  - **Tailwind CSS & Editorial UI:** Desain antarmuka modern bernuansa *clean light mode* editorial (palet warna Stone/Slate/Zinc netral tanpa elemen generik AI-slop), tipografi hierarkis jelas, dan komponen aksesibel.
+  - **React State Hooks & Axios:** Pengelolaan state interaktif efisien dan komunikasi asinkronus ke server backend.
 - **Backend Layer:**
   - **FastAPI (Python 3.12):** Framework backend asinkronus dengan latensi transmisi rendah, validasi skema otomatis via *Pydantic v2*, serta dokumentasi interaktif OpenAPI/Swagger.
   - **aiomysql:** Driver non-blocking asinkron untuk operasi basis data berkecepatan tinggi.
@@ -188,8 +188,8 @@ Arsitektur KilasTugas mengadopsi prinsip efisiensi komputasi, keandalan data (*h
   - **MariaDB 10.x:** Penyimpanan relasional skema terstruktur (`sessions`, `tasks`, `subtasks`, `pomodoro_sessions`) yang mendukung integritas data penuh (*ACID compliant*).
   - **Browser LocalStorage:** Lapisan persistensi lokal sekunder untuk menjamin data tugas tetap dapat diakses pengguna Guest bahkan saat luring (*offline capability*).
 - **Infrastruktur & Delivery:**
-  - **Cloudflare Tunnel (`cloudflared`):** Jalur transmisi aman menghubungkan public endpoint ke server internal tanpa mengekspos port publik secara rentan.
-  - **Vercel Global Edge Network:** Menjamin ketersediaan web aplikasi 99.9% di seluruh jaringan internet Indonesia.
+  - **Nginx Reverse Proxy & SSL Let's Encrypt:** Jalur transmisi aman HTTPS berkecepatan tinggi pada domain `api-kilastugas.najmifaza.my.id` dengan manajemen service `systemd` terisolasi.
+  - **Vercel Global Edge Network:** Menjamin ketersediaan web aplikasi 99.9% di seluruh jaringan internet Indonesia (`kilastugas.vercel.app`).
 
 ---
 
@@ -226,18 +226,20 @@ Tim menjamin bahwa AI tidak digunakan untuk memalsukan data empiris, tidak digun
 
 ## 8. Rencana Implementasi & Status Pengembangan Saat Ini
 
-### 8.1 Status Progres Saat Ini (~50% MVP Online Round)
-- [x] Repositori GitHub terkonfigurasi dengan struktur monorepo / subfolder terstandar.
-- [x] Antarmuka Form Input Tugas (Judul, Deskripsi Instruksi, Matakuliah, Deadline, Kategori).
-- [x] Endpoint Backend `/api/breakdown` terintegrasi dengan 9Router AI & Engine Fallback Template.
-- [x] Checklist sub-tugas interaktif harian dengan sinkronisasi local storage.
-- [x] Engine Pomodoro Focus Mode terpasang pada tiap unit sub-tugas.
+### 8.1 Status Progres Saat Ini (100% MVP Online Round Ready)
+- [x] Repositori GitHub terkonfigurasi dengan struktur monorepo terstandar (`backend/` & `frontend/`).
+- [x] Antarmuka Form Input Tugas terpadu dengan opsi custom target langkah (3–8 langkah atau AI otomatis).
+- [x] Endpoint Backend `/api/breakdown` terintegrasi 9Router AI + Fallback Template + Smart Caching.
+- [x] Checklist sub-tugas interaktif harian dengan sinkronisasi dual-layer (`localStorage` & MariaDB).
+- [x] Engine Pomodoro Focus Mode terpasang dengan persistent background timer, floating pill, dan audio chime.
+- [x] Ekspor kalender otomatis via RFC 5545 iCalendar (`.ics`) dan Google Calendar direct intent.
+- [x] Fitur viral Task Blueprint Sharing (`/p/:id`) dengan impor satu detik.
 - [x] Video walkthrough demonstrasi produk siap diakses panitia dan juri.
 
 ### 8.2 Rencana Pengembangan Sesi Grand Final (11 Oktober 2026)
 1. **Product Sprint Sesi I (09.00–12.00 WIB):**
-   Penyempurnaan algoritma distribusi *micro-pacing* (penyesuaian bobot durasi otomatis jika sisa hari mendekati H-1) dan penghubungan analitik riwayat sesi Pomodoro ke MariaDB.
+   Penyempurnaan algoritma distribusi *micro-pacing* (Emergency Panic Re-pacing H-1) dan analitik Burnout Guard (indikator beban belajar harian).
 2. **Product Sprint Sesi II (13.00–15.00 WIB):**
-   Optimasi responsivitas antarmuka pada layar smartphone resolusi rendah (<380px) dan penambahan fitur ekspor jadwal tugas ke format kalender iCal (`.ics`).
+   Implementasi Always-On Web Push Notification berbasis Service Worker dan sinkronisasi lintas perangkat via OAuth kampus.
 3. **Demo Day & Product Defense (15.45–18.00 WIB):**
-   Live walkthrough end-to-end pemecahan instruksi tugas nyata di hadapan dewan juri.
+   Live walkthrough end-to-end pemecahan instruksi tugas nyata dan pembuktian dampak micro-pacing di hadapan dewan juri.
