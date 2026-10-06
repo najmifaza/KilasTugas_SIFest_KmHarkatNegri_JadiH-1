@@ -1,0 +1,27 @@
+export const theme = {
+  colors: {
+    bgLight: "#fbf8f5",
+    bgWarm: "#fcece3",
+    bgCard: "#ffffff",
+    textPrimary: "#111113",
+    textSecondary: "#4b5563",
+    textMuted: "#6b7280",
+    borderLight: "#e5e7eb",
+    borderMedium: "#d1d5db",
+    brandOrange: "#ea580c",
+    brandOrangeLight: "#ffedd5",
+    brandOrangeDark: "#c2410c",
+    successGreen: "#16a34a",
+    successGreenLight: "#dcfce7",
+    warningAmber: "#d97706",
+    warningAmberLight: "#fef3c7",
+    aiBlue: "#2563eb",
+    aiBlueLight: "#eff6ff",
+    surfaceDark: "#18181b",
+    surfaceDarkCard: "#27272a",
+  },
+  fonts: {
+    sans: '-apple-system, BlinkMacSystemFont, "Plus Jakarta Sans", "SF Pro Display", "Segoe UI", Roboto, sans-serif',
+    mono: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+  },
+};
