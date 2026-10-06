@@ -10,11 +10,11 @@
 
 ```
 [ Tahap 1: MVP Online Round ] ───▶ [ Tahap 2: Grand Final Sprint ] ───▶ [ Tahap 3: Post-Competition Rollout ]
-• AI Magic Breakdown               • Collaborative Group Task Split   • Multi-Tenant Campus Workspace
-• Visual Pacing & Progress Ring    • Always-On Web Push Notifications • Cross-Device Sync (OAuth)
-• Pomodoro Focus Mode              • PWA Offline-First Engine         • Native OS Notification Daemon
-• RFC 5545 iCalendar Export        • Adaptive Step Timing Analytics   • Voice/Audio Prompt Decomposition
-• Task Blueprint Sharing (Active)
+• AI Magic Breakdown               • PDF/Docx Syllabus AI Extractor   • Multi-Tenant Campus Workspace
+• Visual Pacing & Progress Ring    • Collaborative Group Task Split   • Cross-Device Sync (OAuth)
+• Pomodoro Focus Mode              • Always-On Web Push Notifications • Native OS Notification Daemon
+• RFC 5545 iCalendar Export        • PWA Offline-First Engine         • Voice/Audio Prompt Decomposition
+• Task Blueprint Sharing (Active)  • Adaptive Step Timing Analytics
 • Persistent Floating Timer
 ```
 
@@ -22,21 +22,29 @@
 
 ## 🌟 Detail Fitur Unggulan Mendatang
 
-### 1. 👥 Pembagian Tugas Kelompok Cerdas (_Collaborative Task Split_)
+### 1. 📄 Ekstraksi Modul & Silabus Dosen Otomatis (_AI Syllabus & PDF Reader_)
+
+- **Masalah Pengguna:** Mahasiswa enggan mengetik ulang manual deskripsi tugas yang rumit saat dosen memberikan berkas panduan/silabus dalam format PDF atau DOCX tebal (5–15 halaman).
+- **Mekanisme Fitur:**
+  - Komponen drag-and-drop unggah berkas (PDF / DOCX / Gambar pindaian modul tugas).
+  - Parser backend mengekstrak teks instruksi, tanggal tenggat waktu, dan rubrik penilaian dosen secara otomatis.
+  - Model inferensi AI langsung mengonversi poin-poin capaian tugas menjadi rantai sub-tugas terukur tanpa perlu satu pun ketikan manual dari mahasiswa.
+
+### 2. 👥 Pembagian Tugas Kelompok Cerdas (_Collaborative Task Split_)
 
 - **Mekanisme Fitur:**
   - Mode tugas kelompok: Ketua tim memasukkan anggota dan peran (Analis, Pengembang, Penulis Laporan).
   - AI membagi beban kerja secara adil berdasarkan porsi kompetensi dan estimasi waktu.
   - Dasbor ketergantungan tugas (_task dependency_): Anggota B baru mulai saat Anggota A menandai sub-tugasnya selesai.
 
-### 2. 📱 Progressive Web App (PWA) & Offline-First Mode
+### 3. 📱 Progressive Web App (PWA) & Offline-First Mode
 
 - **Mekanisme Fitur:**
   - Pemasangan langsung ke layar utama Android & iOS tanpa melalui App Store (_Add to Home Screen_).
   - Dukungan IndexedDB lokal: aplikasi dapat membuka jadwal, mencentang sub-tugas, dan menjalankan timer Pomodoro tanpa koneksi internet sama sekali.
   - Sinkronisasi otomatis ke server VPS saat perangkat kembali terhubung ke jaringan.
 
-### 3. ⏱️ Timer Background Persisten & Web Push Notification (_Always-On Focus Engine_)
+### 4. ⏱️ Timer Background Persisten & Web Push Notification (_Always-On Focus Engine_)
 
 - **Masalah Pengguna:** Mahasiswa menutup tab browser atau laptop/layar ponsel mati saat sesi fokus Pomodoro berjalan. Ketika thread JavaScript browser mati, timer hilang dan alarm audio bawaan browser tidak berbunyi.
 - **Mekanisme Fitur:**
