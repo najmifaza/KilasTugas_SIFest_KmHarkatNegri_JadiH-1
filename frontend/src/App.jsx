@@ -512,35 +512,32 @@ export default function App() {
         onTaskCreated={() => loadTasks()}
       />
 
-      {activeDetail && (
-        <TaskDetailModal
-          subtask={activeDetail.subtask}
-          task={activeDetail.task}
-          isOpen={Boolean(activeDetail)}
-          onClose={() => setActiveDetail(null)}
-          onComplete={() => loadTasks()}
-          timerState={timerState}
-          onStartTimer={handleStartTimer}
-          onToggleTimer={handleToggleTimer}
-          onResetTimer={handleResetTimer}
-        />
-      )}
+      {/* Task Step Detail & Focus Timer Modal */}
+      <TaskDetailModal
+        subtask={activeDetail?.subtask}
+        task={activeDetail?.task}
+        isOpen={Boolean(activeDetail)}
+        onClose={() => setActiveDetail(null)}
+        onComplete={() => loadTasks()}
+        timerState={timerState}
+        onStartTimer={handleStartTimer}
+        onToggleTimer={handleToggleTimer}
+        onResetTimer={handleResetTimer}
+      />
 
       {/* Blueprint Task Import Modal */}
-      {sharedBlueprint && (
-        <BlueprintModal
-          blueprint={sharedBlueprint}
-          onClose={() => {
-            setSharedBlueprint(null)
-            window.history.pushState({}, '', '/')
-          }}
-          onImportSuccess={() => {
-            setSharedBlueprint(null)
-            window.history.pushState({}, '', '/')
-            loadTasks()
-          }}
-        />
-      )}
+      <BlueprintModal
+        blueprint={sharedBlueprint}
+        onClose={() => {
+          setSharedBlueprint(null)
+          window.history.pushState({}, '', '/')
+        }}
+        onImportSuccess={() => {
+          setSharedBlueprint(null)
+          window.history.pushState({}, '', '/')
+          loadTasks()
+        }}
+      />
     </div>
   )
 }
