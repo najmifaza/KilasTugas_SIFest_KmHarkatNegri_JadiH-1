@@ -1,5 +1,5 @@
 # PROPOSAL RINGKAS INOVASI DIGITAL
-## SIFest Digital Innovation Challenge 2026 — Track: Education
+## SIFest Digital Innovation Challenge 2026: Track Education
 
 ---
 
@@ -14,8 +14,8 @@
 | Komponen | Keterangan |
 |---|---|
 | **Nama Tim** | Tim KilasTugas |
-| **Ketua Tim (Team Leader)** | Adridinan Najmi Faza (Informatika — Universitas Jenderal Soedirman) |
-| **Anggota Tim** | 1. Timotius Willy Narendra (Informatika — Universitas Jenderal Soedirman)<br>2. Fardizza Finda Rahman (Informatika — Universitas Jenderal Soedirman) |
+| **Ketua Tim (Team Leader)** | Adridinan Najmi Faza (Informatika, Universitas Jenderal Soedirman) |
+| **Anggota Tim** | 1. Timotius Willy Narendra (Informatika, Universitas Jenderal Soedirman)<br>2. Fardizza Finda Rahman (Informatika, Universitas Jenderal Soedirman) |
 | **Judul Produk** | **KilasTugas** |
 | **Challenge Track** | **Education** |
 | **Tautan Repositori GitHub** | `https://github.com/najmifaza/KilasTugas_SIFest_KmHarkatNegri_JadiH-1` *(Akses Publik / Juri)* |
@@ -67,7 +67,7 @@ Survei disebarkan kepada mahasiswa lintas angkatan dan program studi rumpun sain
 
 ## 3. Solusi yang Ditawarkan
 
-KilasTugas hadir dengan filosofi dasar: **"Problem First, Technology Second — Jangan tanya 'kapan selesai', tanyakan 'apa yang dikerjakan hari ini'."**
+KilasTugas hadir dengan filosofi dasar: **"Problem First, Technology Second: Jangan tanya 'kapan selesai', tanyakan 'apa yang dikerjakan hari ini'."**
 
 ```
 [ Instruksi Tugas Kuliah yang Panjang & Abstrak ]
@@ -86,7 +86,7 @@ KilasTugas hadir dengan filosofi dasar: **"Problem First, Technology Second — 
 ```
 
 ### 3.1 Nilai Inovasi & Fitur Unggulan
-1. **Magic Task Breakdown (AI-Powered):**
+1. **Dekomposisi Tugas Terarah Berbasis AI:**
    Pengguna cukup memasukkan judul, instruksi dosen, mata kuliah, dan tanggal deadline. Mesin inferensi AI membedah instruksi menjadi 4–6 sub-tugas terstruktur. Tiap langkah memuat:
    - Judul aksi spesifik (<60 karakter, kata kerja aktif).
    - Panduan eksekusi konkret (1–2 kalimat petunjuk praktis).
@@ -116,13 +116,13 @@ KilasTugas hadir dengan filosofi dasar: **"Problem First, Technology Second — 
 ### 4.2 User Persona
 
 #### Persona 1: Mahasiswa Aktif Akademik & Organisasi
-- **Nama:** Reza Aditya (20 tahun) — Mahasiswa Informatika Semester 5.
+- **Nama:** Reza Aditya (20 tahun), Mahasiswa Informatika Semester 5.
 - **Perilaku:** Menghadapi 6 mata kuliah dan 2 praktikum mingguan, aktif di BEM fakultas.
 - **Pain Point:** Sering menunda pengerjaan tugas besar praktikum karena modul instruksi rumit; merasa bersalah dan terbebani di akhir pekan hingga panik pada H-1.
 - **Kebutuhan:** Pemecah tugas otomatis yang memberi tahu menu kerja 30–45 menit setiap sore hari seusai kuliah.
 
 #### Persona 2: Siswi Sekolah / Pelajar Mandiri
-- **Nama:** Siti Nurhaliza (17 tahun) — Siswi SMA Kelas 12.
+- **Nama:** Siti Nurhaliza (17 tahun), Siswi SMA Kelas 12.
 - **Perilaku:** Mempersiapkan tugas proyek akhir sekolah dan ujian mandiri dengan kuota seluler terbatas.
 - **Pain Point:** Tidak memiliki bimbingan privat; bingung menyusun langkah kerja tugas karya ilmiah mandiri.
 - **Kebutuhan:** Platform ringan, tidak membutuhkan login rumit, dan memberikan panduan kerja langkah demi langkah.
