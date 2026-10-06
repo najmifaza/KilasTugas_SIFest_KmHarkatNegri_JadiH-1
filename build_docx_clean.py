@@ -349,21 +349,25 @@ def build_docx_proposal():
                 p.alignment = WD_ALIGN_PARAGRAPH.LEFT
                 p.paragraph_format.keep_with_next = True
                 if lvl == 1 or (lvl == 2 and re.match(r'^\d+\.\s+', text)):
-                    # BAB 1, 2, 3
+                    # BAB 1, 2, 3 (Rata kiri / flush left atau indent 0)
                     p.paragraph_format.space_before = Pt(8)
                     p.paragraph_format.space_after = Pt(2)
                     p.paragraph_format.line_spacing = 1.15
+                    p.paragraph_format.left_indent = Inches(0)
                     runs(p, text, base_font_size=12, default_bold=True)
                 elif lvl == 2 or (lvl == 3 and re.match(r'^\d+\.\d+\s+', text)):
-                    # Sub-bab 1.1, 1.2...
+                    # Sub-bab 1.1, 1.2... Menjorok ke dalam (left indent 1.0 cm = ~0.4 inch)
                     p.paragraph_format.space_before = Pt(6)
                     p.paragraph_format.space_after = Pt(2)
                     p.paragraph_format.line_spacing = 1.15
+                    p.paragraph_format.left_indent = Inches(0.4)
                     runs(p, text, base_font_size=11, default_bold=True)
                 else:
+                    # Sub-sub-bab 1.1.1 atau lainnya menjorok lebih dalam (left indent 1.5 cm = ~0.6 inch)
                     p.paragraph_format.space_before = Pt(4)
                     p.paragraph_format.space_after = Pt(1)
                     p.paragraph_format.line_spacing = 1.15
+                    p.paragraph_format.left_indent = Inches(0.6)
                     runs(p, text, base_font_size=11, default_bold=True, default_italic=True)
                 i += 1
                 continue
@@ -377,8 +381,8 @@ def build_docx_proposal():
             p.paragraph_format.line_spacing = 1.12
             p.paragraph_format.space_before = Pt(0)
             p.paragraph_format.space_after = Pt(1.5)
-            p.paragraph_format.left_indent = Inches(0.35)
-            p.paragraph_format.first_line_indent = Inches(-0.35)
+            p.paragraph_format.left_indent = Inches(0.7)
+            p.paragraph_format.first_line_indent = Inches(-0.3)
 
             r_box = p.add_run(f"{box}  ")
             r_box.font.name = FONT_NAME
@@ -401,7 +405,7 @@ def build_docx_proposal():
             p.paragraph_format.space_after = Pt(2)
             
             is_digit = bool(re.match(r'\d+\.', bullet))
-            base_ind = 0.3 * (1 + (indent_spaces // 2))
+            base_ind = 0.4 + (0.3 * (1 + (indent_spaces // 2)))
             p.paragraph_format.left_indent = Inches(base_ind)
             p.paragraph_format.first_line_indent = Inches(-0.25 if is_digit else -0.2)
 
@@ -423,7 +427,7 @@ def build_docx_proposal():
             p.paragraph_format.line_spacing = 1.15
             p.paragraph_format.space_before = Pt(4)
             p.paragraph_format.space_after = Pt(4)
-            p.paragraph_format.left_indent = Inches(0.4)
+            p.paragraph_format.left_indent = Inches(0.8)
             p.paragraph_format.right_indent = Inches(0.4)
             runs(p, stripped[2:].strip(), base_font_size=11, default_italic=True)
             i += 1
@@ -442,6 +446,9 @@ def build_docx_proposal():
             p.paragraph_format.space_before = Pt(0)
             p.paragraph_format.space_after = Pt(2.5)
             p.paragraph_format.line_spacing = 1.15
+            # Paragraf menjorok ke dalam (first line indent 1.0 cm = ~0.4 inch, left indent 0.4 inch jika di dalam sub-bab)
+            p.paragraph_format.left_indent = Inches(0.4)
+            p.paragraph_format.first_line_indent = Inches(0.35)
             runs(p, stripped, base_font_size=11)
         i += 1
 
