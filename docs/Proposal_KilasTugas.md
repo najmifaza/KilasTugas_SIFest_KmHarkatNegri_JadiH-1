@@ -236,10 +236,10 @@ Tim menjamin bahwa AI tidak digunakan untuk memalsukan data empiris, tidak digun
 - [x] Fitur viral Task Blueprint Sharing (`/p/:id`) dengan impor satu detik.
 - [x] Video walkthrough demonstrasi produk siap diakses panitia dan juri.
 
-### 8.2 Rencana Pengembangan Sesi Grand Final (11 Oktober 2026)
+### 8.2 Rencana Pengembangan Sesi Grand Final & Roadmap (11 Oktober 2026)
 1. **Product Sprint Sesi I (09.00–12.00 WIB):**
-   Penyempurnaan algoritma distribusi *micro-pacing* (Emergency Panic Re-pacing H-1) dan analitik Burnout Guard (indikator beban belajar harian).
+   Implementasi *AI Syllabus & PDF Reader* (ekstraksi instruksi modul tugas PDF/DOCX secara nir-ketik) dan pembagian tugas kelompok cerdas (*Collaborative Task Split*).
 2. **Product Sprint Sesi II (13.00–15.00 WIB):**
-   Implementasi Always-On Web Push Notification berbasis Service Worker dan sinkronisasi lintas perangkat via OAuth kampus.
+   Implementasi Always-On Web Push Notification berbasis Service Worker dan kapabilitas Progressive Web App (PWA) Offline-First.
 3. **Demo Day & Product Defense (15.45–18.00 WIB):**
-   Live walkthrough end-to-end pemecahan instruksi tugas nyata dan pembuktian dampak micro-pacing di hadapan dewan juri.
+   Live walkthrough end-to-end pemecahan instruksi tugas nyata, import cetak biru tugas antar-mahasiswa, dan pembuktian dampak micro-pacing di hadapan dewan juri.
