@@ -306,6 +306,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.2.0 | MIT License |
     --color-amber-600: oklch(0.666 0.179 58.318);
     --color-amber-700: oklch(0.555 0.163 48.998);
     --color-amber-800: oklch(0.473 0.137 46.201);
+    --color-amber-950: oklch(0.279 0.077 45.635);
     --color-emerald-50: oklch(0.979 0.021 166.113);
     --color-emerald-100: oklch(0.95 0.052 163.051);
     --color-emerald-200: oklch(0.905 0.093 164.15);
@@ -315,12 +316,16 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.2.0 | MIT License |
     --color-emerald-600: oklch(0.596 0.145 163.225);
     --color-emerald-700: oklch(0.508 0.118 165.612);
     --color-emerald-800: oklch(0.432 0.095 166.913);
+    --color-emerald-950: oklch(0.262 0.051 172.552);
     --color-blue-50: oklch(0.97 0.014 254.604);
     --color-blue-100: oklch(0.932 0.032 255.585);
     --color-blue-200: oklch(0.882 0.059 254.128);
+    --color-blue-300: oklch(0.809 0.105 251.813);
+    --color-blue-500: oklch(0.623 0.214 259.815);
     --color-blue-600: oklch(0.546 0.245 262.881);
     --color-blue-700: oklch(0.488 0.243 264.376);
     --color-blue-800: oklch(0.424 0.199 265.638);
+    --color-blue-950: oklch(0.282 0.091 267.935);
     --color-rose-50: oklch(0.969 0.015 12.422);
     --color-rose-100: oklch(0.941 0.03 12.58);
     --color-rose-200: oklch(0.892 0.058 10.001);
@@ -386,6 +391,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.2.0 | MIT License |
     --radius-3xl: 1.5rem;
     --animate-spin: spin 1s linear infinite;
     --animate-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    --blur-2xl: 40px;
     --blur-3xl: 64px;
     --default-transition-duration: 150ms;
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -557,11 +563,20 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.2.0 | MIT License |
   .relative {
     position: relative;
   }
+  .inset-0 {
+    inset: calc(var(--spacing) * 0);
+  }
+  .-top-3 {
+    top: calc(var(--spacing) * -3);
+  }
   .-top-32 {
     top: calc(var(--spacing) * -32);
   }
   .top-1\\/2 {
     top: calc(1 / 2 * 100%);
+  }
+  .top-2\\.5 {
+    top: calc(var(--spacing) * 2.5);
   }
   .-right-32 {
     right: calc(var(--spacing) * -32);
@@ -569,17 +584,32 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.2.0 | MIT License |
   .-bottom-32 {
     bottom: calc(var(--spacing) * -32);
   }
+  .-left-3 {
+    left: calc(var(--spacing) * -3);
+  }
   .-left-32 {
     left: calc(var(--spacing) * -32);
   }
   .left-1\\/2 {
     left: calc(1 / 2 * 100%);
   }
+  .left-1\\/3 {
+    left: calc(1 / 3 * 100%);
+  }
   .z-10 {
     z-index: 10;
   }
   .z-20 {
     z-index: 20;
+  }
+  .z-30 {
+    z-index: 30;
+  }
+  .z-40 {
+    z-index: 40;
+  }
+  .z-50 {
+    z-index: 50;
   }
   .mx-6 {
     margin-inline: calc(var(--spacing) * 6);
@@ -710,6 +740,15 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.2.0 | MIT License |
   .h-\\[40rem\\] {
     height: 40rem;
   }
+  .h-\\[45rem\\] {
+    height: 45rem;
+  }
+  .h-\\[740px\\] {
+    height: 740px;
+  }
+  .h-\\[920px\\] {
+    height: 920px;
+  }
   .h-full {
     height: 100%;
   }
@@ -770,8 +809,17 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.2.0 | MIT License |
   .w-\\[40rem\\] {
     width: 40rem;
   }
+  .w-\\[45rem\\] {
+    width: 45rem;
+  }
+  .w-\\[360px\\] {
+    width: 360px;
+  }
   .w-\\[440px\\] {
     width: 440px;
+  }
+  .w-\\[1600px\\] {
+    width: 1600px;
   }
   .w-full {
     width: 100%;
@@ -797,6 +845,9 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.2.0 | MIT License |
   .max-w-\\[1560px\\] {
     max-width: 1560px;
   }
+  .max-w-\\[1720px\\] {
+    max-width: 1720px;
+  }
   .max-w-xl {
     max-width: var(--container-xl);
   }
@@ -808,6 +859,9 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.2.0 | MIT License |
   }
   .shrink-0 {
     flex-shrink: 0;
+  }
+  .origin-center {
+    transform-origin: center;
   }
   .-translate-x-1\\/2 {
     --tw-translate-x: calc(calc(1 / 2 * 100%) * -1);
@@ -924,8 +978,14 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.2.0 | MIT License |
   .rounded-3xl {
     border-radius: var(--radius-3xl);
   }
+  .rounded-\\[42px\\] {
+    border-radius: 42px;
+  }
   .rounded-\\[44px\\] {
     border-radius: 44px;
+  }
+  .rounded-\\[52px\\] {
+    border-radius: 52px;
   }
   .rounded-full {
     border-radius: calc(infinity * 1px);
@@ -947,6 +1007,10 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.2.0 | MIT License |
     border-style: var(--tw-border-style);
     border-width: 2px;
   }
+  .border-4 {
+    border-style: var(--tw-border-style);
+    border-width: 4px;
+  }
   .border-\\[10px\\] {
     border-style: var(--tw-border-style);
     border-width: 10px;
@@ -962,20 +1026,44 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.2.0 | MIT License |
   .border-amber-200 {
     border-color: var(--color-amber-200);
   }
+  .border-amber-300 {
+    border-color: var(--color-amber-300);
+  }
+  .border-amber-500\\/20 {
+    border-color: color-mix(in srgb, oklch(0.769 0.188 70.08) 20%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      border-color: color-mix(in oklab, var(--color-amber-500) 20%, transparent);
+    }
+  }
   .border-amber-500\\/30 {
     border-color: color-mix(in srgb, oklch(0.769 0.188 70.08) 30%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
       border-color: color-mix(in oklab, var(--color-amber-500) 30%, transparent);
     }
   }
+  .border-black\\/20 {
+    border-color: color-mix(in srgb, #000 20%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      border-color: color-mix(in oklab, var(--color-black) 20%, transparent);
+    }
+  }
   .border-blue-200 {
     border-color: var(--color-blue-200);
+  }
+  .border-blue-300 {
+    border-color: var(--color-blue-300);
   }
   .border-emerald-200 {
     border-color: var(--color-emerald-200);
   }
   .border-emerald-300 {
     border-color: var(--color-emerald-300);
+  }
+  .border-emerald-500\\/20 {
+    border-color: color-mix(in srgb, oklch(0.696 0.17 162.48) 20%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      border-color: color-mix(in oklab, var(--color-emerald-500) 20%, transparent);
+    }
   }
   .border-emerald-500\\/30 {
     border-color: color-mix(in srgb, oklch(0.696 0.17 162.48) 30%, transparent);
@@ -1004,8 +1092,17 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.2.0 | MIT License |
   .border-orange-300 {
     border-color: var(--color-orange-300);
   }
+  .border-orange-500 {
+    border-color: var(--color-orange-500);
+  }
   .border-rose-200 {
     border-color: var(--color-rose-200);
+  }
+  .border-rose-500\\/20 {
+    border-color: color-mix(in srgb, oklch(0.645 0.246 16.439) 20%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      border-color: color-mix(in oklab, var(--color-rose-500) 20%, transparent);
+    }
   }
   .border-rose-500\\/30 {
     border-color: color-mix(in srgb, oklch(0.645 0.246 16.439) 30%, transparent);
@@ -1027,6 +1124,12 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.2.0 | MIT License |
   }
   .border-slate-300 {
     border-color: var(--color-slate-300);
+  }
+  .border-slate-700\\/80 {
+    border-color: color-mix(in srgb, oklch(0.372 0.044 257.287) 80%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      border-color: color-mix(in oklab, var(--color-slate-700) 80%, transparent);
+    }
   }
   .border-slate-800 {
     border-color: var(--color-slate-800);
@@ -1103,6 +1206,12 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.2.0 | MIT License |
   .bg-emerald-100 {
     background-color: var(--color-emerald-100);
   }
+  .bg-emerald-100\\/80 {
+    background-color: color-mix(in srgb, oklch(0.95 0.052 163.051) 80%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--color-emerald-100) 80%, transparent);
+    }
+  }
   .bg-emerald-400 {
     background-color: var(--color-emerald-400);
   }
@@ -1130,6 +1239,12 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.2.0 | MIT License |
   .bg-orange-100 {
     background-color: var(--color-orange-100);
   }
+  .bg-orange-100\\/40 {
+    background-color: color-mix(in srgb, oklch(0.954 0.038 75.164) 40%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--color-orange-100) 40%, transparent);
+    }
+  }
   .bg-orange-100\\/70 {
     background-color: color-mix(in srgb, oklch(0.954 0.038 75.164) 70%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
@@ -1140,6 +1255,12 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.2.0 | MIT License |
     background-color: color-mix(in srgb, oklch(0.901 0.076 70.697) 40%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
       background-color: color-mix(in oklab, var(--color-orange-200) 40%, transparent);
+    }
+  }
+  .bg-orange-400\\/20 {
+    background-color: color-mix(in srgb, oklch(0.75 0.183 55.934) 20%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--color-orange-400) 20%, transparent);
     }
   }
   .bg-orange-600 {
@@ -1185,6 +1306,12 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.2.0 | MIT License |
     background-color: color-mix(in srgb, oklch(0.968 0.007 247.896) 90%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
       background-color: color-mix(in oklab, var(--color-slate-100) 90%, transparent);
+    }
+  }
+  .bg-slate-100\\/95 {
+    background-color: color-mix(in srgb, oklch(0.968 0.007 247.896) 95%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--color-slate-100) 95%, transparent);
     }
   }
   .bg-slate-200 {
@@ -1233,6 +1360,17 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.2.0 | MIT License |
     --tw-gradient-position: to right in oklab;
     background-image: linear-gradient(var(--tw-gradient-stops));
   }
+  .bg-radial {
+    --tw-gradient-position: in oklab;
+    background-image: radial-gradient(var(--tw-gradient-stops));
+  }
+  .from-orange-200\\/30 {
+    --tw-gradient-from: color-mix(in srgb, oklch(0.901 0.076 70.697) 30%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      --tw-gradient-from: color-mix(in oklab, var(--color-orange-200) 30%, transparent);
+    }
+    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+  }
   .from-orange-600 {
     --tw-gradient-from: var(--color-orange-600);
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
@@ -1242,8 +1380,17 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.2.0 | MIT License |
     --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
     --tw-gradient-stops: var(--tw-gradient-via-stops);
   }
+  .via-transparent {
+    --tw-gradient-via: transparent;
+    --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-via-stops);
+  }
   .to-orange-500 {
     --tw-gradient-to: var(--color-orange-500);
+    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+  }
+  .to-transparent {
+    --tw-gradient-to: transparent;
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
   }
   .bg-clip-text {
@@ -1251,6 +1398,12 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.2.0 | MIT License |
   }
   .object-contain {
     object-fit: contain;
+  }
+  .object-cover {
+    object-fit: cover;
+  }
+  .object-top {
+    object-position: top;
   }
   .p-1 {
     padding: calc(var(--spacing) * 1);
@@ -1329,6 +1482,9 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.2.0 | MIT License |
   }
   .py-2 {
     padding-block: calc(var(--spacing) * 2);
+  }
+  .py-2\\.5 {
+    padding-block: calc(var(--spacing) * 2.5);
   }
   .py-3 {
     padding-block: calc(var(--spacing) * 3);
@@ -1461,6 +1617,9 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.2.0 | MIT License |
   .text-amber-300 {
     color: var(--color-amber-300);
   }
+  .text-amber-500 {
+    color: var(--color-amber-500);
+  }
   .text-amber-600 {
     color: var(--color-amber-600);
   }
@@ -1469,6 +1628,9 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.2.0 | MIT License |
   }
   .text-amber-800 {
     color: var(--color-amber-800);
+  }
+  .text-amber-950 {
+    color: var(--color-amber-950);
   }
   .text-blue-600 {
     color: var(--color-blue-600);
@@ -1479,6 +1641,9 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.2.0 | MIT License |
   .text-blue-800 {
     color: var(--color-blue-800);
   }
+  .text-blue-950 {
+    color: var(--color-blue-950);
+  }
   .text-emerald-600 {
     color: var(--color-emerald-600);
   }
@@ -1487,6 +1652,9 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.2.0 | MIT License |
   }
   .text-emerald-800 {
     color: var(--color-emerald-800);
+  }
+  .text-emerald-950 {
+    color: var(--color-emerald-950);
   }
   .text-orange-400 {
     color: var(--color-orange-400);
@@ -1499,6 +1667,9 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.2.0 | MIT License |
   }
   .text-orange-800 {
     color: var(--color-orange-800);
+  }
+  .text-orange-950 {
+    color: var(--color-orange-950);
   }
   .text-rose-600 {
     color: var(--color-rose-600);
@@ -1580,11 +1751,42 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.2.0 | MIT License |
     --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
+  .shadow-amber-500\\/10 {
+    --tw-shadow-color: color-mix(in srgb, oklch(0.769 0.188 70.08) 10%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-amber-500) 10%, transparent) var(--tw-shadow-alpha), transparent);
+    }
+  }
+  .shadow-blue-500\\/10 {
+    --tw-shadow-color: color-mix(in srgb, oklch(0.623 0.214 259.815) 10%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-blue-500) 10%, transparent) var(--tw-shadow-alpha), transparent);
+    }
+  }
+  .shadow-emerald-500\\/10 {
+    --tw-shadow-color: color-mix(in srgb, oklch(0.696 0.17 162.48) 10%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-emerald-500) 10%, transparent) var(--tw-shadow-alpha), transparent);
+    }
+  }
+  .shadow-orange-500\\/10 {
+    --tw-shadow-color: color-mix(in srgb, oklch(0.705 0.213 47.604) 10%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-orange-500) 10%, transparent) var(--tw-shadow-alpha), transparent);
+    }
+  }
   .ring-orange-200 {
     --tw-ring-color: var(--color-orange-200);
   }
+  .blur-2xl {
+    --tw-blur: blur(var(--blur-2xl));
+    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+  }
   .blur-3xl {
     --tw-blur: blur(var(--blur-3xl));
+    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+  }
+  .filter {
     filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
   }
   .backdrop-blur {
@@ -1596,6 +1798,15 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.2.0 | MIT License |
     transition-property: all;
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
     transition-duration: var(--tw-duration, var(--default-transition-duration));
+  }
+  .transition-transform {
+    transition-property: transform, translate, scale, rotate;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
+  }
+  .select-none {
+    -webkit-user-select: none;
+    user-select: none;
   }
   .hover\\:bg-orange-700 {
     &:hover {
@@ -2028,7 +2239,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, `/*! tailwindcss v4.2.0 | MIT License |
     }
   }
 }
-`, "",{"version":3,"sources":["webpack://./src/index.css"],"names":[],"mappings":"AAAA,gEAAgE;AAChE,iBAAiB;AACjB,yCAAyC;AACzC;EACE;IACE;6DACyD;IACzD;iDAC6C;IAC7C,2CAA2C;IAC3C,6CAA6C;IAC7C,6CAA6C;IAC7C,4CAA4C;IAC5C,4CAA4C;IAC5C,6CAA6C;IAC7C,6CAA6C;IAC7C,6CAA6C;IAC7C,4CAA4C;IAC5C,6CAA6C;IAC7C,2CAA2C;IAC3C,4CAA4C;IAC5C,2CAA2C;IAC3C,4CAA4C;IAC5C,4CAA4C;IAC5C,2CAA2C;IAC3C,4CAA4C;IAC5C,4CAA4C;IAC5C,4CAA4C;IAC5C,8CAA8C;IAC9C,8CAA8C;IAC9C,8CAA8C;IAC9C,+CAA+C;IAC/C,+CAA+C;IAC/C,6CAA6C;IAC7C,+CAA+C;IAC/C,+CAA+C;IAC/C,+CAA+C;IAC/C,0CAA0C;IAC1C,4CAA4C;IAC5C,4CAA4C;IAC5C,4CAA4C;IAC5C,4CAA4C;IAC5C,4CAA4C;IAC5C,0CAA0C;IAC1C,yCAAyC;IACzC,2CAA2C;IAC3C,2CAA2C;IAC3C,2CAA2C;IAC3C,2CAA2C;IAC3C,2CAA2C;IAC3C,4CAA4C;IAC5C,6CAA6C;IAC7C,6CAA6C;IAC7C,6CAA6C;IAC7C,4CAA4C;IAC5C,6CAA6C;IAC7C,6CAA6C;IAC7C,6CAA6C;IAC7C,6CAA6C;IAC7C,6CAA6C;IAC7C,mBAAmB;IACnB,mBAAmB;IACnB,kBAAkB;IAClB,qBAAqB;IACrB,qBAAqB;IACrB,sBAAsB;IACtB,sBAAsB;IACtB,sBAAsB;IACtB,sBAAsB;IACtB,kBAAkB;IAClB,sCAAsC;IACtC,mBAAmB;IACnB,0CAA0C;IAC1C,iBAAiB;IACjB,uCAAuC;IACvC,mBAAmB;IACnB,0CAA0C;IAC1C,kBAAkB;IAClB,yCAAyC;IACzC,kBAAkB;IAClB,sCAAsC;IACtC,oBAAoB;IACpB,2CAA2C;IAC3C,mBAAmB;IACnB,yCAAyC;IACzC,gBAAgB;IAChB,0BAA0B;IAC1B,mBAAmB;IACnB,0BAA0B;IAC1B,kBAAkB;IAClB,0BAA0B;IAC1B,yBAAyB;IACzB,yBAAyB;IACzB,2BAA2B;IAC3B,uBAAuB;IACvB,wBAAwB;IACxB,0BAA0B;IAC1B,wBAAwB;IACxB,qBAAqB;IACrB,qBAAqB;IACrB,wBAAwB;IACxB,qBAAqB;IACrB,mBAAmB;IACnB,oBAAoB;IACpB,kBAAkB;IAClB,oBAAoB;IACpB,uCAAuC;IACvC,+DAA+D;IAC/D,gBAAgB;IAChB,oCAAoC;IACpC,kEAAkE;IAClE,uCAAuC;IACvC,wEAAwE;IACxE;;KAEC;IACD,4CAA4C;IAC5C;;KAEC;IACD;;KAEC;EACH;AACF;AACA;EACE;IACE,sBAAsB;IACtB,SAAS;IACT,UAAU;IACV,eAAe;EACjB;EACA;IACE,gBAAgB;IAChB,8BAA8B;IAC9B,WAAW;IACX,6JAA6J;IAC7J,mEAAmE;IACnE,yEAAyE;IACzE,wCAAwC;EAC1C;EACA;IACE,oBAAoB;EACtB;EACA;IACE,SAAS;IACT,cAAc;IACd,qBAAqB;EACvB;EACA;IACE,yCAAyC;IACzC,iCAAiC;EACnC;EACA;IACE,kBAAkB;IAClB,oBAAoB;EACtB;EACA;IACE,cAAc;IACd,gCAAgC;IAChC,wBAAwB;EAC1B;EACA;IACE,mBAAmB;EACrB;EACA;IACE,kJAAkJ;IAClJ,0EAA0E;IAC1E,8EAA8E;IAC9E,cAAc;EAChB;EACA;IACE,cAAc;EAChB;EACA;IACE,cAAc;IACd,cAAc;IACd,kBAAkB;IAClB,wBAAwB;EAC1B;EACA;IACE,eAAe;EACjB;EACA;IACE,WAAW;EACb;EACA;IACE,cAAc;IACd,qBAAqB;IACrB,yBAAyB;EAC3B;EACA;IACE,aAAa;EACf;EACA;IACE,wBAAwB;EAC1B;EACA;IACE,kBAAkB;EACpB;EACA;IACE,gBAAgB;EAClB;EACA;IACE,cAAc;IACd,sBAAsB;EACxB;EACA;IACE,eAAe;IACf,YAAY;EACd;EACA;IACE,aAAa;IACb,8BAA8B;IAC9B,gCAAgC;IAChC,uBAAuB;IACvB,cAAc;IACd,gBAAgB;IAChB,6BAA6B;IAC7B,UAAU;EACZ;EACA;IACE,mBAAmB;EACrB;EACA;IACE,0BAA0B;EAC5B;EACA;IACE,sBAAsB;EACxB;EACA;IACE,UAAU;IACV,mBAAmB;IACnB;MACE,yDAAyD;IAC3D;EACF;EACA;IACE,gBAAgB;EAClB;EACA;IACE,wBAAwB;EAC1B;EACA;IACE,eAAe;IACf,mBAAmB;EACrB;EACA;IACE,oBAAoB;EACtB;EACA;IACE,UAAU;EACZ;EACA;IACE,gBAAgB;EAClB;EACA;IACE,gBAAgB;EAClB;EACA;IACE,kBAAkB;EACpB;EACA;IACE,YAAY;EACd;EACA;IACE,wBAAwB;EAC1B;AACF;AACA;EACE;IACE,oBAAoB;EACtB;EACA;IACE,kBAAkB;EACpB;EACA;IACE,kBAAkB;EACpB;EACA;IACE,+BAA+B;EACjC;EACA;IACE,uBAAuB;EACzB;EACA;IACE,iCAAiC;EACnC;EACA;IACE,kCAAkC;EACpC;EACA;IACE,gCAAgC;EAClC;EACA;IACE,wBAAwB;EAC1B;EACA;IACE,WAAW;EACb;EACA;IACE,WAAW;EACb;EACA;IACE,uCAAuC;EACzC;EACA;IACE,mBAAmB;EACrB;EACA;IACE,sCAAsC;EACxC;EACA;IACE,qCAAqC;EACvC;EACA;IACE,sCAAsC;EACxC;EACA;IACE,oCAAoC;EACtC;EACA;IACE,sCAAsC;EACxC;EACA;IACE,oCAAoC;EACtC;EACA;IACE,oCAAoC;EACtC;EACA;IACE,oCAAoC;EACtC;EACA;IACE,yCAAyC;EAC3C;EACA;IACE,uCAAuC;EACzC;EACA;IACE,yCAAyC;EAC3C;EACA;IACE,uCAAuC;EACzC;EACA;IACE,uCAAuC;EACzC;EACA;IACE,uCAAuC;EACzC;EACA;IACE,uCAAuC;EACzC;EACA;IACE,uCAAuC;EACzC;EACA;IACE,uCAAuC;EACzC;EACA;IACE,cAAc;EAChB;EACA;IACE,aAAa;EACf;EACA;IACE,aAAa;EACf;EACA;IACE,aAAa;EACf;EACA;IACE,qBAAqB;EACvB;EACA;IACE,oBAAoB;EACtB;EACA;IACE,kCAAkC;EACpC;EACA;IACE,kCAAkC;EACpC;EACA;IACE,gCAAgC;EAClC;EACA;IACE,kCAAkC;EACpC;EACA;IACE,gCAAgC;EAClC;EACA;IACE,gCAAgC;EAClC;EACA;IACE,gCAAgC;EAClC;EACA;IACE,gCAAgC;EAClC;EACA;IACE,gCAAgC;EAClC;EACA;IACE,gCAAgC;EAClC;EACA;IACE,iCAAiC;EACnC;EACA;IACE,iCAAiC;EACnC;EACA;IACE,iCAAiC;EACnC;EACA;IACE,iCAAiC;EACnC;EACA;IACE,iCAAiC;EACnC;EACA;IACE,iCAAiC;EACnC;EACA;IACE,aAAa;EACf;EACA;IACE,aAAa;EACf;EACA;IACE,YAAY;EACd;EACA;IACE,iBAAiB;EACnB;EACA;IACE,iCAAiC;EACnC;EACA;IACE,iCAAiC;EACnC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,iCAAiC;EACnC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,gCAAgC;EAClC;EACA;IACE,gCAAgC;EAClC;EACA;IACE,gCAAgC;EAClC;EACA;IACE,gCAAgC;EAClC;EACA;IACE,gCAAgC;EAClC;EACA;IACE,gCAAgC;EAClC;EACA;IACE,YAAY;EACd;EACA;IACE,YAAY;EACd;EACA;IACE,YAAY;EACd;EACA;IACE,WAAW;EACb;EACA;IACE,kBAAkB;EACpB;EACA;IACE,+BAA+B;EACjC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,gBAAgB;EAClB;EACA;IACE,iBAAiB;EACnB;EACA;IACE,8BAA8B;EAChC;EACA;IACE,8BAA8B;EAChC;EACA;IACE,OAAO;EACT;EACA;IACE,cAAc;EAChB;EACA;IACE,+CAA+C;IAC/C,sDAAsD;EACxD;EACA;IACE,+CAA+C;IAC/C,sDAAsD;EACxD;EACA;IACE,wBAAwB;EAC1B;EACA;IACE,0GAA0G;EAC5G;EACA;IACE,+BAA+B;EACjC;EACA;IACE,8BAA8B;EAChC;EACA;IACE,eAAe;EACjB;EACA;IACE,gDAAgD;EAClD;EACA;IACE,gDAAgD;EAClD;EACA;IACE,sBAAsB;EACxB;EACA;IACE,mBAAmB;EACrB;EACA;IACE,uBAAuB;EACzB;EACA;IACE,8BAA8B;EAChC;EACA;IACE,uBAAuB;EACzB;EACA;IACE,yBAAyB;EAC3B;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,+BAA+B;EACjC;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,+BAA+B;EACjC;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,+BAA+B;EACjC;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,6BAA6B;EAC/B;EACA;IACE;MACE,uBAAuB;MACvB,gFAAgF;MAChF,wFAAwF;IAC1F;EACF;EACA;IACE;MACE,uBAAuB;MACvB,8EAA8E;MAC9E,sFAAsF;IACxF;EACF;EACA;IACE;MACE,uBAAuB;MACvB,gFAAgF;MAChF,wFAAwF;IAC1F;EACF;EACA;IACE,gBAAgB;IAChB,uBAAuB;IACvB,mBAAmB;EACrB;EACA;IACE,gBAAgB;EAClB;EACA;IACE,sBAAsB;EACxB;EACA;IACE,gCAAgC;EAClC;EACA;IACE,gCAAgC;EAClC;EACA;IACE,mBAAmB;EACrB;EACA;IACE,mCAAmC;EACrC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,oCAAoC;IACpC,iBAAiB;EACnB;EACA;IACE,oCAAoC;IACpC,iBAAiB;EACnB;EACA;IACE,oCAAoC;IACpC,kBAAkB;EACpB;EACA;IACE,wCAAwC;IACxC,qBAAqB;EACvB;EACA;IACE,2CAA2C;IAC3C,wBAAwB;EAC1B;EACA;IACE,oCAAoC;EACtC;EACA;IACE,2EAA2E;IAC3E;MACE,0EAA0E;IAC5E;EACF;EACA;IACE,mCAAmC;EACrC;EACA;IACE,sCAAsC;EACxC;EACA;IACE,sCAAsC;EACxC;EACA;IACE,2EAA2E;IAC3E;MACE,4EAA4E;IAC9E;EACF;EACA;IACE,qCAAqC;EACvC;EACA;IACE,qCAAqC;EACvC;EACA;IACE,4EAA4E;IAC5E;MACE,2EAA2E;IAC7E;EACF;EACA;IACE,4EAA4E;IAC5E;MACE,2EAA2E;IAC7E;EACF;EACA;IACE,qCAAqC;EACvC;EACA;IACE,mCAAmC;EACrC;EACA;IACE,4EAA4E;IAC5E;MACE,yEAAyE;IAC3E;EACF;EACA;IACE,oCAAoC;EACtC;EACA;IACE,oCAAoC;EACtC;EACA;IACE,6EAA6E;IAC7E;MACE,0EAA0E;IAC5E;EACF;EACA;IACE,oCAAoC;EACtC;EACA;IACE,oCAAoC;EACtC;EACA;IACE,oCAAoC;EACtC;EACA;IACE,yBAAyB;EAC3B;EACA;IACE,uCAAuC;EACzC;EACA;IACE,gFAAgF;IAChF;MACE,6EAA6E;IAC/E;EACF;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,+EAA+E;IAC/E;MACE,8EAA8E;IAChF;EACF;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,oCAAoC;EACtC;EACA;IACE,2DAA2D;IAC3D;MACE,0EAA0E;IAC5E;EACF;EACA;IACE,sCAAsC;EACxC;EACA;IACE,gFAAgF;IAChF;MACE,4EAA4E;IAC9E;EACF;EACA;IACE,uCAAuC;EACzC;EACA;IACE,8BAA8B;EAChC;EACA;IACE,yCAAyC;EAC3C;EACA;IACE,iFAAiF;IACjF;MACE,+EAA+E;IACjF;EACF;EACA;IACE,iFAAiF;IACjF;MACE,+EAA+E;IACjF;EACF;EACA;IACE,0CAA0C;EAC5C;EACA;IACE,0CAA0C;EAC5C;EACA;IACE,0CAA0C;EAC5C;EACA;IACE,0CAA0C;EAC5C;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,+EAA+E;IAC/E;MACE,8EAA8E;IAChF;EACF;EACA;IACE,+EAA+E;IAC/E;MACE,8EAA8E;IAChF;EACF;EACA;IACE,yCAAyC;EAC3C;EACA;IACE,gFAAgF;IAChF;MACE,+EAA+E;IACjF;EACF;EACA;IACE,gFAAgF;IAChF;MACE,+EAA+E;IACjF;EACF;EACA;IACE,yCAAyC;EAC3C;EACA;IACE,gFAAgF;IAChF;MACE,+EAA+E;IACjF;EACF;EACA;IACE,yCAAyC;EAC3C;EACA;IACE,sCAAsC;EACxC;EACA;IACE,gFAAgF;IAChF;MACE,4EAA4E;IAC9E;EACF;EACA;IACE,uCAAuC;EACzC;EACA;IACE,8EAA8E;IAC9E;MACE,6EAA6E;IAC/E;EACF;EACA;IACE,uCAAuC;EACzC;EACA;IACE,uCAAuC;EACzC;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,iFAAiF;IACjF;MACE,8EAA8E;IAChF;EACF;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,iFAAiF;IACjF;MACE,8EAA8E;IAChF;EACF;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,oCAAoC;EACtC;EACA;IACE,2DAA2D;IAC3D;MACE,0EAA0E;IAC5E;EACF;EACA;IACE,2DAA2D;IAC3D;MACE,0EAA0E;IAC5E;EACF;EACA;IACE,2DAA2D;IAC3D;MACE,0EAA0E;IAC5E;EACF;EACA;IACE,2DAA2D;IAC3D;MACE,0EAA0E;IAC5E;EACF;EACA;IACE,yCAAyC;IACzC,2DAA2D;EAC7D;EACA;IACE,2CAA2C;IAC3C,8LAA8L;EAChM;EACA;IACE,yCAAyC;IACzC,4NAA4N;IAC5N,iDAAiD;EACnD;EACA;IACE,yCAAyC;IACzC,8LAA8L;EAChM;EACA;IACE,qBAAqB;EACvB;EACA;IACE,mBAAmB;EACrB;EACA;IACE,iCAAiC;EACnC;EACA;IACE,iCAAiC;EACnC;EACA;IACE,mCAAmC;EACrC;EACA;IACE,iCAAiC;EACnC;EACA;IACE,mCAAmC;EACrC;EACA;IACE,iCAAiC;EACnC;EACA;IACE,iCAAiC;EACnC;EACA;IACE,iCAAiC;EACnC;EACA;IACE,iCAAiC;EACnC;EACA;IACE,iCAAiC;EACnC;EACA;IACE,kCAAkC;EACpC;EACA;IACE,kCAAkC;EACpC;EACA;IACE,kCAAkC;EACpC;EACA;IACE,kCAAkC;EACpC;EACA;IACE,0CAA0C;EAC5C;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,0CAA0C;EAC5C;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,0CAA0C;EAC5C;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,yCAAyC;EAC3C;EACA;IACE,uCAAuC;EACzC;EACA;IACE,yCAAyC;EAC3C;EACA;IACE,uCAAuC;EACzC;EACA;IACE,uCAAuC;EACzC;EACA;IACE,qCAAqC;EACvC;EACA;IACE,qCAAqC;EACvC;EACA;IACE,qCAAqC;EACvC;EACA;IACE,qCAAqC;EACvC;EACA;IACE,uCAAuC;EACzC;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,kBAAkB;EACpB;EACA;IACE,gBAAgB;EAClB;EACA;IACE,iBAAiB;EACnB;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,0BAA0B;IAC1B,4DAA4D;EAC9D;EACA;IACE,0BAA0B;IAC1B,4DAA4D;EAC9D;EACA;IACE,0BAA0B;IAC1B,4DAA4D;EAC9D;EACA;IACE,0BAA0B;IAC1B,4DAA4D;EAC9D;EACA;IACE,2BAA2B;IAC3B,6DAA6D;EAC/D;EACA;IACE,yBAAyB;IACzB,2DAA2D;EAC7D;EACA;IACE,yBAAyB;IACzB,2DAA2D;EAC7D;EACA;IACE,yBAAyB;IACzB,2DAA2D;EAC7D;EACA;IACE,yBAAyB;IACzB,2DAA2D;EAC7D;EACA;IACE,eAAe;EACjB;EACA;IACE,eAAe;EACjB;EACA;IACE,eAAe;IACf,cAAc;EAChB;EACA;IACE,oCAAoC;IACpC,mCAAmC;EACrC;EACA;IACE,iCAAiC;IACjC,gCAAgC;EAClC;EACA;IACE,kCAAkC;IAClC,iCAAiC;EACnC;EACA;IACE,0CAA0C;IAC1C,qCAAqC;EACvC;EACA;IACE,yCAAyC;IACzC,oCAAoC;EACtC;EACA;IACE,2CAA2C;IAC3C,sCAAsC;EACxC;EACA;IACE,2CAA2C;IAC3C,sCAAsC;EACxC;EACA;IACE,6CAA6C;IAC7C,wCAAwC;EAC1C;EACA;IACE,oCAAoC;IACpC,qCAAqC;EACvC;EACA;IACE,oCAAoC;IACpC,qCAAqC;EACvC;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,4BAA4B;EAC9B;EACA;IACE,4BAA4B;EAC9B;EACA;IACE,4BAA4B;EAC9B;EACA;IACE,+BAA+B;EACjC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,8BAA8B;EAChC;EACA;IACE,8BAA8B;EAChC;EACA;IACE,8BAA8B;EAChC;EACA;IACE,8BAA8B;EAChC;EACA;IACE,4BAA4B;EAC9B;EACA;IACE,4BAA4B;EAC9B;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,kBAAkB;EACpB;EACA;IACE,yBAAyB;EAC3B;EACA;IACE,yBAAyB;EAC3B;EACA;IACE,kBAAkB;EACpB;EACA;IACE,kCAAkC;EACpC;EACA;IACE,YAAY;EACd;EACA;IACE,YAAY;EACd;EACA;IACE,wEAAwE;IACxE,sIAAsI;EACxI;EACA;IACE,4DAA4D;IAC5D,sIAAsI;EACxI;EACA;IACE,+HAA+H;IAC/H,sIAAsI;EACxI;EACA;IACE,6HAA6H;IAC7H,sIAAsI;EACxI;EACA;IACE,0HAA0H;IAC1H,sIAAsI;EACxI;EACA;IACE,gIAAgI;IAChI,sIAAsI;EACxI;EACA;IACE,kEAAkE;IAClE,sIAAsI;EACxI;EACA;IACE,wHAAwH;IACxH,sIAAsI;EACxI;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,gCAAgC;IAChC,0LAA0L;EAC5L;EACA;IACE,6BAA6B;IAC7B,wRAAwR;IACxR,gRAAgR;EAClR;EACA;IACE,wBAAwB;IACxB,qFAAqF;IACrF,2EAA2E;EAC7E;EACA;IACE;MACE;QACE,yCAAyC;MAC3C;IACF;EACF;EACA;IACE;MACE;QACE,wCAAwC;MAC1C;IACF;EACF;EACA;IACE;MACE,qBAAqB;IACvB;EACF;EACA;IACE;MACE,iCAAiC;IACnC;EACF;EACA;IACE;MACE,gCAAgC;IAClC;EACF;EACA;IACE;MACE,gDAAgD;IAClD;EACF;EACA;IACE;MACE,gDAAgD;IAClD;EACF;EACA;IACE;MACE,0CAA0C;MAC1C,uBAAuB;IACzB;EACF;EACA;IACE;MACE,2CAA2C;MAC3C,wBAAwB;IAC1B;EACF;EACA;IACE;MACE,uCAAuC;IACzC;EACF;EACA;IACE;MACE,wCAAwC;IAC1C;EACF;EACA;IACE;MACE,0BAA0B;MAC1B,4DAA4D;IAC9D;EACF;EACA;IACE;MACE,0BAA0B;MAC1B,4DAA4D;IAC9D;EACF;EACA;IACE;MACE,0BAA0B;MAC1B,4DAA4D;IAC9D;EACF;EACA;IACE;MACE,2BAA2B;MAC3B,6DAA6D;IAC/D;EACF;EACA;IACE;MACE,yBAAyB;MACzB,2DAA2D;IAC7D;EACF;EACA;IACE;MACE,yBAAyB;MACzB,2DAA2D;IAC7D;EACF;EACA;IACE;MACE,yBAAyB;MACzB,2DAA2D;IAC7D;EACF;AACF;AACA;EACE,WAAW;EACX,eAAe;EACf,gBAAgB;AAClB;AACA;EACE,WAAW;EACX,eAAe;EACf,gBAAgB;AAClB;AACA;EACE,WAAW;EACX,eAAe;EACf,gBAAgB;AAClB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;EACf,gBAAgB;AAClB;AACA;EACE,WAAW;EACX,eAAe;EACf,oBAAoB;AACtB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,iBAAiB;EACjB,eAAe;EACf,oBAAoB;AACtB;AACA;EACE,iBAAiB;EACjB,eAAe;EACf,oBAAoB;AACtB;AACA;EACE,iBAAiB;EACjB,eAAe;EACf,oBAAoB;AACtB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,6BAA6B;EAC7B,eAAe;EACf,iBAAiB;AACnB;AACA;EACE,6BAA6B;EAC7B,eAAe;EACf,kBAAkB;AACpB;AACA;EACE,6BAA6B;EAC7B,eAAe;EACf,mBAAmB;AACrB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;EACf,wBAAwB;AAC1B;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,sBAAsB;EACtB,eAAe;EACf,mBAAmB;AACrB;AACA;EACE,WAAW;EACX,eAAe;EACf,wBAAwB;AAC1B;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,sBAAsB;EACtB,eAAe;EACf,mBAAmB;AACrB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;EACf,wBAAwB;AAC1B;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;EACf,wBAAwB;AAC1B;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,kBAAkB;EAClB,eAAe;EACf,kBAAkB;AACpB;AACA;EACE,WAAW;EACX,eAAe;EACf,mBAAmB;AACrB;AACA;EACE,WAAW;EACX,eAAe;EACf,wBAAwB;AAC1B;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,sBAAsB;EACtB,eAAe;EACf,mBAAmB;AACrB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE;IACE,yBAAyB;EAC3B;AACF;AACA;EACE;IACE,YAAY;EACd;AACF;AACA;EACE;IACE;MACE,mBAAmB;MACnB,mBAAmB;MACnB,mBAAmB;MACnB,sBAAsB;MACtB,sBAAsB;MACtB,sBAAsB;MACtB,oBAAoB;MACpB,oBAAoB;MACpB,uBAAuB;MACvB,wBAAwB;MACxB,+BAA+B;MAC/B,yBAAyB;MACzB,wBAAwB;MACxB,uBAAuB;MACvB,4BAA4B;MAC5B,gCAAgC;MAChC,+BAA+B;MAC/B,+BAA+B;MAC/B,+BAA+B;MAC/B,qBAAqB;MACrB,yBAAyB;MACzB,sBAAsB;MACtB,sBAAsB;MACtB,0BAA0B;MAC1B,uBAAuB;MACvB,4BAA4B;MAC5B,gCAAgC;MAChC,6BAA6B;MAC7B,wBAAwB;MACxB,2BAA2B;MAC3B,8BAA8B;MAC9B,iCAAiC;MACjC,wBAAwB;MACxB,2BAA2B;MAC3B,4BAA4B;MAC5B,kCAAkC;MAClC,kBAAkB;MAClB,wBAAwB;MACxB,sBAAsB;MACtB,uBAAuB;MACvB,wBAAwB;MACxB,oBAAoB;MACpB,qBAAqB;MACrB,sBAAsB;MACtB,mBAAmB;MACnB,yBAAyB;MACzB,+BAA+B;MAC/B,4BAA4B;MAC5B,8BAA8B;MAC9B,2BAA2B;MAC3B,iCAAiC;MACjC,+BAA+B;MAC/B,gCAAgC;MAChC,iCAAiC;MACjC,6BAA6B;MAC7B,8BAA8B;MAC9B,+BAA+B;MAC/B,4BAA4B;IAC9B;EACF;AACF","sourcesContent":["/*! tailwindcss v4.2.0 | MIT License | https://tailwindcss.com */\n@layer properties;\n@layer theme, base, components, utilities;\n@layer theme {\n  :root, :host {\n    --font-sans: ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\",\n      \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";\n    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,\n      \"Liberation Mono\", \"Courier New\", monospace;\n    --color-orange-50: oklch(0.98 0.016 73.684);\n    --color-orange-100: oklch(0.954 0.038 75.164);\n    --color-orange-200: oklch(0.901 0.076 70.697);\n    --color-orange-300: oklch(0.837 0.128 66.29);\n    --color-orange-400: oklch(0.75 0.183 55.934);\n    --color-orange-500: oklch(0.705 0.213 47.604);\n    --color-orange-600: oklch(0.646 0.222 41.116);\n    --color-orange-700: oklch(0.553 0.195 38.402);\n    --color-orange-800: oklch(0.47 0.157 37.304);\n    --color-orange-950: oklch(0.266 0.079 36.259);\n    --color-amber-50: oklch(0.987 0.022 95.277);\n    --color-amber-100: oklch(0.962 0.059 95.617);\n    --color-amber-200: oklch(0.924 0.12 95.746);\n    --color-amber-300: oklch(0.879 0.169 91.605);\n    --color-amber-400: oklch(0.828 0.189 84.429);\n    --color-amber-500: oklch(0.769 0.188 70.08);\n    --color-amber-600: oklch(0.666 0.179 58.318);\n    --color-amber-700: oklch(0.555 0.163 48.998);\n    --color-amber-800: oklch(0.473 0.137 46.201);\n    --color-emerald-50: oklch(0.979 0.021 166.113);\n    --color-emerald-100: oklch(0.95 0.052 163.051);\n    --color-emerald-200: oklch(0.905 0.093 164.15);\n    --color-emerald-300: oklch(0.845 0.143 164.978);\n    --color-emerald-400: oklch(0.765 0.177 163.223);\n    --color-emerald-500: oklch(0.696 0.17 162.48);\n    --color-emerald-600: oklch(0.596 0.145 163.225);\n    --color-emerald-700: oklch(0.508 0.118 165.612);\n    --color-emerald-800: oklch(0.432 0.095 166.913);\n    --color-blue-50: oklch(0.97 0.014 254.604);\n    --color-blue-100: oklch(0.932 0.032 255.585);\n    --color-blue-200: oklch(0.882 0.059 254.128);\n    --color-blue-600: oklch(0.546 0.245 262.881);\n    --color-blue-700: oklch(0.488 0.243 264.376);\n    --color-blue-800: oklch(0.424 0.199 265.638);\n    --color-rose-50: oklch(0.969 0.015 12.422);\n    --color-rose-100: oklch(0.941 0.03 12.58);\n    --color-rose-200: oklch(0.892 0.058 10.001);\n    --color-rose-400: oklch(0.712 0.194 13.428);\n    --color-rose-500: oklch(0.645 0.246 16.439);\n    --color-rose-600: oklch(0.586 0.253 17.585);\n    --color-rose-700: oklch(0.514 0.222 16.935);\n    --color-slate-50: oklch(0.984 0.003 247.858);\n    --color-slate-100: oklch(0.968 0.007 247.896);\n    --color-slate-200: oklch(0.929 0.013 255.508);\n    --color-slate-300: oklch(0.869 0.022 252.894);\n    --color-slate-400: oklch(0.704 0.04 256.788);\n    --color-slate-500: oklch(0.554 0.046 257.417);\n    --color-slate-600: oklch(0.446 0.043 257.281);\n    --color-slate-700: oklch(0.372 0.044 257.287);\n    --color-slate-800: oklch(0.279 0.041 260.031);\n    --color-slate-900: oklch(0.208 0.042 265.755);\n    --color-black: #000;\n    --color-white: #fff;\n    --spacing: 0.25rem;\n    --container-xs: 20rem;\n    --container-xl: 36rem;\n    --container-2xl: 42rem;\n    --container-3xl: 48rem;\n    --container-4xl: 56rem;\n    --container-5xl: 64rem;\n    --text-xs: 0.75rem;\n    --text-xs--line-height: calc(1 / 0.75);\n    --text-sm: 0.875rem;\n    --text-sm--line-height: calc(1.25 / 0.875);\n    --text-base: 1rem;\n    --text-base--line-height: calc(1.5 / 1);\n    --text-lg: 1.125rem;\n    --text-lg--line-height: calc(1.75 / 1.125);\n    --text-xl: 1.25rem;\n    --text-xl--line-height: calc(1.75 / 1.25);\n    --text-2xl: 1.5rem;\n    --text-2xl--line-height: calc(2 / 1.5);\n    --text-3xl: 1.875rem;\n    --text-3xl--line-height: calc(2.25 / 1.875);\n    --text-4xl: 2.25rem;\n    --text-4xl--line-height: calc(2.5 / 2.25);\n    --text-5xl: 3rem;\n    --text-5xl--line-height: 1;\n    --text-6xl: 3.75rem;\n    --text-6xl--line-height: 1;\n    --text-7xl: 4.5rem;\n    --text-7xl--line-height: 1;\n    --font-weight-normal: 400;\n    --font-weight-medium: 500;\n    --font-weight-semibold: 600;\n    --font-weight-bold: 700;\n    --font-weight-black: 900;\n    --tracking-tight: -0.025em;\n    --tracking-wider: 0.05em;\n    --leading-tight: 1.25;\n    --leading-snug: 1.375;\n    --leading-relaxed: 1.625;\n    --radius-md: 0.375rem;\n    --radius-lg: 0.5rem;\n    --radius-xl: 0.75rem;\n    --radius-2xl: 1rem;\n    --radius-3xl: 1.5rem;\n    --animate-spin: spin 1s linear infinite;\n    --animate-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;\n    --blur-3xl: 64px;\n    --default-transition-duration: 150ms;\n    --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);\n    --default-font-family: var(--font-sans);\n    --default-font-feature-settings: var(--font-sans--font-feature-settings);\n    --default-font-variation-settings: var(\n      --font-sans--font-variation-settings\n    );\n    --default-mono-font-family: var(--font-mono);\n    --default-mono-font-feature-settings: var(\n      --font-mono--font-feature-settings\n    );\n    --default-mono-font-variation-settings: var(\n      --font-mono--font-variation-settings\n    );\n  }\n}\n@layer base {\n  *, ::after, ::before, ::backdrop, ::file-selector-button {\n    box-sizing: border-box;\n    margin: 0;\n    padding: 0;\n    border: 0 solid;\n  }\n  html, :host {\n    line-height: 1.5;\n    -webkit-text-size-adjust: 100%;\n    tab-size: 4;\n    font-family: var( --default-font-family, ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\" );\n    font-feature-settings: var(--default-font-feature-settings, normal);\n    font-variation-settings: var( --default-font-variation-settings, normal );\n    -webkit-tap-highlight-color: transparent;\n  }\n  body {\n    line-height: inherit;\n  }\n  hr {\n    height: 0;\n    color: inherit;\n    border-top-width: 1px;\n  }\n  abbr:where([title]) {\n    -webkit-text-decoration: underline dotted;\n    text-decoration: underline dotted;\n  }\n  h1, h2, h3, h4, h5, h6 {\n    font-size: inherit;\n    font-weight: inherit;\n  }\n  a {\n    color: inherit;\n    -webkit-text-decoration: inherit;\n    text-decoration: inherit;\n  }\n  b, strong {\n    font-weight: bolder;\n  }\n  code, kbd, samp, pre {\n    font-family: var( --default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace );\n    font-feature-settings: var( --default-mono-font-feature-settings, normal );\n    font-variation-settings: var( --default-mono-font-variation-settings, normal );\n    font-size: 1em;\n  }\n  small {\n    font-size: 80%;\n  }\n  sub, sup {\n    font-size: 75%;\n    line-height: 0;\n    position: relative;\n    vertical-align: baseline;\n  }\n  sub {\n    bottom: -0.25em;\n  }\n  sup {\n    top: -0.5em;\n  }\n  table {\n    text-indent: 0;\n    border-color: inherit;\n    border-collapse: collapse;\n  }\n  :-moz-focusring {\n    outline: auto;\n  }\n  progress {\n    vertical-align: baseline;\n  }\n  summary {\n    display: list-item;\n  }\n  ol, ul, menu {\n    list-style: none;\n  }\n  img, svg, video, canvas, audio, iframe, embed, object {\n    display: block;\n    vertical-align: middle;\n  }\n  img, video {\n    max-width: 100%;\n    height: auto;\n  }\n  button, input, select, optgroup, textarea, ::file-selector-button {\n    font: inherit;\n    font-feature-settings: inherit;\n    font-variation-settings: inherit;\n    letter-spacing: inherit;\n    color: inherit;\n    border-radius: 0;\n    background-color: transparent;\n    opacity: 1;\n  }\n  :where(select:is([multiple], [size])) optgroup {\n    font-weight: bolder;\n  }\n  :where(select:is([multiple], [size])) optgroup option {\n    padding-inline-start: 20px;\n  }\n  ::file-selector-button {\n    margin-inline-end: 4px;\n  }\n  ::placeholder {\n    opacity: 1;\n    color: currentColor;\n    @supports (color: color-mix(in lab, red, red)) {\n      color: color-mix(in oklab, currentColor 50%, transparent);\n    }\n  }\n  textarea {\n    resize: vertical;\n  }\n  ::-webkit-search-decoration {\n    -webkit-appearance: none;\n  }\n  ::-webkit-date-and-time-value {\n    min-height: 1lh;\n    text-align: inherit;\n  }\n  ::-webkit-datetime-edit {\n    display: inline-flex;\n  }\n  ::-webkit-datetime-edit-fields-wrapper {\n    padding: 0;\n  }\n  ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month-field, ::-webkit-datetime-edit-day-field, ::-webkit-datetime-edit-hour-field, ::-webkit-datetime-edit-minute-field, ::-webkit-datetime-edit-second-field, ::-webkit-datetime-edit-millisecond-field, ::-webkit-datetime-edit-meridiem-field {\n    padding-block: 0;\n  }\n  :-moz-ui-invalid {\n    box-shadow: none;\n  }\n  button, input:where([type=\"button\"], [type=\"reset\"], [type=\"submit\"]), ::file-selector-button {\n    appearance: button;\n  }\n  ::-webkit-inner-spin-button, ::-webkit-outer-spin-button {\n    height: auto;\n  }\n  [hidden]:where(:not([hidden=\"until-found\"])) {\n    display: none !important;\n  }\n}\n@layer utilities {\n  .pointer-events-none {\n    pointer-events: none;\n  }\n  .absolute {\n    position: absolute;\n  }\n  .relative {\n    position: relative;\n  }\n  .-top-32 {\n    top: calc(var(--spacing) * -32);\n  }\n  .top-1\\/2 {\n    top: calc(1 / 2 * 100%);\n  }\n  .-right-32 {\n    right: calc(var(--spacing) * -32);\n  }\n  .-bottom-32 {\n    bottom: calc(var(--spacing) * -32);\n  }\n  .-left-32 {\n    left: calc(var(--spacing) * -32);\n  }\n  .left-1\\/2 {\n    left: calc(1 / 2 * 100%);\n  }\n  .z-10 {\n    z-index: 10;\n  }\n  .z-20 {\n    z-index: 20;\n  }\n  .mx-6 {\n    margin-inline: calc(var(--spacing) * 6);\n  }\n  .mx-auto {\n    margin-inline: auto;\n  }\n  .my-4 {\n    margin-block: calc(var(--spacing) * 4);\n  }\n  .-mt-3 {\n    margin-top: calc(var(--spacing) * -3);\n  }\n  .mt-0\\.5 {\n    margin-top: calc(var(--spacing) * 0.5);\n  }\n  .mt-1 {\n    margin-top: calc(var(--spacing) * 1);\n  }\n  .mt-2\\.5 {\n    margin-top: calc(var(--spacing) * 2.5);\n  }\n  .mt-4 {\n    margin-top: calc(var(--spacing) * 4);\n  }\n  .mt-5 {\n    margin-top: calc(var(--spacing) * 5);\n  }\n  .mt-6 {\n    margin-top: calc(var(--spacing) * 6);\n  }\n  .mb-0\\.5 {\n    margin-bottom: calc(var(--spacing) * 0.5);\n  }\n  .mb-1 {\n    margin-bottom: calc(var(--spacing) * 1);\n  }\n  .mb-1\\.5 {\n    margin-bottom: calc(var(--spacing) * 1.5);\n  }\n  .mb-2 {\n    margin-bottom: calc(var(--spacing) * 2);\n  }\n  .mb-3 {\n    margin-bottom: calc(var(--spacing) * 3);\n  }\n  .mb-4 {\n    margin-bottom: calc(var(--spacing) * 4);\n  }\n  .mb-5 {\n    margin-bottom: calc(var(--spacing) * 5);\n  }\n  .mb-6 {\n    margin-bottom: calc(var(--spacing) * 6);\n  }\n  .mb-8 {\n    margin-bottom: calc(var(--spacing) * 8);\n  }\n  .block {\n    display: block;\n  }\n  .flex {\n    display: flex;\n  }\n  .grid {\n    display: grid;\n  }\n  .hidden {\n    display: none;\n  }\n  .inline-block {\n    display: inline-block;\n  }\n  .inline-flex {\n    display: inline-flex;\n  }\n  .h-1\\.5 {\n    height: calc(var(--spacing) * 1.5);\n  }\n  .h-2\\.5 {\n    height: calc(var(--spacing) * 2.5);\n  }\n  .h-3 {\n    height: calc(var(--spacing) * 3);\n  }\n  .h-3\\.5 {\n    height: calc(var(--spacing) * 3.5);\n  }\n  .h-4 {\n    height: calc(var(--spacing) * 4);\n  }\n  .h-5 {\n    height: calc(var(--spacing) * 5);\n  }\n  .h-6 {\n    height: calc(var(--spacing) * 6);\n  }\n  .h-7 {\n    height: calc(var(--spacing) * 7);\n  }\n  .h-8 {\n    height: calc(var(--spacing) * 8);\n  }\n  .h-9 {\n    height: calc(var(--spacing) * 9);\n  }\n  .h-10 {\n    height: calc(var(--spacing) * 10);\n  }\n  .h-11 {\n    height: calc(var(--spacing) * 11);\n  }\n  .h-12 {\n    height: calc(var(--spacing) * 12);\n  }\n  .h-16 {\n    height: calc(var(--spacing) * 16);\n  }\n  .h-28 {\n    height: calc(var(--spacing) * 28);\n  }\n  .h-96 {\n    height: calc(var(--spacing) * 96);\n  }\n  .h-\\[32rem\\] {\n    height: 32rem;\n  }\n  .h-\\[40rem\\] {\n    height: 40rem;\n  }\n  .h-full {\n    height: 100%;\n  }\n  .min-h-\\[700px\\] {\n    min-height: 700px;\n  }\n  .w-1\\.5 {\n    width: calc(var(--spacing) * 1.5);\n  }\n  .w-2\\.5 {\n    width: calc(var(--spacing) * 2.5);\n  }\n  .w-3 {\n    width: calc(var(--spacing) * 3);\n  }\n  .w-3\\.5 {\n    width: calc(var(--spacing) * 3.5);\n  }\n  .w-4 {\n    width: calc(var(--spacing) * 4);\n  }\n  .w-5 {\n    width: calc(var(--spacing) * 5);\n  }\n  .w-6 {\n    width: calc(var(--spacing) * 6);\n  }\n  .w-7 {\n    width: calc(var(--spacing) * 7);\n  }\n  .w-8 {\n    width: calc(var(--spacing) * 8);\n  }\n  .w-9 {\n    width: calc(var(--spacing) * 9);\n  }\n  .w-10 {\n    width: calc(var(--spacing) * 10);\n  }\n  .w-11 {\n    width: calc(var(--spacing) * 11);\n  }\n  .w-12 {\n    width: calc(var(--spacing) * 12);\n  }\n  .w-16 {\n    width: calc(var(--spacing) * 16);\n  }\n  .w-28 {\n    width: calc(var(--spacing) * 28);\n  }\n  .w-96 {\n    width: calc(var(--spacing) * 96);\n  }\n  .w-\\[32rem\\] {\n    width: 32rem;\n  }\n  .w-\\[40rem\\] {\n    width: 40rem;\n  }\n  .w-\\[440px\\] {\n    width: 440px;\n  }\n  .w-full {\n    width: 100%;\n  }\n  .w-max {\n    width: max-content;\n  }\n  .max-w-2xl {\n    max-width: var(--container-2xl);\n  }\n  .max-w-3xl {\n    max-width: var(--container-3xl);\n  }\n  .max-w-4xl {\n    max-width: var(--container-4xl);\n  }\n  .max-w-5xl {\n    max-width: var(--container-5xl);\n  }\n  .max-w-\\[200px\\] {\n    max-width: 200px;\n  }\n  .max-w-\\[1560px\\] {\n    max-width: 1560px;\n  }\n  .max-w-xl {\n    max-width: var(--container-xl);\n  }\n  .max-w-xs {\n    max-width: var(--container-xs);\n  }\n  .flex-1 {\n    flex: 1;\n  }\n  .shrink-0 {\n    flex-shrink: 0;\n  }\n  .-translate-x-1\\/2 {\n    --tw-translate-x: calc(calc(1 / 2 * 100%) * -1);\n    translate: var(--tw-translate-x) var(--tw-translate-y);\n  }\n  .-translate-y-1\\/2 {\n    --tw-translate-y: calc(calc(1 / 2 * 100%) * -1);\n    translate: var(--tw-translate-x) var(--tw-translate-y);\n  }\n  .-rotate-90 {\n    rotate: calc(90deg * -1);\n  }\n  .transform {\n    transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);\n  }\n  .animate-pulse {\n    animation: var(--animate-pulse);\n  }\n  .animate-spin {\n    animation: var(--animate-spin);\n  }\n  .cursor-pointer {\n    cursor: pointer;\n  }\n  .grid-cols-1 {\n    grid-template-columns: repeat(1, minmax(0, 1fr));\n  }\n  .grid-cols-2 {\n    grid-template-columns: repeat(2, minmax(0, 1fr));\n  }\n  .flex-col {\n    flex-direction: column;\n  }\n  .items-center {\n    align-items: center;\n  }\n  .items-start {\n    align-items: flex-start;\n  }\n  .justify-between {\n    justify-content: space-between;\n  }\n  .justify-center {\n    justify-content: center;\n  }\n  .justify-end {\n    justify-content: flex-end;\n  }\n  .gap-1 {\n    gap: calc(var(--spacing) * 1);\n  }\n  .gap-1\\.5 {\n    gap: calc(var(--spacing) * 1.5);\n  }\n  .gap-2 {\n    gap: calc(var(--spacing) * 2);\n  }\n  .gap-2\\.5 {\n    gap: calc(var(--spacing) * 2.5);\n  }\n  .gap-3 {\n    gap: calc(var(--spacing) * 3);\n  }\n  .gap-3\\.5 {\n    gap: calc(var(--spacing) * 3.5);\n  }\n  .gap-4 {\n    gap: calc(var(--spacing) * 4);\n  }\n  .gap-5 {\n    gap: calc(var(--spacing) * 5);\n  }\n  .gap-6 {\n    gap: calc(var(--spacing) * 6);\n  }\n  .gap-8 {\n    gap: calc(var(--spacing) * 8);\n  }\n  .space-y-2\\.5 {\n    :where(& > :not(:last-child)) {\n      --tw-space-y-reverse: 0;\n      margin-block-start: calc(calc(var(--spacing) * 2.5) * var(--tw-space-y-reverse));\n      margin-block-end: calc(calc(var(--spacing) * 2.5) * calc(1 - var(--tw-space-y-reverse)));\n    }\n  }\n  .space-y-3 {\n    :where(& > :not(:last-child)) {\n      --tw-space-y-reverse: 0;\n      margin-block-start: calc(calc(var(--spacing) * 3) * var(--tw-space-y-reverse));\n      margin-block-end: calc(calc(var(--spacing) * 3) * calc(1 - var(--tw-space-y-reverse)));\n    }\n  }\n  .space-y-3\\.5 {\n    :where(& > :not(:last-child)) {\n      --tw-space-y-reverse: 0;\n      margin-block-start: calc(calc(var(--spacing) * 3.5) * var(--tw-space-y-reverse));\n      margin-block-end: calc(calc(var(--spacing) * 3.5) * calc(1 - var(--tw-space-y-reverse)));\n    }\n  }\n  .truncate {\n    overflow: hidden;\n    text-overflow: ellipsis;\n    white-space: nowrap;\n  }\n  .overflow-hidden {\n    overflow: hidden;\n  }\n  .rounded {\n    border-radius: 0.25rem;\n  }\n  .rounded-2xl {\n    border-radius: var(--radius-2xl);\n  }\n  .rounded-3xl {\n    border-radius: var(--radius-3xl);\n  }\n  .rounded-\\[44px\\] {\n    border-radius: 44px;\n  }\n  .rounded-full {\n    border-radius: calc(infinity * 1px);\n  }\n  .rounded-lg {\n    border-radius: var(--radius-lg);\n  }\n  .rounded-md {\n    border-radius: var(--radius-md);\n  }\n  .rounded-xl {\n    border-radius: var(--radius-xl);\n  }\n  .border {\n    border-style: var(--tw-border-style);\n    border-width: 1px;\n  }\n  .border-2 {\n    border-style: var(--tw-border-style);\n    border-width: 2px;\n  }\n  .border-\\[10px\\] {\n    border-style: var(--tw-border-style);\n    border-width: 10px;\n  }\n  .border-t {\n    border-top-style: var(--tw-border-style);\n    border-top-width: 1px;\n  }\n  .border-b {\n    border-bottom-style: var(--tw-border-style);\n    border-bottom-width: 1px;\n  }\n  .border-amber-200 {\n    border-color: var(--color-amber-200);\n  }\n  .border-amber-500\\/30 {\n    border-color: color-mix(in srgb, oklch(0.769 0.188 70.08) 30%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      border-color: color-mix(in oklab, var(--color-amber-500) 30%, transparent);\n    }\n  }\n  .border-blue-200 {\n    border-color: var(--color-blue-200);\n  }\n  .border-emerald-200 {\n    border-color: var(--color-emerald-200);\n  }\n  .border-emerald-300 {\n    border-color: var(--color-emerald-300);\n  }\n  .border-emerald-500\\/30 {\n    border-color: color-mix(in srgb, oklch(0.696 0.17 162.48) 30%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      border-color: color-mix(in oklab, var(--color-emerald-500) 30%, transparent);\n    }\n  }\n  .border-orange-100 {\n    border-color: var(--color-orange-100);\n  }\n  .border-orange-200 {\n    border-color: var(--color-orange-200);\n  }\n  .border-orange-200\\/60 {\n    border-color: color-mix(in srgb, oklch(0.901 0.076 70.697) 60%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      border-color: color-mix(in oklab, var(--color-orange-200) 60%, transparent);\n    }\n  }\n  .border-orange-200\\/80 {\n    border-color: color-mix(in srgb, oklch(0.901 0.076 70.697) 80%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      border-color: color-mix(in oklab, var(--color-orange-200) 80%, transparent);\n    }\n  }\n  .border-orange-300 {\n    border-color: var(--color-orange-300);\n  }\n  .border-rose-200 {\n    border-color: var(--color-rose-200);\n  }\n  .border-rose-500\\/30 {\n    border-color: color-mix(in srgb, oklch(0.645 0.246 16.439) 30%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      border-color: color-mix(in oklab, var(--color-rose-500) 30%, transparent);\n    }\n  }\n  .border-slate-100 {\n    border-color: var(--color-slate-100);\n  }\n  .border-slate-200 {\n    border-color: var(--color-slate-200);\n  }\n  .border-slate-200\\/90 {\n    border-color: color-mix(in srgb, oklch(0.929 0.013 255.508) 90%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      border-color: color-mix(in oklab, var(--color-slate-200) 90%, transparent);\n    }\n  }\n  .border-slate-300 {\n    border-color: var(--color-slate-300);\n  }\n  .border-slate-800 {\n    border-color: var(--color-slate-800);\n  }\n  .border-slate-900 {\n    border-color: var(--color-slate-900);\n  }\n  .bg-\\[\\#fcece3\\] {\n    background-color: #fcece3;\n  }\n  .bg-amber-50 {\n    background-color: var(--color-amber-50);\n  }\n  .bg-amber-50\\/50 {\n    background-color: color-mix(in srgb, oklch(0.987 0.022 95.277) 50%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-amber-50) 50%, transparent);\n    }\n  }\n  .bg-amber-100 {\n    background-color: var(--color-amber-100);\n  }\n  .bg-amber-200\\/40 {\n    background-color: color-mix(in srgb, oklch(0.924 0.12 95.746) 40%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-amber-200) 40%, transparent);\n    }\n  }\n  .bg-amber-400 {\n    background-color: var(--color-amber-400);\n  }\n  .bg-amber-600 {\n    background-color: var(--color-amber-600);\n  }\n  .bg-black {\n    background-color: var(--color-black);\n  }\n  .bg-black\\/40 {\n    background-color: color-mix(in srgb, #000 40%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-black) 40%, transparent);\n    }\n  }\n  .bg-blue-50 {\n    background-color: var(--color-blue-50);\n  }\n  .bg-blue-50\\/40 {\n    background-color: color-mix(in srgb, oklch(0.97 0.014 254.604) 40%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-blue-50) 40%, transparent);\n    }\n  }\n  .bg-blue-100 {\n    background-color: var(--color-blue-100);\n  }\n  .bg-current {\n    background-color: currentcolor;\n  }\n  .bg-emerald-50 {\n    background-color: var(--color-emerald-50);\n  }\n  .bg-emerald-50\\/40 {\n    background-color: color-mix(in srgb, oklch(0.979 0.021 166.113) 40%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-emerald-50) 40%, transparent);\n    }\n  }\n  .bg-emerald-50\\/70 {\n    background-color: color-mix(in srgb, oklch(0.979 0.021 166.113) 70%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-emerald-50) 70%, transparent);\n    }\n  }\n  .bg-emerald-100 {\n    background-color: var(--color-emerald-100);\n  }\n  .bg-emerald-400 {\n    background-color: var(--color-emerald-400);\n  }\n  .bg-emerald-500 {\n    background-color: var(--color-emerald-500);\n  }\n  .bg-emerald-600 {\n    background-color: var(--color-emerald-600);\n  }\n  .bg-orange-50 {\n    background-color: var(--color-orange-50);\n  }\n  .bg-orange-50\\/30 {\n    background-color: color-mix(in srgb, oklch(0.98 0.016 73.684) 30%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-orange-50) 30%, transparent);\n    }\n  }\n  .bg-orange-50\\/40 {\n    background-color: color-mix(in srgb, oklch(0.98 0.016 73.684) 40%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-orange-50) 40%, transparent);\n    }\n  }\n  .bg-orange-100 {\n    background-color: var(--color-orange-100);\n  }\n  .bg-orange-100\\/70 {\n    background-color: color-mix(in srgb, oklch(0.954 0.038 75.164) 70%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-orange-100) 70%, transparent);\n    }\n  }\n  .bg-orange-200\\/40 {\n    background-color: color-mix(in srgb, oklch(0.901 0.076 70.697) 40%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-orange-200) 40%, transparent);\n    }\n  }\n  .bg-orange-600 {\n    background-color: var(--color-orange-600);\n  }\n  .bg-orange-600\\/30 {\n    background-color: color-mix(in srgb, oklch(0.646 0.222 41.116) 30%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-orange-600) 30%, transparent);\n    }\n  }\n  .bg-orange-950 {\n    background-color: var(--color-orange-950);\n  }\n  .bg-rose-50 {\n    background-color: var(--color-rose-50);\n  }\n  .bg-rose-50\\/40 {\n    background-color: color-mix(in srgb, oklch(0.969 0.015 12.422) 40%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-rose-50) 40%, transparent);\n    }\n  }\n  .bg-rose-100 {\n    background-color: var(--color-rose-100);\n  }\n  .bg-rose-100\\/40 {\n    background-color: color-mix(in srgb, oklch(0.941 0.03 12.58) 40%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-rose-100) 40%, transparent);\n    }\n  }\n  .bg-rose-400 {\n    background-color: var(--color-rose-400);\n  }\n  .bg-slate-50 {\n    background-color: var(--color-slate-50);\n  }\n  .bg-slate-100 {\n    background-color: var(--color-slate-100);\n  }\n  .bg-slate-100\\/90 {\n    background-color: color-mix(in srgb, oklch(0.968 0.007 247.896) 90%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-slate-100) 90%, transparent);\n    }\n  }\n  .bg-slate-200 {\n    background-color: var(--color-slate-200);\n  }\n  .bg-slate-200\\/70 {\n    background-color: color-mix(in srgb, oklch(0.929 0.013 255.508) 70%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-slate-200) 70%, transparent);\n    }\n  }\n  .bg-slate-800 {\n    background-color: var(--color-slate-800);\n  }\n  .bg-slate-900 {\n    background-color: var(--color-slate-900);\n  }\n  .bg-white {\n    background-color: var(--color-white);\n  }\n  .bg-white\\/20 {\n    background-color: color-mix(in srgb, #fff 20%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-white) 20%, transparent);\n    }\n  }\n  .bg-white\\/70 {\n    background-color: color-mix(in srgb, #fff 70%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-white) 70%, transparent);\n    }\n  }\n  .bg-white\\/90 {\n    background-color: color-mix(in srgb, #fff 90%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-white) 90%, transparent);\n    }\n  }\n  .bg-white\\/95 {\n    background-color: color-mix(in srgb, #fff 95%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-white) 95%, transparent);\n    }\n  }\n  .bg-gradient-to-r {\n    --tw-gradient-position: to right in oklab;\n    background-image: linear-gradient(var(--tw-gradient-stops));\n  }\n  .from-orange-600 {\n    --tw-gradient-from: var(--color-orange-600);\n    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));\n  }\n  .via-amber-600 {\n    --tw-gradient-via: var(--color-amber-600);\n    --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);\n    --tw-gradient-stops: var(--tw-gradient-via-stops);\n  }\n  .to-orange-500 {\n    --tw-gradient-to: var(--color-orange-500);\n    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));\n  }\n  .bg-clip-text {\n    background-clip: text;\n  }\n  .object-contain {\n    object-fit: contain;\n  }\n  .p-1 {\n    padding: calc(var(--spacing) * 1);\n  }\n  .p-2 {\n    padding: calc(var(--spacing) * 2);\n  }\n  .p-2\\.5 {\n    padding: calc(var(--spacing) * 2.5);\n  }\n  .p-3 {\n    padding: calc(var(--spacing) * 3);\n  }\n  .p-3\\.5 {\n    padding: calc(var(--spacing) * 3.5);\n  }\n  .p-4 {\n    padding: calc(var(--spacing) * 4);\n  }\n  .p-5 {\n    padding: calc(var(--spacing) * 5);\n  }\n  .p-6 {\n    padding: calc(var(--spacing) * 6);\n  }\n  .p-7 {\n    padding: calc(var(--spacing) * 7);\n  }\n  .p-8 {\n    padding: calc(var(--spacing) * 8);\n  }\n  .p-10 {\n    padding: calc(var(--spacing) * 10);\n  }\n  .p-12 {\n    padding: calc(var(--spacing) * 12);\n  }\n  .p-14 {\n    padding: calc(var(--spacing) * 14);\n  }\n  .p-16 {\n    padding: calc(var(--spacing) * 16);\n  }\n  .px-1\\.5 {\n    padding-inline: calc(var(--spacing) * 1.5);\n  }\n  .px-2 {\n    padding-inline: calc(var(--spacing) * 2);\n  }\n  .px-2\\.5 {\n    padding-inline: calc(var(--spacing) * 2.5);\n  }\n  .px-3 {\n    padding-inline: calc(var(--spacing) * 3);\n  }\n  .px-3\\.5 {\n    padding-inline: calc(var(--spacing) * 3.5);\n  }\n  .px-4 {\n    padding-inline: calc(var(--spacing) * 4);\n  }\n  .px-5 {\n    padding-inline: calc(var(--spacing) * 5);\n  }\n  .px-6 {\n    padding-inline: calc(var(--spacing) * 6);\n  }\n  .py-0\\.5 {\n    padding-block: calc(var(--spacing) * 0.5);\n  }\n  .py-1 {\n    padding-block: calc(var(--spacing) * 1);\n  }\n  .py-1\\.5 {\n    padding-block: calc(var(--spacing) * 1.5);\n  }\n  .py-2 {\n    padding-block: calc(var(--spacing) * 2);\n  }\n  .py-3 {\n    padding-block: calc(var(--spacing) * 3);\n  }\n  .pt-2 {\n    padding-top: calc(var(--spacing) * 2);\n  }\n  .pt-3 {\n    padding-top: calc(var(--spacing) * 3);\n  }\n  .pt-4 {\n    padding-top: calc(var(--spacing) * 4);\n  }\n  .pt-5 {\n    padding-top: calc(var(--spacing) * 5);\n  }\n  .pr-0 {\n    padding-right: calc(var(--spacing) * 0);\n  }\n  .pb-2 {\n    padding-bottom: calc(var(--spacing) * 2);\n  }\n  .pb-3 {\n    padding-bottom: calc(var(--spacing) * 3);\n  }\n  .pb-4 {\n    padding-bottom: calc(var(--spacing) * 4);\n  }\n  .pb-6 {\n    padding-bottom: calc(var(--spacing) * 6);\n  }\n  .text-center {\n    text-align: center;\n  }\n  .text-left {\n    text-align: left;\n  }\n  .text-right {\n    text-align: right;\n  }\n  .font-mono {\n    font-family: var(--font-mono);\n  }\n  .text-2xl {\n    font-size: var(--text-2xl);\n    line-height: var(--tw-leading, var(--text-2xl--line-height));\n  }\n  .text-3xl {\n    font-size: var(--text-3xl);\n    line-height: var(--tw-leading, var(--text-3xl--line-height));\n  }\n  .text-4xl {\n    font-size: var(--text-4xl);\n    line-height: var(--tw-leading, var(--text-4xl--line-height));\n  }\n  .text-6xl {\n    font-size: var(--text-6xl);\n    line-height: var(--tw-leading, var(--text-6xl--line-height));\n  }\n  .text-base {\n    font-size: var(--text-base);\n    line-height: var(--tw-leading, var(--text-base--line-height));\n  }\n  .text-lg {\n    font-size: var(--text-lg);\n    line-height: var(--tw-leading, var(--text-lg--line-height));\n  }\n  .text-sm {\n    font-size: var(--text-sm);\n    line-height: var(--tw-leading, var(--text-sm--line-height));\n  }\n  .text-xl {\n    font-size: var(--text-xl);\n    line-height: var(--tw-leading, var(--text-xl--line-height));\n  }\n  .text-xs {\n    font-size: var(--text-xs);\n    line-height: var(--tw-leading, var(--text-xs--line-height));\n  }\n  .text-\\[10px\\] {\n    font-size: 10px;\n  }\n  .text-\\[11px\\] {\n    font-size: 11px;\n  }\n  .leading-none {\n    --tw-leading: 1;\n    line-height: 1;\n  }\n  .leading-relaxed {\n    --tw-leading: var(--leading-relaxed);\n    line-height: var(--leading-relaxed);\n  }\n  .leading-snug {\n    --tw-leading: var(--leading-snug);\n    line-height: var(--leading-snug);\n  }\n  .leading-tight {\n    --tw-leading: var(--leading-tight);\n    line-height: var(--leading-tight);\n  }\n  .font-black {\n    --tw-font-weight: var(--font-weight-black);\n    font-weight: var(--font-weight-black);\n  }\n  .font-bold {\n    --tw-font-weight: var(--font-weight-bold);\n    font-weight: var(--font-weight-bold);\n  }\n  .font-medium {\n    --tw-font-weight: var(--font-weight-medium);\n    font-weight: var(--font-weight-medium);\n  }\n  .font-normal {\n    --tw-font-weight: var(--font-weight-normal);\n    font-weight: var(--font-weight-normal);\n  }\n  .font-semibold {\n    --tw-font-weight: var(--font-weight-semibold);\n    font-weight: var(--font-weight-semibold);\n  }\n  .tracking-tight {\n    --tw-tracking: var(--tracking-tight);\n    letter-spacing: var(--tracking-tight);\n  }\n  .tracking-wider {\n    --tw-tracking: var(--tracking-wider);\n    letter-spacing: var(--tracking-wider);\n  }\n  .text-amber-300 {\n    color: var(--color-amber-300);\n  }\n  .text-amber-600 {\n    color: var(--color-amber-600);\n  }\n  .text-amber-700 {\n    color: var(--color-amber-700);\n  }\n  .text-amber-800 {\n    color: var(--color-amber-800);\n  }\n  .text-blue-600 {\n    color: var(--color-blue-600);\n  }\n  .text-blue-700 {\n    color: var(--color-blue-700);\n  }\n  .text-blue-800 {\n    color: var(--color-blue-800);\n  }\n  .text-emerald-600 {\n    color: var(--color-emerald-600);\n  }\n  .text-emerald-700 {\n    color: var(--color-emerald-700);\n  }\n  .text-emerald-800 {\n    color: var(--color-emerald-800);\n  }\n  .text-orange-400 {\n    color: var(--color-orange-400);\n  }\n  .text-orange-600 {\n    color: var(--color-orange-600);\n  }\n  .text-orange-700 {\n    color: var(--color-orange-700);\n  }\n  .text-orange-800 {\n    color: var(--color-orange-800);\n  }\n  .text-rose-600 {\n    color: var(--color-rose-600);\n  }\n  .text-rose-700 {\n    color: var(--color-rose-700);\n  }\n  .text-slate-300 {\n    color: var(--color-slate-300);\n  }\n  .text-slate-400 {\n    color: var(--color-slate-400);\n  }\n  .text-slate-500 {\n    color: var(--color-slate-500);\n  }\n  .text-slate-600 {\n    color: var(--color-slate-600);\n  }\n  .text-slate-700 {\n    color: var(--color-slate-700);\n  }\n  .text-slate-800 {\n    color: var(--color-slate-800);\n  }\n  .text-slate-900 {\n    color: var(--color-slate-900);\n  }\n  .text-transparent {\n    color: transparent;\n  }\n  .text-white {\n    color: var(--color-white);\n  }\n  .uppercase {\n    text-transform: uppercase;\n  }\n  .italic {\n    font-style: italic;\n  }\n  .line-through {\n    text-decoration-line: line-through;\n  }\n  .opacity-60 {\n    opacity: 60%;\n  }\n  .opacity-80 {\n    opacity: 80%;\n  }\n  .shadow-2xl {\n    --tw-shadow: 0 25px 50px -12px var(--tw-shadow-color, rgb(0 0 0 / 0.25));\n    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);\n  }\n  .shadow-2xs {\n    --tw-shadow: 0 1px var(--tw-shadow-color, rgb(0 0 0 / 0.05));\n    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);\n  }\n  .shadow-lg {\n    --tw-shadow: 0 10px 15px -3px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 4px 6px -4px var(--tw-shadow-color, rgb(0 0 0 / 0.1));\n    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);\n  }\n  .shadow-md {\n    --tw-shadow: 0 4px 6px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 2px 4px -2px var(--tw-shadow-color, rgb(0 0 0 / 0.1));\n    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);\n  }\n  .shadow-sm {\n    --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));\n    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);\n  }\n  .shadow-xl {\n    --tw-shadow: 0 20px 25px -5px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 8px 10px -6px var(--tw-shadow-color, rgb(0 0 0 / 0.1));\n    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);\n  }\n  .shadow-xs {\n    --tw-shadow: 0 1px 2px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.05));\n    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);\n  }\n  .ring-2 {\n    --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);\n    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);\n  }\n  .ring-orange-200 {\n    --tw-ring-color: var(--color-orange-200);\n  }\n  .blur-3xl {\n    --tw-blur: blur(var(--blur-3xl));\n    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);\n  }\n  .backdrop-blur {\n    --tw-backdrop-blur: blur(8px);\n    -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);\n    backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);\n  }\n  .transition-all {\n    transition-property: all;\n    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));\n    transition-duration: var(--tw-duration, var(--default-transition-duration));\n  }\n  .hover\\:bg-orange-700 {\n    &:hover {\n      @media (hover: hover) {\n        background-color: var(--color-orange-700);\n      }\n    }\n  }\n  .hover\\:bg-slate-700 {\n    &:hover {\n      @media (hover: hover) {\n        background-color: var(--color-slate-700);\n      }\n    }\n  }\n  .md\\:inline-block {\n    @media (width >= 48rem) {\n      display: inline-block;\n    }\n  }\n  .md\\:h-36 {\n    @media (width >= 48rem) {\n      height: calc(var(--spacing) * 36);\n    }\n  }\n  .md\\:w-36 {\n    @media (width >= 48rem) {\n      width: calc(var(--spacing) * 36);\n    }\n  }\n  .md\\:grid-cols-2 {\n    @media (width >= 48rem) {\n      grid-template-columns: repeat(2, minmax(0, 1fr));\n    }\n  }\n  .md\\:grid-cols-3 {\n    @media (width >= 48rem) {\n      grid-template-columns: repeat(3, minmax(0, 1fr));\n    }\n  }\n  .md\\:border-r {\n    @media (width >= 48rem) {\n      border-right-style: var(--tw-border-style);\n      border-right-width: 1px;\n    }\n  }\n  .md\\:border-b-0 {\n    @media (width >= 48rem) {\n      border-bottom-style: var(--tw-border-style);\n      border-bottom-width: 0px;\n    }\n  }\n  .md\\:pr-6 {\n    @media (width >= 48rem) {\n      padding-right: calc(var(--spacing) * 6);\n    }\n  }\n  .md\\:pb-0 {\n    @media (width >= 48rem) {\n      padding-bottom: calc(var(--spacing) * 0);\n    }\n  }\n  .md\\:text-2xl {\n    @media (width >= 48rem) {\n      font-size: var(--text-2xl);\n      line-height: var(--tw-leading, var(--text-2xl--line-height));\n    }\n  }\n  .md\\:text-5xl {\n    @media (width >= 48rem) {\n      font-size: var(--text-5xl);\n      line-height: var(--tw-leading, var(--text-5xl--line-height));\n    }\n  }\n  .md\\:text-7xl {\n    @media (width >= 48rem) {\n      font-size: var(--text-7xl);\n      line-height: var(--tw-leading, var(--text-7xl--line-height));\n    }\n  }\n  .md\\:text-base {\n    @media (width >= 48rem) {\n      font-size: var(--text-base);\n      line-height: var(--tw-leading, var(--text-base--line-height));\n    }\n  }\n  .md\\:text-lg {\n    @media (width >= 48rem) {\n      font-size: var(--text-lg);\n      line-height: var(--tw-leading, var(--text-lg--line-height));\n    }\n  }\n  .md\\:text-sm {\n    @media (width >= 48rem) {\n      font-size: var(--text-sm);\n      line-height: var(--tw-leading, var(--text-sm--line-height));\n    }\n  }\n  .md\\:text-xl {\n    @media (width >= 48rem) {\n      font-size: var(--text-xl);\n      line-height: var(--tw-leading, var(--text-xl--line-height));\n    }\n  }\n}\n@property --tw-translate-x {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: 0;\n}\n@property --tw-translate-y {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: 0;\n}\n@property --tw-translate-z {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: 0;\n}\n@property --tw-rotate-x {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-rotate-y {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-rotate-z {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-skew-x {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-skew-y {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-space-y-reverse {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: 0;\n}\n@property --tw-border-style {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: solid;\n}\n@property --tw-gradient-position {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-gradient-from {\n  syntax: \"<color>\";\n  inherits: false;\n  initial-value: #0000;\n}\n@property --tw-gradient-via {\n  syntax: \"<color>\";\n  inherits: false;\n  initial-value: #0000;\n}\n@property --tw-gradient-to {\n  syntax: \"<color>\";\n  inherits: false;\n  initial-value: #0000;\n}\n@property --tw-gradient-stops {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-gradient-via-stops {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-gradient-from-position {\n  syntax: \"<length-percentage>\";\n  inherits: false;\n  initial-value: 0%;\n}\n@property --tw-gradient-via-position {\n  syntax: \"<length-percentage>\";\n  inherits: false;\n  initial-value: 50%;\n}\n@property --tw-gradient-to-position {\n  syntax: \"<length-percentage>\";\n  inherits: false;\n  initial-value: 100%;\n}\n@property --tw-leading {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-font-weight {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-tracking {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-shadow {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: 0 0 #0000;\n}\n@property --tw-shadow-color {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-shadow-alpha {\n  syntax: \"<percentage>\";\n  inherits: false;\n  initial-value: 100%;\n}\n@property --tw-inset-shadow {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: 0 0 #0000;\n}\n@property --tw-inset-shadow-color {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-inset-shadow-alpha {\n  syntax: \"<percentage>\";\n  inherits: false;\n  initial-value: 100%;\n}\n@property --tw-ring-color {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-ring-shadow {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: 0 0 #0000;\n}\n@property --tw-inset-ring-color {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-inset-ring-shadow {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: 0 0 #0000;\n}\n@property --tw-ring-inset {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-ring-offset-width {\n  syntax: \"<length>\";\n  inherits: false;\n  initial-value: 0px;\n}\n@property --tw-ring-offset-color {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: #fff;\n}\n@property --tw-ring-offset-shadow {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: 0 0 #0000;\n}\n@property --tw-blur {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-brightness {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-contrast {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-grayscale {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-hue-rotate {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-invert {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-opacity {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-saturate {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-sepia {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-drop-shadow {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-drop-shadow-color {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-drop-shadow-alpha {\n  syntax: \"<percentage>\";\n  inherits: false;\n  initial-value: 100%;\n}\n@property --tw-drop-shadow-size {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-backdrop-blur {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-backdrop-brightness {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-backdrop-contrast {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-backdrop-grayscale {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-backdrop-hue-rotate {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-backdrop-invert {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-backdrop-opacity {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-backdrop-saturate {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-backdrop-sepia {\n  syntax: \"*\";\n  inherits: false;\n}\n@keyframes spin {\n  to {\n    transform: rotate(360deg);\n  }\n}\n@keyframes pulse {\n  50% {\n    opacity: 0.5;\n  }\n}\n@layer properties {\n  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {\n    *, ::before, ::after, ::backdrop {\n      --tw-translate-x: 0;\n      --tw-translate-y: 0;\n      --tw-translate-z: 0;\n      --tw-rotate-x: initial;\n      --tw-rotate-y: initial;\n      --tw-rotate-z: initial;\n      --tw-skew-x: initial;\n      --tw-skew-y: initial;\n      --tw-space-y-reverse: 0;\n      --tw-border-style: solid;\n      --tw-gradient-position: initial;\n      --tw-gradient-from: #0000;\n      --tw-gradient-via: #0000;\n      --tw-gradient-to: #0000;\n      --tw-gradient-stops: initial;\n      --tw-gradient-via-stops: initial;\n      --tw-gradient-from-position: 0%;\n      --tw-gradient-via-position: 50%;\n      --tw-gradient-to-position: 100%;\n      --tw-leading: initial;\n      --tw-font-weight: initial;\n      --tw-tracking: initial;\n      --tw-shadow: 0 0 #0000;\n      --tw-shadow-color: initial;\n      --tw-shadow-alpha: 100%;\n      --tw-inset-shadow: 0 0 #0000;\n      --tw-inset-shadow-color: initial;\n      --tw-inset-shadow-alpha: 100%;\n      --tw-ring-color: initial;\n      --tw-ring-shadow: 0 0 #0000;\n      --tw-inset-ring-color: initial;\n      --tw-inset-ring-shadow: 0 0 #0000;\n      --tw-ring-inset: initial;\n      --tw-ring-offset-width: 0px;\n      --tw-ring-offset-color: #fff;\n      --tw-ring-offset-shadow: 0 0 #0000;\n      --tw-blur: initial;\n      --tw-brightness: initial;\n      --tw-contrast: initial;\n      --tw-grayscale: initial;\n      --tw-hue-rotate: initial;\n      --tw-invert: initial;\n      --tw-opacity: initial;\n      --tw-saturate: initial;\n      --tw-sepia: initial;\n      --tw-drop-shadow: initial;\n      --tw-drop-shadow-color: initial;\n      --tw-drop-shadow-alpha: 100%;\n      --tw-drop-shadow-size: initial;\n      --tw-backdrop-blur: initial;\n      --tw-backdrop-brightness: initial;\n      --tw-backdrop-contrast: initial;\n      --tw-backdrop-grayscale: initial;\n      --tw-backdrop-hue-rotate: initial;\n      --tw-backdrop-invert: initial;\n      --tw-backdrop-opacity: initial;\n      --tw-backdrop-saturate: initial;\n      --tw-backdrop-sepia: initial;\n    }\n  }\n}\n"],"sourceRoot":""}]);
+`, "",{"version":3,"sources":["webpack://./src/index.css"],"names":[],"mappings":"AAAA,gEAAgE;AAChE,iBAAiB;AACjB,yCAAyC;AACzC;EACE;IACE;6DACyD;IACzD;iDAC6C;IAC7C,2CAA2C;IAC3C,6CAA6C;IAC7C,6CAA6C;IAC7C,4CAA4C;IAC5C,4CAA4C;IAC5C,6CAA6C;IAC7C,6CAA6C;IAC7C,6CAA6C;IAC7C,4CAA4C;IAC5C,6CAA6C;IAC7C,2CAA2C;IAC3C,4CAA4C;IAC5C,2CAA2C;IAC3C,4CAA4C;IAC5C,4CAA4C;IAC5C,2CAA2C;IAC3C,4CAA4C;IAC5C,4CAA4C;IAC5C,4CAA4C;IAC5C,4CAA4C;IAC5C,8CAA8C;IAC9C,8CAA8C;IAC9C,8CAA8C;IAC9C,+CAA+C;IAC/C,+CAA+C;IAC/C,6CAA6C;IAC7C,+CAA+C;IAC/C,+CAA+C;IAC/C,+CAA+C;IAC/C,+CAA+C;IAC/C,0CAA0C;IAC1C,4CAA4C;IAC5C,4CAA4C;IAC5C,4CAA4C;IAC5C,4CAA4C;IAC5C,4CAA4C;IAC5C,4CAA4C;IAC5C,4CAA4C;IAC5C,4CAA4C;IAC5C,0CAA0C;IAC1C,yCAAyC;IACzC,2CAA2C;IAC3C,2CAA2C;IAC3C,2CAA2C;IAC3C,2CAA2C;IAC3C,2CAA2C;IAC3C,4CAA4C;IAC5C,6CAA6C;IAC7C,6CAA6C;IAC7C,6CAA6C;IAC7C,4CAA4C;IAC5C,6CAA6C;IAC7C,6CAA6C;IAC7C,6CAA6C;IAC7C,6CAA6C;IAC7C,6CAA6C;IAC7C,mBAAmB;IACnB,mBAAmB;IACnB,kBAAkB;IAClB,qBAAqB;IACrB,qBAAqB;IACrB,sBAAsB;IACtB,sBAAsB;IACtB,sBAAsB;IACtB,sBAAsB;IACtB,kBAAkB;IAClB,sCAAsC;IACtC,mBAAmB;IACnB,0CAA0C;IAC1C,iBAAiB;IACjB,uCAAuC;IACvC,mBAAmB;IACnB,0CAA0C;IAC1C,kBAAkB;IAClB,yCAAyC;IACzC,kBAAkB;IAClB,sCAAsC;IACtC,oBAAoB;IACpB,2CAA2C;IAC3C,mBAAmB;IACnB,yCAAyC;IACzC,gBAAgB;IAChB,0BAA0B;IAC1B,mBAAmB;IACnB,0BAA0B;IAC1B,kBAAkB;IAClB,0BAA0B;IAC1B,yBAAyB;IACzB,yBAAyB;IACzB,2BAA2B;IAC3B,uBAAuB;IACvB,wBAAwB;IACxB,0BAA0B;IAC1B,wBAAwB;IACxB,qBAAqB;IACrB,qBAAqB;IACrB,wBAAwB;IACxB,qBAAqB;IACrB,mBAAmB;IACnB,oBAAoB;IACpB,kBAAkB;IAClB,oBAAoB;IACpB,uCAAuC;IACvC,+DAA+D;IAC/D,gBAAgB;IAChB,gBAAgB;IAChB,oCAAoC;IACpC,kEAAkE;IAClE,uCAAuC;IACvC,wEAAwE;IACxE;;KAEC;IACD,4CAA4C;IAC5C;;KAEC;IACD;;KAEC;EACH;AACF;AACA;EACE;IACE,sBAAsB;IACtB,SAAS;IACT,UAAU;IACV,eAAe;EACjB;EACA;IACE,gBAAgB;IAChB,8BAA8B;IAC9B,WAAW;IACX,6JAA6J;IAC7J,mEAAmE;IACnE,yEAAyE;IACzE,wCAAwC;EAC1C;EACA;IACE,oBAAoB;EACtB;EACA;IACE,SAAS;IACT,cAAc;IACd,qBAAqB;EACvB;EACA;IACE,yCAAyC;IACzC,iCAAiC;EACnC;EACA;IACE,kBAAkB;IAClB,oBAAoB;EACtB;EACA;IACE,cAAc;IACd,gCAAgC;IAChC,wBAAwB;EAC1B;EACA;IACE,mBAAmB;EACrB;EACA;IACE,kJAAkJ;IAClJ,0EAA0E;IAC1E,8EAA8E;IAC9E,cAAc;EAChB;EACA;IACE,cAAc;EAChB;EACA;IACE,cAAc;IACd,cAAc;IACd,kBAAkB;IAClB,wBAAwB;EAC1B;EACA;IACE,eAAe;EACjB;EACA;IACE,WAAW;EACb;EACA;IACE,cAAc;IACd,qBAAqB;IACrB,yBAAyB;EAC3B;EACA;IACE,aAAa;EACf;EACA;IACE,wBAAwB;EAC1B;EACA;IACE,kBAAkB;EACpB;EACA;IACE,gBAAgB;EAClB;EACA;IACE,cAAc;IACd,sBAAsB;EACxB;EACA;IACE,eAAe;IACf,YAAY;EACd;EACA;IACE,aAAa;IACb,8BAA8B;IAC9B,gCAAgC;IAChC,uBAAuB;IACvB,cAAc;IACd,gBAAgB;IAChB,6BAA6B;IAC7B,UAAU;EACZ;EACA;IACE,mBAAmB;EACrB;EACA;IACE,0BAA0B;EAC5B;EACA;IACE,sBAAsB;EACxB;EACA;IACE,UAAU;IACV,mBAAmB;IACnB;MACE,yDAAyD;IAC3D;EACF;EACA;IACE,gBAAgB;EAClB;EACA;IACE,wBAAwB;EAC1B;EACA;IACE,eAAe;IACf,mBAAmB;EACrB;EACA;IACE,oBAAoB;EACtB;EACA;IACE,UAAU;EACZ;EACA;IACE,gBAAgB;EAClB;EACA;IACE,gBAAgB;EAClB;EACA;IACE,kBAAkB;EACpB;EACA;IACE,YAAY;EACd;EACA;IACE,wBAAwB;EAC1B;AACF;AACA;EACE;IACE,oBAAoB;EACtB;EACA;IACE,kBAAkB;EACpB;EACA;IACE,kBAAkB;EACpB;EACA;IACE,+BAA+B;EACjC;EACA;IACE,8BAA8B;EAChC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,uBAAuB;EACzB;EACA;IACE,+BAA+B;EACjC;EACA;IACE,iCAAiC;EACnC;EACA;IACE,kCAAkC;EACpC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,gCAAgC;EAClC;EACA;IACE,wBAAwB;EAC1B;EACA;IACE,wBAAwB;EAC1B;EACA;IACE,WAAW;EACb;EACA;IACE,WAAW;EACb;EACA;IACE,WAAW;EACb;EACA;IACE,WAAW;EACb;EACA;IACE,WAAW;EACb;EACA;IACE,uCAAuC;EACzC;EACA;IACE,mBAAmB;EACrB;EACA;IACE,sCAAsC;EACxC;EACA;IACE,qCAAqC;EACvC;EACA;IACE,sCAAsC;EACxC;EACA;IACE,oCAAoC;EACtC;EACA;IACE,sCAAsC;EACxC;EACA;IACE,oCAAoC;EACtC;EACA;IACE,oCAAoC;EACtC;EACA;IACE,oCAAoC;EACtC;EACA;IACE,yCAAyC;EAC3C;EACA;IACE,uCAAuC;EACzC;EACA;IACE,yCAAyC;EAC3C;EACA;IACE,uCAAuC;EACzC;EACA;IACE,uCAAuC;EACzC;EACA;IACE,uCAAuC;EACzC;EACA;IACE,uCAAuC;EACzC;EACA;IACE,uCAAuC;EACzC;EACA;IACE,uCAAuC;EACzC;EACA;IACE,cAAc;EAChB;EACA;IACE,aAAa;EACf;EACA;IACE,aAAa;EACf;EACA;IACE,aAAa;EACf;EACA;IACE,qBAAqB;EACvB;EACA;IACE,oBAAoB;EACtB;EACA;IACE,kCAAkC;EACpC;EACA;IACE,kCAAkC;EACpC;EACA;IACE,gCAAgC;EAClC;EACA;IACE,kCAAkC;EACpC;EACA;IACE,gCAAgC;EAClC;EACA;IACE,gCAAgC;EAClC;EACA;IACE,gCAAgC;EAClC;EACA;IACE,gCAAgC;EAClC;EACA;IACE,gCAAgC;EAClC;EACA;IACE,gCAAgC;EAClC;EACA;IACE,iCAAiC;EACnC;EACA;IACE,iCAAiC;EACnC;EACA;IACE,iCAAiC;EACnC;EACA;IACE,iCAAiC;EACnC;EACA;IACE,iCAAiC;EACnC;EACA;IACE,iCAAiC;EACnC;EACA;IACE,aAAa;EACf;EACA;IACE,aAAa;EACf;EACA;IACE,aAAa;EACf;EACA;IACE,aAAa;EACf;EACA;IACE,aAAa;EACf;EACA;IACE,YAAY;EACd;EACA;IACE,iBAAiB;EACnB;EACA;IACE,iCAAiC;EACnC;EACA;IACE,iCAAiC;EACnC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,iCAAiC;EACnC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,gCAAgC;EAClC;EACA;IACE,gCAAgC;EAClC;EACA;IACE,gCAAgC;EAClC;EACA;IACE,gCAAgC;EAClC;EACA;IACE,gCAAgC;EAClC;EACA;IACE,gCAAgC;EAClC;EACA;IACE,YAAY;EACd;EACA;IACE,YAAY;EACd;EACA;IACE,YAAY;EACd;EACA;IACE,YAAY;EACd;EACA;IACE,YAAY;EACd;EACA;IACE,aAAa;EACf;EACA;IACE,WAAW;EACb;EACA;IACE,kBAAkB;EACpB;EACA;IACE,+BAA+B;EACjC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,gBAAgB;EAClB;EACA;IACE,iBAAiB;EACnB;EACA;IACE,iBAAiB;EACnB;EACA;IACE,8BAA8B;EAChC;EACA;IACE,8BAA8B;EAChC;EACA;IACE,OAAO;EACT;EACA;IACE,cAAc;EAChB;EACA;IACE,wBAAwB;EAC1B;EACA;IACE,+CAA+C;IAC/C,sDAAsD;EACxD;EACA;IACE,+CAA+C;IAC/C,sDAAsD;EACxD;EACA;IACE,wBAAwB;EAC1B;EACA;IACE,0GAA0G;EAC5G;EACA;IACE,+BAA+B;EACjC;EACA;IACE,8BAA8B;EAChC;EACA;IACE,eAAe;EACjB;EACA;IACE,gDAAgD;EAClD;EACA;IACE,gDAAgD;EAClD;EACA;IACE,sBAAsB;EACxB;EACA;IACE,mBAAmB;EACrB;EACA;IACE,uBAAuB;EACzB;EACA;IACE,8BAA8B;EAChC;EACA;IACE,uBAAuB;EACzB;EACA;IACE,yBAAyB;EAC3B;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,+BAA+B;EACjC;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,+BAA+B;EACjC;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,+BAA+B;EACjC;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,6BAA6B;EAC/B;EACA;IACE;MACE,uBAAuB;MACvB,gFAAgF;MAChF,wFAAwF;IAC1F;EACF;EACA;IACE;MACE,uBAAuB;MACvB,8EAA8E;MAC9E,sFAAsF;IACxF;EACF;EACA;IACE;MACE,uBAAuB;MACvB,gFAAgF;MAChF,wFAAwF;IAC1F;EACF;EACA;IACE,gBAAgB;IAChB,uBAAuB;IACvB,mBAAmB;EACrB;EACA;IACE,gBAAgB;EAClB;EACA;IACE,sBAAsB;EACxB;EACA;IACE,gCAAgC;EAClC;EACA;IACE,gCAAgC;EAClC;EACA;IACE,mBAAmB;EACrB;EACA;IACE,mBAAmB;EACrB;EACA;IACE,mBAAmB;EACrB;EACA;IACE,mCAAmC;EACrC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,oCAAoC;IACpC,iBAAiB;EACnB;EACA;IACE,oCAAoC;IACpC,iBAAiB;EACnB;EACA;IACE,oCAAoC;IACpC,iBAAiB;EACnB;EACA;IACE,oCAAoC;IACpC,kBAAkB;EACpB;EACA;IACE,wCAAwC;IACxC,qBAAqB;EACvB;EACA;IACE,2CAA2C;IAC3C,wBAAwB;EAC1B;EACA;IACE,oCAAoC;EACtC;EACA;IACE,oCAAoC;EACtC;EACA;IACE,2EAA2E;IAC3E;MACE,0EAA0E;IAC5E;EACF;EACA;IACE,2EAA2E;IAC3E;MACE,0EAA0E;IAC5E;EACF;EACA;IACE,uDAAuD;IACvD;MACE,sEAAsE;IACxE;EACF;EACA;IACE,mCAAmC;EACrC;EACA;IACE,mCAAmC;EACrC;EACA;IACE,sCAAsC;EACxC;EACA;IACE,sCAAsC;EACxC;EACA;IACE,2EAA2E;IAC3E;MACE,4EAA4E;IAC9E;EACF;EACA;IACE,2EAA2E;IAC3E;MACE,4EAA4E;IAC9E;EACF;EACA;IACE,qCAAqC;EACvC;EACA;IACE,qCAAqC;EACvC;EACA;IACE,4EAA4E;IAC5E;MACE,2EAA2E;IAC7E;EACF;EACA;IACE,4EAA4E;IAC5E;MACE,2EAA2E;IAC7E;EACF;EACA;IACE,qCAAqC;EACvC;EACA;IACE,qCAAqC;EACvC;EACA;IACE,mCAAmC;EACrC;EACA;IACE,4EAA4E;IAC5E;MACE,yEAAyE;IAC3E;EACF;EACA;IACE,4EAA4E;IAC5E;MACE,yEAAyE;IAC3E;EACF;EACA;IACE,oCAAoC;EACtC;EACA;IACE,oCAAoC;EACtC;EACA;IACE,6EAA6E;IAC7E;MACE,0EAA0E;IAC5E;EACF;EACA;IACE,oCAAoC;EACtC;EACA;IACE,6EAA6E;IAC7E;MACE,0EAA0E;IAC5E;EACF;EACA;IACE,oCAAoC;EACtC;EACA;IACE,oCAAoC;EACtC;EACA;IACE,yBAAyB;EAC3B;EACA;IACE,uCAAuC;EACzC;EACA;IACE,gFAAgF;IAChF;MACE,6EAA6E;IAC/E;EACF;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,+EAA+E;IAC/E;MACE,8EAA8E;IAChF;EACF;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,oCAAoC;EACtC;EACA;IACE,2DAA2D;IAC3D;MACE,0EAA0E;IAC5E;EACF;EACA;IACE,sCAAsC;EACxC;EACA;IACE,gFAAgF;IAChF;MACE,4EAA4E;IAC9E;EACF;EACA;IACE,uCAAuC;EACzC;EACA;IACE,8BAA8B;EAChC;EACA;IACE,yCAAyC;EAC3C;EACA;IACE,iFAAiF;IACjF;MACE,+EAA+E;IACjF;EACF;EACA;IACE,iFAAiF;IACjF;MACE,+EAA+E;IACjF;EACF;EACA;IACE,0CAA0C;EAC5C;EACA;IACE,gFAAgF;IAChF;MACE,gFAAgF;IAClF;EACF;EACA;IACE,0CAA0C;EAC5C;EACA;IACE,0CAA0C;EAC5C;EACA;IACE,0CAA0C;EAC5C;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,+EAA+E;IAC/E;MACE,8EAA8E;IAChF;EACF;EACA;IACE,+EAA+E;IAC/E;MACE,8EAA8E;IAChF;EACF;EACA;IACE,yCAAyC;EAC3C;EACA;IACE,gFAAgF;IAChF;MACE,+EAA+E;IACjF;EACF;EACA;IACE,gFAAgF;IAChF;MACE,+EAA+E;IACjF;EACF;EACA;IACE,gFAAgF;IAChF;MACE,+EAA+E;IACjF;EACF;EACA;IACE,+EAA+E;IAC/E;MACE,+EAA+E;IACjF;EACF;EACA;IACE,yCAAyC;EAC3C;EACA;IACE,gFAAgF;IAChF;MACE,+EAA+E;IACjF;EACF;EACA;IACE,yCAAyC;EAC3C;EACA;IACE,sCAAsC;EACxC;EACA;IACE,gFAAgF;IAChF;MACE,4EAA4E;IAC9E;EACF;EACA;IACE,uCAAuC;EACzC;EACA;IACE,8EAA8E;IAC9E;MACE,6EAA6E;IAC/E;EACF;EACA;IACE,uCAAuC;EACzC;EACA;IACE,uCAAuC;EACzC;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,iFAAiF;IACjF;MACE,8EAA8E;IAChF;EACF;EACA;IACE,iFAAiF;IACjF;MACE,8EAA8E;IAChF;EACF;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,iFAAiF;IACjF;MACE,8EAA8E;IAChF;EACF;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,oCAAoC;EACtC;EACA;IACE,2DAA2D;IAC3D;MACE,0EAA0E;IAC5E;EACF;EACA;IACE,2DAA2D;IAC3D;MACE,0EAA0E;IAC5E;EACF;EACA;IACE,2DAA2D;IAC3D;MACE,0EAA0E;IAC5E;EACF;EACA;IACE,2DAA2D;IAC3D;MACE,0EAA0E;IAC5E;EACF;EACA;IACE,yCAAyC;IACzC,2DAA2D;EAC7D;EACA;IACE,gCAAgC;IAChC,2DAA2D;EAC7D;EACA;IACE,kFAAkF;IAClF;MACE,iFAAiF;IACnF;IACA,8LAA8L;EAChM;EACA;IACE,2CAA2C;IAC3C,8LAA8L;EAChM;EACA;IACE,yCAAyC;IACzC,4NAA4N;IAC5N,iDAAiD;EACnD;EACA;IACE,8BAA8B;IAC9B,4NAA4N;IAC5N,iDAAiD;EACnD;EACA;IACE,yCAAyC;IACzC,8LAA8L;EAChM;EACA;IACE,6BAA6B;IAC7B,8LAA8L;EAChM;EACA;IACE,qBAAqB;EACvB;EACA;IACE,mBAAmB;EACrB;EACA;IACE,iBAAiB;EACnB;EACA;IACE,oBAAoB;EACtB;EACA;IACE,iCAAiC;EACnC;EACA;IACE,iCAAiC;EACnC;EACA;IACE,mCAAmC;EACrC;EACA;IACE,iCAAiC;EACnC;EACA;IACE,mCAAmC;EACrC;EACA;IACE,iCAAiC;EACnC;EACA;IACE,iCAAiC;EACnC;EACA;IACE,iCAAiC;EACnC;EACA;IACE,iCAAiC;EACnC;EACA;IACE,iCAAiC;EACnC;EACA;IACE,kCAAkC;EACpC;EACA;IACE,kCAAkC;EACpC;EACA;IACE,kCAAkC;EACpC;EACA;IACE,kCAAkC;EACpC;EACA;IACE,0CAA0C;EAC5C;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,0CAA0C;EAC5C;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,0CAA0C;EAC5C;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,yCAAyC;EAC3C;EACA;IACE,uCAAuC;EACzC;EACA;IACE,yCAAyC;EAC3C;EACA;IACE,uCAAuC;EACzC;EACA;IACE,yCAAyC;EAC3C;EACA;IACE,uCAAuC;EACzC;EACA;IACE,qCAAqC;EACvC;EACA;IACE,qCAAqC;EACvC;EACA;IACE,qCAAqC;EACvC;EACA;IACE,qCAAqC;EACvC;EACA;IACE,uCAAuC;EACzC;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,kBAAkB;EACpB;EACA;IACE,gBAAgB;EAClB;EACA;IACE,iBAAiB;EACnB;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,0BAA0B;IAC1B,4DAA4D;EAC9D;EACA;IACE,0BAA0B;IAC1B,4DAA4D;EAC9D;EACA;IACE,0BAA0B;IAC1B,4DAA4D;EAC9D;EACA;IACE,0BAA0B;IAC1B,4DAA4D;EAC9D;EACA;IACE,2BAA2B;IAC3B,6DAA6D;EAC/D;EACA;IACE,yBAAyB;IACzB,2DAA2D;EAC7D;EACA;IACE,yBAAyB;IACzB,2DAA2D;EAC7D;EACA;IACE,yBAAyB;IACzB,2DAA2D;EAC7D;EACA;IACE,yBAAyB;IACzB,2DAA2D;EAC7D;EACA;IACE,eAAe;EACjB;EACA;IACE,eAAe;EACjB;EACA;IACE,eAAe;IACf,cAAc;EAChB;EACA;IACE,oCAAoC;IACpC,mCAAmC;EACrC;EACA;IACE,iCAAiC;IACjC,gCAAgC;EAClC;EACA;IACE,kCAAkC;IAClC,iCAAiC;EACnC;EACA;IACE,0CAA0C;IAC1C,qCAAqC;EACvC;EACA;IACE,yCAAyC;IACzC,oCAAoC;EACtC;EACA;IACE,2CAA2C;IAC3C,sCAAsC;EACxC;EACA;IACE,2CAA2C;IAC3C,sCAAsC;EACxC;EACA;IACE,6CAA6C;IAC7C,wCAAwC;EAC1C;EACA;IACE,oCAAoC;IACpC,qCAAqC;EACvC;EACA;IACE,oCAAoC;IACpC,qCAAqC;EACvC;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,4BAA4B;EAC9B;EACA;IACE,4BAA4B;EAC9B;EACA;IACE,4BAA4B;EAC9B;EACA;IACE,4BAA4B;EAC9B;EACA;IACE,+BAA+B;EACjC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,+BAA+B;EACjC;EACA;IACE,8BAA8B;EAChC;EACA;IACE,8BAA8B;EAChC;EACA;IACE,8BAA8B;EAChC;EACA;IACE,8BAA8B;EAChC;EACA;IACE,8BAA8B;EAChC;EACA;IACE,4BAA4B;EAC9B;EACA;IACE,4BAA4B;EAC9B;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,6BAA6B;EAC/B;EACA;IACE,kBAAkB;EACpB;EACA;IACE,yBAAyB;EAC3B;EACA;IACE,yBAAyB;EAC3B;EACA;IACE,kBAAkB;EACpB;EACA;IACE,kCAAkC;EACpC;EACA;IACE,YAAY;EACd;EACA;IACE,YAAY;EACd;EACA;IACE,wEAAwE;IACxE,sIAAsI;EACxI;EACA;IACE,4DAA4D;IAC5D,sIAAsI;EACxI;EACA;IACE,+HAA+H;IAC/H,sIAAsI;EACxI;EACA;IACE,6HAA6H;IAC7H,sIAAsI;EACxI;EACA;IACE,0HAA0H;IAC1H,sIAAsI;EACxI;EACA;IACE,gIAAgI;IAChI,sIAAsI;EACxI;EACA;IACE,kEAAkE;IAClE,sIAAsI;EACxI;EACA;IACE,wHAAwH;IACxH,sIAAsI;EACxI;EACA;IACE,gFAAgF;IAChF;MACE,wIAAwI;IAC1I;EACF;EACA;IACE,kFAAkF;IAClF;MACE,uIAAuI;IACzI;EACF;EACA;IACE,gFAAgF;IAChF;MACE,0IAA0I;IAC5I;EACF;EACA;IACE,iFAAiF;IACjF;MACE,yIAAyI;IAC3I;EACF;EACA;IACE,wCAAwC;EAC1C;EACA;IACE,gCAAgC;IAChC,0LAA0L;EAC5L;EACA;IACE,gCAAgC;IAChC,0LAA0L;EAC5L;EACA;IACE,0LAA0L;EAC5L;EACA;IACE,6BAA6B;IAC7B,wRAAwR;IACxR,gRAAgR;EAClR;EACA;IACE,wBAAwB;IACxB,qFAAqF;IACrF,2EAA2E;EAC7E;EACA;IACE,wDAAwD;IACxD,qFAAqF;IACrF,2EAA2E;EAC7E;EACA;IACE,yBAAyB;IACzB,iBAAiB;EACnB;EACA;IACE;MACE;QACE,yCAAyC;MAC3C;IACF;EACF;EACA;IACE;MACE;QACE,wCAAwC;MAC1C;IACF;EACF;EACA;IACE;MACE,qBAAqB;IACvB;EACF;EACA;IACE;MACE,iCAAiC;IACnC;EACF;EACA;IACE;MACE,gCAAgC;IAClC;EACF;EACA;IACE;MACE,gDAAgD;IAClD;EACF;EACA;IACE;MACE,gDAAgD;IAClD;EACF;EACA;IACE;MACE,0CAA0C;MAC1C,uBAAuB;IACzB;EACF;EACA;IACE;MACE,2CAA2C;MAC3C,wBAAwB;IAC1B;EACF;EACA;IACE;MACE,uCAAuC;IACzC;EACF;EACA;IACE;MACE,wCAAwC;IAC1C;EACF;EACA;IACE;MACE,0BAA0B;MAC1B,4DAA4D;IAC9D;EACF;EACA;IACE;MACE,0BAA0B;MAC1B,4DAA4D;IAC9D;EACF;EACA;IACE;MACE,0BAA0B;MAC1B,4DAA4D;IAC9D;EACF;EACA;IACE;MACE,2BAA2B;MAC3B,6DAA6D;IAC/D;EACF;EACA;IACE;MACE,yBAAyB;MACzB,2DAA2D;IAC7D;EACF;EACA;IACE;MACE,yBAAyB;MACzB,2DAA2D;IAC7D;EACF;EACA;IACE;MACE,yBAAyB;MACzB,2DAA2D;IAC7D;EACF;AACF;AACA;EACE,WAAW;EACX,eAAe;EACf,gBAAgB;AAClB;AACA;EACE,WAAW;EACX,eAAe;EACf,gBAAgB;AAClB;AACA;EACE,WAAW;EACX,eAAe;EACf,gBAAgB;AAClB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;EACf,gBAAgB;AAClB;AACA;EACE,WAAW;EACX,eAAe;EACf,oBAAoB;AACtB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,iBAAiB;EACjB,eAAe;EACf,oBAAoB;AACtB;AACA;EACE,iBAAiB;EACjB,eAAe;EACf,oBAAoB;AACtB;AACA;EACE,iBAAiB;EACjB,eAAe;EACf,oBAAoB;AACtB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,6BAA6B;EAC7B,eAAe;EACf,iBAAiB;AACnB;AACA;EACE,6BAA6B;EAC7B,eAAe;EACf,kBAAkB;AACpB;AACA;EACE,6BAA6B;EAC7B,eAAe;EACf,mBAAmB;AACrB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;EACf,wBAAwB;AAC1B;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,sBAAsB;EACtB,eAAe;EACf,mBAAmB;AACrB;AACA;EACE,WAAW;EACX,eAAe;EACf,wBAAwB;AAC1B;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,sBAAsB;EACtB,eAAe;EACf,mBAAmB;AACrB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;EACf,wBAAwB;AAC1B;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;EACf,wBAAwB;AAC1B;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,kBAAkB;EAClB,eAAe;EACf,kBAAkB;AACpB;AACA;EACE,WAAW;EACX,eAAe;EACf,mBAAmB;AACrB;AACA;EACE,WAAW;EACX,eAAe;EACf,wBAAwB;AAC1B;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,sBAAsB;EACtB,eAAe;EACf,mBAAmB;AACrB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE,WAAW;EACX,eAAe;AACjB;AACA;EACE;IACE,yBAAyB;EAC3B;AACF;AACA;EACE;IACE,YAAY;EACd;AACF;AACA;EACE;IACE;MACE,mBAAmB;MACnB,mBAAmB;MACnB,mBAAmB;MACnB,sBAAsB;MACtB,sBAAsB;MACtB,sBAAsB;MACtB,oBAAoB;MACpB,oBAAoB;MACpB,uBAAuB;MACvB,wBAAwB;MACxB,+BAA+B;MAC/B,yBAAyB;MACzB,wBAAwB;MACxB,uBAAuB;MACvB,4BAA4B;MAC5B,gCAAgC;MAChC,+BAA+B;MAC/B,+BAA+B;MAC/B,+BAA+B;MAC/B,qBAAqB;MACrB,yBAAyB;MACzB,sBAAsB;MACtB,sBAAsB;MACtB,0BAA0B;MAC1B,uBAAuB;MACvB,4BAA4B;MAC5B,gCAAgC;MAChC,6BAA6B;MAC7B,wBAAwB;MACxB,2BAA2B;MAC3B,8BAA8B;MAC9B,iCAAiC;MACjC,wBAAwB;MACxB,2BAA2B;MAC3B,4BAA4B;MAC5B,kCAAkC;MAClC,kBAAkB;MAClB,wBAAwB;MACxB,sBAAsB;MACtB,uBAAuB;MACvB,wBAAwB;MACxB,oBAAoB;MACpB,qBAAqB;MACrB,sBAAsB;MACtB,mBAAmB;MACnB,yBAAyB;MACzB,+BAA+B;MAC/B,4BAA4B;MAC5B,8BAA8B;MAC9B,2BAA2B;MAC3B,iCAAiC;MACjC,+BAA+B;MAC/B,gCAAgC;MAChC,iCAAiC;MACjC,6BAA6B;MAC7B,8BAA8B;MAC9B,+BAA+B;MAC/B,4BAA4B;IAC9B;EACF;AACF","sourcesContent":["/*! tailwindcss v4.2.0 | MIT License | https://tailwindcss.com */\n@layer properties;\n@layer theme, base, components, utilities;\n@layer theme {\n  :root, :host {\n    --font-sans: ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\",\n      \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\";\n    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,\n      \"Liberation Mono\", \"Courier New\", monospace;\n    --color-orange-50: oklch(0.98 0.016 73.684);\n    --color-orange-100: oklch(0.954 0.038 75.164);\n    --color-orange-200: oklch(0.901 0.076 70.697);\n    --color-orange-300: oklch(0.837 0.128 66.29);\n    --color-orange-400: oklch(0.75 0.183 55.934);\n    --color-orange-500: oklch(0.705 0.213 47.604);\n    --color-orange-600: oklch(0.646 0.222 41.116);\n    --color-orange-700: oklch(0.553 0.195 38.402);\n    --color-orange-800: oklch(0.47 0.157 37.304);\n    --color-orange-950: oklch(0.266 0.079 36.259);\n    --color-amber-50: oklch(0.987 0.022 95.277);\n    --color-amber-100: oklch(0.962 0.059 95.617);\n    --color-amber-200: oklch(0.924 0.12 95.746);\n    --color-amber-300: oklch(0.879 0.169 91.605);\n    --color-amber-400: oklch(0.828 0.189 84.429);\n    --color-amber-500: oklch(0.769 0.188 70.08);\n    --color-amber-600: oklch(0.666 0.179 58.318);\n    --color-amber-700: oklch(0.555 0.163 48.998);\n    --color-amber-800: oklch(0.473 0.137 46.201);\n    --color-amber-950: oklch(0.279 0.077 45.635);\n    --color-emerald-50: oklch(0.979 0.021 166.113);\n    --color-emerald-100: oklch(0.95 0.052 163.051);\n    --color-emerald-200: oklch(0.905 0.093 164.15);\n    --color-emerald-300: oklch(0.845 0.143 164.978);\n    --color-emerald-400: oklch(0.765 0.177 163.223);\n    --color-emerald-500: oklch(0.696 0.17 162.48);\n    --color-emerald-600: oklch(0.596 0.145 163.225);\n    --color-emerald-700: oklch(0.508 0.118 165.612);\n    --color-emerald-800: oklch(0.432 0.095 166.913);\n    --color-emerald-950: oklch(0.262 0.051 172.552);\n    --color-blue-50: oklch(0.97 0.014 254.604);\n    --color-blue-100: oklch(0.932 0.032 255.585);\n    --color-blue-200: oklch(0.882 0.059 254.128);\n    --color-blue-300: oklch(0.809 0.105 251.813);\n    --color-blue-500: oklch(0.623 0.214 259.815);\n    --color-blue-600: oklch(0.546 0.245 262.881);\n    --color-blue-700: oklch(0.488 0.243 264.376);\n    --color-blue-800: oklch(0.424 0.199 265.638);\n    --color-blue-950: oklch(0.282 0.091 267.935);\n    --color-rose-50: oklch(0.969 0.015 12.422);\n    --color-rose-100: oklch(0.941 0.03 12.58);\n    --color-rose-200: oklch(0.892 0.058 10.001);\n    --color-rose-400: oklch(0.712 0.194 13.428);\n    --color-rose-500: oklch(0.645 0.246 16.439);\n    --color-rose-600: oklch(0.586 0.253 17.585);\n    --color-rose-700: oklch(0.514 0.222 16.935);\n    --color-slate-50: oklch(0.984 0.003 247.858);\n    --color-slate-100: oklch(0.968 0.007 247.896);\n    --color-slate-200: oklch(0.929 0.013 255.508);\n    --color-slate-300: oklch(0.869 0.022 252.894);\n    --color-slate-400: oklch(0.704 0.04 256.788);\n    --color-slate-500: oklch(0.554 0.046 257.417);\n    --color-slate-600: oklch(0.446 0.043 257.281);\n    --color-slate-700: oklch(0.372 0.044 257.287);\n    --color-slate-800: oklch(0.279 0.041 260.031);\n    --color-slate-900: oklch(0.208 0.042 265.755);\n    --color-black: #000;\n    --color-white: #fff;\n    --spacing: 0.25rem;\n    --container-xs: 20rem;\n    --container-xl: 36rem;\n    --container-2xl: 42rem;\n    --container-3xl: 48rem;\n    --container-4xl: 56rem;\n    --container-5xl: 64rem;\n    --text-xs: 0.75rem;\n    --text-xs--line-height: calc(1 / 0.75);\n    --text-sm: 0.875rem;\n    --text-sm--line-height: calc(1.25 / 0.875);\n    --text-base: 1rem;\n    --text-base--line-height: calc(1.5 / 1);\n    --text-lg: 1.125rem;\n    --text-lg--line-height: calc(1.75 / 1.125);\n    --text-xl: 1.25rem;\n    --text-xl--line-height: calc(1.75 / 1.25);\n    --text-2xl: 1.5rem;\n    --text-2xl--line-height: calc(2 / 1.5);\n    --text-3xl: 1.875rem;\n    --text-3xl--line-height: calc(2.25 / 1.875);\n    --text-4xl: 2.25rem;\n    --text-4xl--line-height: calc(2.5 / 2.25);\n    --text-5xl: 3rem;\n    --text-5xl--line-height: 1;\n    --text-6xl: 3.75rem;\n    --text-6xl--line-height: 1;\n    --text-7xl: 4.5rem;\n    --text-7xl--line-height: 1;\n    --font-weight-normal: 400;\n    --font-weight-medium: 500;\n    --font-weight-semibold: 600;\n    --font-weight-bold: 700;\n    --font-weight-black: 900;\n    --tracking-tight: -0.025em;\n    --tracking-wider: 0.05em;\n    --leading-tight: 1.25;\n    --leading-snug: 1.375;\n    --leading-relaxed: 1.625;\n    --radius-md: 0.375rem;\n    --radius-lg: 0.5rem;\n    --radius-xl: 0.75rem;\n    --radius-2xl: 1rem;\n    --radius-3xl: 1.5rem;\n    --animate-spin: spin 1s linear infinite;\n    --animate-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;\n    --blur-2xl: 40px;\n    --blur-3xl: 64px;\n    --default-transition-duration: 150ms;\n    --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);\n    --default-font-family: var(--font-sans);\n    --default-font-feature-settings: var(--font-sans--font-feature-settings);\n    --default-font-variation-settings: var(\n      --font-sans--font-variation-settings\n    );\n    --default-mono-font-family: var(--font-mono);\n    --default-mono-font-feature-settings: var(\n      --font-mono--font-feature-settings\n    );\n    --default-mono-font-variation-settings: var(\n      --font-mono--font-variation-settings\n    );\n  }\n}\n@layer base {\n  *, ::after, ::before, ::backdrop, ::file-selector-button {\n    box-sizing: border-box;\n    margin: 0;\n    padding: 0;\n    border: 0 solid;\n  }\n  html, :host {\n    line-height: 1.5;\n    -webkit-text-size-adjust: 100%;\n    tab-size: 4;\n    font-family: var( --default-font-family, ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\" );\n    font-feature-settings: var(--default-font-feature-settings, normal);\n    font-variation-settings: var( --default-font-variation-settings, normal );\n    -webkit-tap-highlight-color: transparent;\n  }\n  body {\n    line-height: inherit;\n  }\n  hr {\n    height: 0;\n    color: inherit;\n    border-top-width: 1px;\n  }\n  abbr:where([title]) {\n    -webkit-text-decoration: underline dotted;\n    text-decoration: underline dotted;\n  }\n  h1, h2, h3, h4, h5, h6 {\n    font-size: inherit;\n    font-weight: inherit;\n  }\n  a {\n    color: inherit;\n    -webkit-text-decoration: inherit;\n    text-decoration: inherit;\n  }\n  b, strong {\n    font-weight: bolder;\n  }\n  code, kbd, samp, pre {\n    font-family: var( --default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace );\n    font-feature-settings: var( --default-mono-font-feature-settings, normal );\n    font-variation-settings: var( --default-mono-font-variation-settings, normal );\n    font-size: 1em;\n  }\n  small {\n    font-size: 80%;\n  }\n  sub, sup {\n    font-size: 75%;\n    line-height: 0;\n    position: relative;\n    vertical-align: baseline;\n  }\n  sub {\n    bottom: -0.25em;\n  }\n  sup {\n    top: -0.5em;\n  }\n  table {\n    text-indent: 0;\n    border-color: inherit;\n    border-collapse: collapse;\n  }\n  :-moz-focusring {\n    outline: auto;\n  }\n  progress {\n    vertical-align: baseline;\n  }\n  summary {\n    display: list-item;\n  }\n  ol, ul, menu {\n    list-style: none;\n  }\n  img, svg, video, canvas, audio, iframe, embed, object {\n    display: block;\n    vertical-align: middle;\n  }\n  img, video {\n    max-width: 100%;\n    height: auto;\n  }\n  button, input, select, optgroup, textarea, ::file-selector-button {\n    font: inherit;\n    font-feature-settings: inherit;\n    font-variation-settings: inherit;\n    letter-spacing: inherit;\n    color: inherit;\n    border-radius: 0;\n    background-color: transparent;\n    opacity: 1;\n  }\n  :where(select:is([multiple], [size])) optgroup {\n    font-weight: bolder;\n  }\n  :where(select:is([multiple], [size])) optgroup option {\n    padding-inline-start: 20px;\n  }\n  ::file-selector-button {\n    margin-inline-end: 4px;\n  }\n  ::placeholder {\n    opacity: 1;\n    color: currentColor;\n    @supports (color: color-mix(in lab, red, red)) {\n      color: color-mix(in oklab, currentColor 50%, transparent);\n    }\n  }\n  textarea {\n    resize: vertical;\n  }\n  ::-webkit-search-decoration {\n    -webkit-appearance: none;\n  }\n  ::-webkit-date-and-time-value {\n    min-height: 1lh;\n    text-align: inherit;\n  }\n  ::-webkit-datetime-edit {\n    display: inline-flex;\n  }\n  ::-webkit-datetime-edit-fields-wrapper {\n    padding: 0;\n  }\n  ::-webkit-datetime-edit, ::-webkit-datetime-edit-year-field, ::-webkit-datetime-edit-month-field, ::-webkit-datetime-edit-day-field, ::-webkit-datetime-edit-hour-field, ::-webkit-datetime-edit-minute-field, ::-webkit-datetime-edit-second-field, ::-webkit-datetime-edit-millisecond-field, ::-webkit-datetime-edit-meridiem-field {\n    padding-block: 0;\n  }\n  :-moz-ui-invalid {\n    box-shadow: none;\n  }\n  button, input:where([type=\"button\"], [type=\"reset\"], [type=\"submit\"]), ::file-selector-button {\n    appearance: button;\n  }\n  ::-webkit-inner-spin-button, ::-webkit-outer-spin-button {\n    height: auto;\n  }\n  [hidden]:where(:not([hidden=\"until-found\"])) {\n    display: none !important;\n  }\n}\n@layer utilities {\n  .pointer-events-none {\n    pointer-events: none;\n  }\n  .absolute {\n    position: absolute;\n  }\n  .relative {\n    position: relative;\n  }\n  .inset-0 {\n    inset: calc(var(--spacing) * 0);\n  }\n  .-top-3 {\n    top: calc(var(--spacing) * -3);\n  }\n  .-top-32 {\n    top: calc(var(--spacing) * -32);\n  }\n  .top-1\\/2 {\n    top: calc(1 / 2 * 100%);\n  }\n  .top-2\\.5 {\n    top: calc(var(--spacing) * 2.5);\n  }\n  .-right-32 {\n    right: calc(var(--spacing) * -32);\n  }\n  .-bottom-32 {\n    bottom: calc(var(--spacing) * -32);\n  }\n  .-left-3 {\n    left: calc(var(--spacing) * -3);\n  }\n  .-left-32 {\n    left: calc(var(--spacing) * -32);\n  }\n  .left-1\\/2 {\n    left: calc(1 / 2 * 100%);\n  }\n  .left-1\\/3 {\n    left: calc(1 / 3 * 100%);\n  }\n  .z-10 {\n    z-index: 10;\n  }\n  .z-20 {\n    z-index: 20;\n  }\n  .z-30 {\n    z-index: 30;\n  }\n  .z-40 {\n    z-index: 40;\n  }\n  .z-50 {\n    z-index: 50;\n  }\n  .mx-6 {\n    margin-inline: calc(var(--spacing) * 6);\n  }\n  .mx-auto {\n    margin-inline: auto;\n  }\n  .my-4 {\n    margin-block: calc(var(--spacing) * 4);\n  }\n  .-mt-3 {\n    margin-top: calc(var(--spacing) * -3);\n  }\n  .mt-0\\.5 {\n    margin-top: calc(var(--spacing) * 0.5);\n  }\n  .mt-1 {\n    margin-top: calc(var(--spacing) * 1);\n  }\n  .mt-2\\.5 {\n    margin-top: calc(var(--spacing) * 2.5);\n  }\n  .mt-4 {\n    margin-top: calc(var(--spacing) * 4);\n  }\n  .mt-5 {\n    margin-top: calc(var(--spacing) * 5);\n  }\n  .mt-6 {\n    margin-top: calc(var(--spacing) * 6);\n  }\n  .mb-0\\.5 {\n    margin-bottom: calc(var(--spacing) * 0.5);\n  }\n  .mb-1 {\n    margin-bottom: calc(var(--spacing) * 1);\n  }\n  .mb-1\\.5 {\n    margin-bottom: calc(var(--spacing) * 1.5);\n  }\n  .mb-2 {\n    margin-bottom: calc(var(--spacing) * 2);\n  }\n  .mb-3 {\n    margin-bottom: calc(var(--spacing) * 3);\n  }\n  .mb-4 {\n    margin-bottom: calc(var(--spacing) * 4);\n  }\n  .mb-5 {\n    margin-bottom: calc(var(--spacing) * 5);\n  }\n  .mb-6 {\n    margin-bottom: calc(var(--spacing) * 6);\n  }\n  .mb-8 {\n    margin-bottom: calc(var(--spacing) * 8);\n  }\n  .block {\n    display: block;\n  }\n  .flex {\n    display: flex;\n  }\n  .grid {\n    display: grid;\n  }\n  .hidden {\n    display: none;\n  }\n  .inline-block {\n    display: inline-block;\n  }\n  .inline-flex {\n    display: inline-flex;\n  }\n  .h-1\\.5 {\n    height: calc(var(--spacing) * 1.5);\n  }\n  .h-2\\.5 {\n    height: calc(var(--spacing) * 2.5);\n  }\n  .h-3 {\n    height: calc(var(--spacing) * 3);\n  }\n  .h-3\\.5 {\n    height: calc(var(--spacing) * 3.5);\n  }\n  .h-4 {\n    height: calc(var(--spacing) * 4);\n  }\n  .h-5 {\n    height: calc(var(--spacing) * 5);\n  }\n  .h-6 {\n    height: calc(var(--spacing) * 6);\n  }\n  .h-7 {\n    height: calc(var(--spacing) * 7);\n  }\n  .h-8 {\n    height: calc(var(--spacing) * 8);\n  }\n  .h-9 {\n    height: calc(var(--spacing) * 9);\n  }\n  .h-10 {\n    height: calc(var(--spacing) * 10);\n  }\n  .h-11 {\n    height: calc(var(--spacing) * 11);\n  }\n  .h-12 {\n    height: calc(var(--spacing) * 12);\n  }\n  .h-16 {\n    height: calc(var(--spacing) * 16);\n  }\n  .h-28 {\n    height: calc(var(--spacing) * 28);\n  }\n  .h-96 {\n    height: calc(var(--spacing) * 96);\n  }\n  .h-\\[32rem\\] {\n    height: 32rem;\n  }\n  .h-\\[40rem\\] {\n    height: 40rem;\n  }\n  .h-\\[45rem\\] {\n    height: 45rem;\n  }\n  .h-\\[740px\\] {\n    height: 740px;\n  }\n  .h-\\[920px\\] {\n    height: 920px;\n  }\n  .h-full {\n    height: 100%;\n  }\n  .min-h-\\[700px\\] {\n    min-height: 700px;\n  }\n  .w-1\\.5 {\n    width: calc(var(--spacing) * 1.5);\n  }\n  .w-2\\.5 {\n    width: calc(var(--spacing) * 2.5);\n  }\n  .w-3 {\n    width: calc(var(--spacing) * 3);\n  }\n  .w-3\\.5 {\n    width: calc(var(--spacing) * 3.5);\n  }\n  .w-4 {\n    width: calc(var(--spacing) * 4);\n  }\n  .w-5 {\n    width: calc(var(--spacing) * 5);\n  }\n  .w-6 {\n    width: calc(var(--spacing) * 6);\n  }\n  .w-7 {\n    width: calc(var(--spacing) * 7);\n  }\n  .w-8 {\n    width: calc(var(--spacing) * 8);\n  }\n  .w-9 {\n    width: calc(var(--spacing) * 9);\n  }\n  .w-10 {\n    width: calc(var(--spacing) * 10);\n  }\n  .w-11 {\n    width: calc(var(--spacing) * 11);\n  }\n  .w-12 {\n    width: calc(var(--spacing) * 12);\n  }\n  .w-16 {\n    width: calc(var(--spacing) * 16);\n  }\n  .w-28 {\n    width: calc(var(--spacing) * 28);\n  }\n  .w-96 {\n    width: calc(var(--spacing) * 96);\n  }\n  .w-\\[32rem\\] {\n    width: 32rem;\n  }\n  .w-\\[40rem\\] {\n    width: 40rem;\n  }\n  .w-\\[45rem\\] {\n    width: 45rem;\n  }\n  .w-\\[360px\\] {\n    width: 360px;\n  }\n  .w-\\[440px\\] {\n    width: 440px;\n  }\n  .w-\\[1600px\\] {\n    width: 1600px;\n  }\n  .w-full {\n    width: 100%;\n  }\n  .w-max {\n    width: max-content;\n  }\n  .max-w-2xl {\n    max-width: var(--container-2xl);\n  }\n  .max-w-3xl {\n    max-width: var(--container-3xl);\n  }\n  .max-w-4xl {\n    max-width: var(--container-4xl);\n  }\n  .max-w-5xl {\n    max-width: var(--container-5xl);\n  }\n  .max-w-\\[200px\\] {\n    max-width: 200px;\n  }\n  .max-w-\\[1560px\\] {\n    max-width: 1560px;\n  }\n  .max-w-\\[1720px\\] {\n    max-width: 1720px;\n  }\n  .max-w-xl {\n    max-width: var(--container-xl);\n  }\n  .max-w-xs {\n    max-width: var(--container-xs);\n  }\n  .flex-1 {\n    flex: 1;\n  }\n  .shrink-0 {\n    flex-shrink: 0;\n  }\n  .origin-center {\n    transform-origin: center;\n  }\n  .-translate-x-1\\/2 {\n    --tw-translate-x: calc(calc(1 / 2 * 100%) * -1);\n    translate: var(--tw-translate-x) var(--tw-translate-y);\n  }\n  .-translate-y-1\\/2 {\n    --tw-translate-y: calc(calc(1 / 2 * 100%) * -1);\n    translate: var(--tw-translate-x) var(--tw-translate-y);\n  }\n  .-rotate-90 {\n    rotate: calc(90deg * -1);\n  }\n  .transform {\n    transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);\n  }\n  .animate-pulse {\n    animation: var(--animate-pulse);\n  }\n  .animate-spin {\n    animation: var(--animate-spin);\n  }\n  .cursor-pointer {\n    cursor: pointer;\n  }\n  .grid-cols-1 {\n    grid-template-columns: repeat(1, minmax(0, 1fr));\n  }\n  .grid-cols-2 {\n    grid-template-columns: repeat(2, minmax(0, 1fr));\n  }\n  .flex-col {\n    flex-direction: column;\n  }\n  .items-center {\n    align-items: center;\n  }\n  .items-start {\n    align-items: flex-start;\n  }\n  .justify-between {\n    justify-content: space-between;\n  }\n  .justify-center {\n    justify-content: center;\n  }\n  .justify-end {\n    justify-content: flex-end;\n  }\n  .gap-1 {\n    gap: calc(var(--spacing) * 1);\n  }\n  .gap-1\\.5 {\n    gap: calc(var(--spacing) * 1.5);\n  }\n  .gap-2 {\n    gap: calc(var(--spacing) * 2);\n  }\n  .gap-2\\.5 {\n    gap: calc(var(--spacing) * 2.5);\n  }\n  .gap-3 {\n    gap: calc(var(--spacing) * 3);\n  }\n  .gap-3\\.5 {\n    gap: calc(var(--spacing) * 3.5);\n  }\n  .gap-4 {\n    gap: calc(var(--spacing) * 4);\n  }\n  .gap-5 {\n    gap: calc(var(--spacing) * 5);\n  }\n  .gap-6 {\n    gap: calc(var(--spacing) * 6);\n  }\n  .gap-8 {\n    gap: calc(var(--spacing) * 8);\n  }\n  .space-y-2\\.5 {\n    :where(& > :not(:last-child)) {\n      --tw-space-y-reverse: 0;\n      margin-block-start: calc(calc(var(--spacing) * 2.5) * var(--tw-space-y-reverse));\n      margin-block-end: calc(calc(var(--spacing) * 2.5) * calc(1 - var(--tw-space-y-reverse)));\n    }\n  }\n  .space-y-3 {\n    :where(& > :not(:last-child)) {\n      --tw-space-y-reverse: 0;\n      margin-block-start: calc(calc(var(--spacing) * 3) * var(--tw-space-y-reverse));\n      margin-block-end: calc(calc(var(--spacing) * 3) * calc(1 - var(--tw-space-y-reverse)));\n    }\n  }\n  .space-y-3\\.5 {\n    :where(& > :not(:last-child)) {\n      --tw-space-y-reverse: 0;\n      margin-block-start: calc(calc(var(--spacing) * 3.5) * var(--tw-space-y-reverse));\n      margin-block-end: calc(calc(var(--spacing) * 3.5) * calc(1 - var(--tw-space-y-reverse)));\n    }\n  }\n  .truncate {\n    overflow: hidden;\n    text-overflow: ellipsis;\n    white-space: nowrap;\n  }\n  .overflow-hidden {\n    overflow: hidden;\n  }\n  .rounded {\n    border-radius: 0.25rem;\n  }\n  .rounded-2xl {\n    border-radius: var(--radius-2xl);\n  }\n  .rounded-3xl {\n    border-radius: var(--radius-3xl);\n  }\n  .rounded-\\[42px\\] {\n    border-radius: 42px;\n  }\n  .rounded-\\[44px\\] {\n    border-radius: 44px;\n  }\n  .rounded-\\[52px\\] {\n    border-radius: 52px;\n  }\n  .rounded-full {\n    border-radius: calc(infinity * 1px);\n  }\n  .rounded-lg {\n    border-radius: var(--radius-lg);\n  }\n  .rounded-md {\n    border-radius: var(--radius-md);\n  }\n  .rounded-xl {\n    border-radius: var(--radius-xl);\n  }\n  .border {\n    border-style: var(--tw-border-style);\n    border-width: 1px;\n  }\n  .border-2 {\n    border-style: var(--tw-border-style);\n    border-width: 2px;\n  }\n  .border-4 {\n    border-style: var(--tw-border-style);\n    border-width: 4px;\n  }\n  .border-\\[10px\\] {\n    border-style: var(--tw-border-style);\n    border-width: 10px;\n  }\n  .border-t {\n    border-top-style: var(--tw-border-style);\n    border-top-width: 1px;\n  }\n  .border-b {\n    border-bottom-style: var(--tw-border-style);\n    border-bottom-width: 1px;\n  }\n  .border-amber-200 {\n    border-color: var(--color-amber-200);\n  }\n  .border-amber-300 {\n    border-color: var(--color-amber-300);\n  }\n  .border-amber-500\\/20 {\n    border-color: color-mix(in srgb, oklch(0.769 0.188 70.08) 20%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      border-color: color-mix(in oklab, var(--color-amber-500) 20%, transparent);\n    }\n  }\n  .border-amber-500\\/30 {\n    border-color: color-mix(in srgb, oklch(0.769 0.188 70.08) 30%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      border-color: color-mix(in oklab, var(--color-amber-500) 30%, transparent);\n    }\n  }\n  .border-black\\/20 {\n    border-color: color-mix(in srgb, #000 20%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      border-color: color-mix(in oklab, var(--color-black) 20%, transparent);\n    }\n  }\n  .border-blue-200 {\n    border-color: var(--color-blue-200);\n  }\n  .border-blue-300 {\n    border-color: var(--color-blue-300);\n  }\n  .border-emerald-200 {\n    border-color: var(--color-emerald-200);\n  }\n  .border-emerald-300 {\n    border-color: var(--color-emerald-300);\n  }\n  .border-emerald-500\\/20 {\n    border-color: color-mix(in srgb, oklch(0.696 0.17 162.48) 20%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      border-color: color-mix(in oklab, var(--color-emerald-500) 20%, transparent);\n    }\n  }\n  .border-emerald-500\\/30 {\n    border-color: color-mix(in srgb, oklch(0.696 0.17 162.48) 30%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      border-color: color-mix(in oklab, var(--color-emerald-500) 30%, transparent);\n    }\n  }\n  .border-orange-100 {\n    border-color: var(--color-orange-100);\n  }\n  .border-orange-200 {\n    border-color: var(--color-orange-200);\n  }\n  .border-orange-200\\/60 {\n    border-color: color-mix(in srgb, oklch(0.901 0.076 70.697) 60%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      border-color: color-mix(in oklab, var(--color-orange-200) 60%, transparent);\n    }\n  }\n  .border-orange-200\\/80 {\n    border-color: color-mix(in srgb, oklch(0.901 0.076 70.697) 80%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      border-color: color-mix(in oklab, var(--color-orange-200) 80%, transparent);\n    }\n  }\n  .border-orange-300 {\n    border-color: var(--color-orange-300);\n  }\n  .border-orange-500 {\n    border-color: var(--color-orange-500);\n  }\n  .border-rose-200 {\n    border-color: var(--color-rose-200);\n  }\n  .border-rose-500\\/20 {\n    border-color: color-mix(in srgb, oklch(0.645 0.246 16.439) 20%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      border-color: color-mix(in oklab, var(--color-rose-500) 20%, transparent);\n    }\n  }\n  .border-rose-500\\/30 {\n    border-color: color-mix(in srgb, oklch(0.645 0.246 16.439) 30%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      border-color: color-mix(in oklab, var(--color-rose-500) 30%, transparent);\n    }\n  }\n  .border-slate-100 {\n    border-color: var(--color-slate-100);\n  }\n  .border-slate-200 {\n    border-color: var(--color-slate-200);\n  }\n  .border-slate-200\\/90 {\n    border-color: color-mix(in srgb, oklch(0.929 0.013 255.508) 90%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      border-color: color-mix(in oklab, var(--color-slate-200) 90%, transparent);\n    }\n  }\n  .border-slate-300 {\n    border-color: var(--color-slate-300);\n  }\n  .border-slate-700\\/80 {\n    border-color: color-mix(in srgb, oklch(0.372 0.044 257.287) 80%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      border-color: color-mix(in oklab, var(--color-slate-700) 80%, transparent);\n    }\n  }\n  .border-slate-800 {\n    border-color: var(--color-slate-800);\n  }\n  .border-slate-900 {\n    border-color: var(--color-slate-900);\n  }\n  .bg-\\[\\#fcece3\\] {\n    background-color: #fcece3;\n  }\n  .bg-amber-50 {\n    background-color: var(--color-amber-50);\n  }\n  .bg-amber-50\\/50 {\n    background-color: color-mix(in srgb, oklch(0.987 0.022 95.277) 50%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-amber-50) 50%, transparent);\n    }\n  }\n  .bg-amber-100 {\n    background-color: var(--color-amber-100);\n  }\n  .bg-amber-200\\/40 {\n    background-color: color-mix(in srgb, oklch(0.924 0.12 95.746) 40%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-amber-200) 40%, transparent);\n    }\n  }\n  .bg-amber-400 {\n    background-color: var(--color-amber-400);\n  }\n  .bg-amber-600 {\n    background-color: var(--color-amber-600);\n  }\n  .bg-black {\n    background-color: var(--color-black);\n  }\n  .bg-black\\/40 {\n    background-color: color-mix(in srgb, #000 40%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-black) 40%, transparent);\n    }\n  }\n  .bg-blue-50 {\n    background-color: var(--color-blue-50);\n  }\n  .bg-blue-50\\/40 {\n    background-color: color-mix(in srgb, oklch(0.97 0.014 254.604) 40%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-blue-50) 40%, transparent);\n    }\n  }\n  .bg-blue-100 {\n    background-color: var(--color-blue-100);\n  }\n  .bg-current {\n    background-color: currentcolor;\n  }\n  .bg-emerald-50 {\n    background-color: var(--color-emerald-50);\n  }\n  .bg-emerald-50\\/40 {\n    background-color: color-mix(in srgb, oklch(0.979 0.021 166.113) 40%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-emerald-50) 40%, transparent);\n    }\n  }\n  .bg-emerald-50\\/70 {\n    background-color: color-mix(in srgb, oklch(0.979 0.021 166.113) 70%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-emerald-50) 70%, transparent);\n    }\n  }\n  .bg-emerald-100 {\n    background-color: var(--color-emerald-100);\n  }\n  .bg-emerald-100\\/80 {\n    background-color: color-mix(in srgb, oklch(0.95 0.052 163.051) 80%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-emerald-100) 80%, transparent);\n    }\n  }\n  .bg-emerald-400 {\n    background-color: var(--color-emerald-400);\n  }\n  .bg-emerald-500 {\n    background-color: var(--color-emerald-500);\n  }\n  .bg-emerald-600 {\n    background-color: var(--color-emerald-600);\n  }\n  .bg-orange-50 {\n    background-color: var(--color-orange-50);\n  }\n  .bg-orange-50\\/30 {\n    background-color: color-mix(in srgb, oklch(0.98 0.016 73.684) 30%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-orange-50) 30%, transparent);\n    }\n  }\n  .bg-orange-50\\/40 {\n    background-color: color-mix(in srgb, oklch(0.98 0.016 73.684) 40%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-orange-50) 40%, transparent);\n    }\n  }\n  .bg-orange-100 {\n    background-color: var(--color-orange-100);\n  }\n  .bg-orange-100\\/40 {\n    background-color: color-mix(in srgb, oklch(0.954 0.038 75.164) 40%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-orange-100) 40%, transparent);\n    }\n  }\n  .bg-orange-100\\/70 {\n    background-color: color-mix(in srgb, oklch(0.954 0.038 75.164) 70%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-orange-100) 70%, transparent);\n    }\n  }\n  .bg-orange-200\\/40 {\n    background-color: color-mix(in srgb, oklch(0.901 0.076 70.697) 40%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-orange-200) 40%, transparent);\n    }\n  }\n  .bg-orange-400\\/20 {\n    background-color: color-mix(in srgb, oklch(0.75 0.183 55.934) 20%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-orange-400) 20%, transparent);\n    }\n  }\n  .bg-orange-600 {\n    background-color: var(--color-orange-600);\n  }\n  .bg-orange-600\\/30 {\n    background-color: color-mix(in srgb, oklch(0.646 0.222 41.116) 30%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-orange-600) 30%, transparent);\n    }\n  }\n  .bg-orange-950 {\n    background-color: var(--color-orange-950);\n  }\n  .bg-rose-50 {\n    background-color: var(--color-rose-50);\n  }\n  .bg-rose-50\\/40 {\n    background-color: color-mix(in srgb, oklch(0.969 0.015 12.422) 40%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-rose-50) 40%, transparent);\n    }\n  }\n  .bg-rose-100 {\n    background-color: var(--color-rose-100);\n  }\n  .bg-rose-100\\/40 {\n    background-color: color-mix(in srgb, oklch(0.941 0.03 12.58) 40%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-rose-100) 40%, transparent);\n    }\n  }\n  .bg-rose-400 {\n    background-color: var(--color-rose-400);\n  }\n  .bg-slate-50 {\n    background-color: var(--color-slate-50);\n  }\n  .bg-slate-100 {\n    background-color: var(--color-slate-100);\n  }\n  .bg-slate-100\\/90 {\n    background-color: color-mix(in srgb, oklch(0.968 0.007 247.896) 90%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-slate-100) 90%, transparent);\n    }\n  }\n  .bg-slate-100\\/95 {\n    background-color: color-mix(in srgb, oklch(0.968 0.007 247.896) 95%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-slate-100) 95%, transparent);\n    }\n  }\n  .bg-slate-200 {\n    background-color: var(--color-slate-200);\n  }\n  .bg-slate-200\\/70 {\n    background-color: color-mix(in srgb, oklch(0.929 0.013 255.508) 70%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-slate-200) 70%, transparent);\n    }\n  }\n  .bg-slate-800 {\n    background-color: var(--color-slate-800);\n  }\n  .bg-slate-900 {\n    background-color: var(--color-slate-900);\n  }\n  .bg-white {\n    background-color: var(--color-white);\n  }\n  .bg-white\\/20 {\n    background-color: color-mix(in srgb, #fff 20%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-white) 20%, transparent);\n    }\n  }\n  .bg-white\\/70 {\n    background-color: color-mix(in srgb, #fff 70%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-white) 70%, transparent);\n    }\n  }\n  .bg-white\\/90 {\n    background-color: color-mix(in srgb, #fff 90%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-white) 90%, transparent);\n    }\n  }\n  .bg-white\\/95 {\n    background-color: color-mix(in srgb, #fff 95%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      background-color: color-mix(in oklab, var(--color-white) 95%, transparent);\n    }\n  }\n  .bg-gradient-to-r {\n    --tw-gradient-position: to right in oklab;\n    background-image: linear-gradient(var(--tw-gradient-stops));\n  }\n  .bg-radial {\n    --tw-gradient-position: in oklab;\n    background-image: radial-gradient(var(--tw-gradient-stops));\n  }\n  .from-orange-200\\/30 {\n    --tw-gradient-from: color-mix(in srgb, oklch(0.901 0.076 70.697) 30%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      --tw-gradient-from: color-mix(in oklab, var(--color-orange-200) 30%, transparent);\n    }\n    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));\n  }\n  .from-orange-600 {\n    --tw-gradient-from: var(--color-orange-600);\n    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));\n  }\n  .via-amber-600 {\n    --tw-gradient-via: var(--color-amber-600);\n    --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);\n    --tw-gradient-stops: var(--tw-gradient-via-stops);\n  }\n  .via-transparent {\n    --tw-gradient-via: transparent;\n    --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);\n    --tw-gradient-stops: var(--tw-gradient-via-stops);\n  }\n  .to-orange-500 {\n    --tw-gradient-to: var(--color-orange-500);\n    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));\n  }\n  .to-transparent {\n    --tw-gradient-to: transparent;\n    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));\n  }\n  .bg-clip-text {\n    background-clip: text;\n  }\n  .object-contain {\n    object-fit: contain;\n  }\n  .object-cover {\n    object-fit: cover;\n  }\n  .object-top {\n    object-position: top;\n  }\n  .p-1 {\n    padding: calc(var(--spacing) * 1);\n  }\n  .p-2 {\n    padding: calc(var(--spacing) * 2);\n  }\n  .p-2\\.5 {\n    padding: calc(var(--spacing) * 2.5);\n  }\n  .p-3 {\n    padding: calc(var(--spacing) * 3);\n  }\n  .p-3\\.5 {\n    padding: calc(var(--spacing) * 3.5);\n  }\n  .p-4 {\n    padding: calc(var(--spacing) * 4);\n  }\n  .p-5 {\n    padding: calc(var(--spacing) * 5);\n  }\n  .p-6 {\n    padding: calc(var(--spacing) * 6);\n  }\n  .p-7 {\n    padding: calc(var(--spacing) * 7);\n  }\n  .p-8 {\n    padding: calc(var(--spacing) * 8);\n  }\n  .p-10 {\n    padding: calc(var(--spacing) * 10);\n  }\n  .p-12 {\n    padding: calc(var(--spacing) * 12);\n  }\n  .p-14 {\n    padding: calc(var(--spacing) * 14);\n  }\n  .p-16 {\n    padding: calc(var(--spacing) * 16);\n  }\n  .px-1\\.5 {\n    padding-inline: calc(var(--spacing) * 1.5);\n  }\n  .px-2 {\n    padding-inline: calc(var(--spacing) * 2);\n  }\n  .px-2\\.5 {\n    padding-inline: calc(var(--spacing) * 2.5);\n  }\n  .px-3 {\n    padding-inline: calc(var(--spacing) * 3);\n  }\n  .px-3\\.5 {\n    padding-inline: calc(var(--spacing) * 3.5);\n  }\n  .px-4 {\n    padding-inline: calc(var(--spacing) * 4);\n  }\n  .px-5 {\n    padding-inline: calc(var(--spacing) * 5);\n  }\n  .px-6 {\n    padding-inline: calc(var(--spacing) * 6);\n  }\n  .py-0\\.5 {\n    padding-block: calc(var(--spacing) * 0.5);\n  }\n  .py-1 {\n    padding-block: calc(var(--spacing) * 1);\n  }\n  .py-1\\.5 {\n    padding-block: calc(var(--spacing) * 1.5);\n  }\n  .py-2 {\n    padding-block: calc(var(--spacing) * 2);\n  }\n  .py-2\\.5 {\n    padding-block: calc(var(--spacing) * 2.5);\n  }\n  .py-3 {\n    padding-block: calc(var(--spacing) * 3);\n  }\n  .pt-2 {\n    padding-top: calc(var(--spacing) * 2);\n  }\n  .pt-3 {\n    padding-top: calc(var(--spacing) * 3);\n  }\n  .pt-4 {\n    padding-top: calc(var(--spacing) * 4);\n  }\n  .pt-5 {\n    padding-top: calc(var(--spacing) * 5);\n  }\n  .pr-0 {\n    padding-right: calc(var(--spacing) * 0);\n  }\n  .pb-2 {\n    padding-bottom: calc(var(--spacing) * 2);\n  }\n  .pb-3 {\n    padding-bottom: calc(var(--spacing) * 3);\n  }\n  .pb-4 {\n    padding-bottom: calc(var(--spacing) * 4);\n  }\n  .pb-6 {\n    padding-bottom: calc(var(--spacing) * 6);\n  }\n  .text-center {\n    text-align: center;\n  }\n  .text-left {\n    text-align: left;\n  }\n  .text-right {\n    text-align: right;\n  }\n  .font-mono {\n    font-family: var(--font-mono);\n  }\n  .text-2xl {\n    font-size: var(--text-2xl);\n    line-height: var(--tw-leading, var(--text-2xl--line-height));\n  }\n  .text-3xl {\n    font-size: var(--text-3xl);\n    line-height: var(--tw-leading, var(--text-3xl--line-height));\n  }\n  .text-4xl {\n    font-size: var(--text-4xl);\n    line-height: var(--tw-leading, var(--text-4xl--line-height));\n  }\n  .text-6xl {\n    font-size: var(--text-6xl);\n    line-height: var(--tw-leading, var(--text-6xl--line-height));\n  }\n  .text-base {\n    font-size: var(--text-base);\n    line-height: var(--tw-leading, var(--text-base--line-height));\n  }\n  .text-lg {\n    font-size: var(--text-lg);\n    line-height: var(--tw-leading, var(--text-lg--line-height));\n  }\n  .text-sm {\n    font-size: var(--text-sm);\n    line-height: var(--tw-leading, var(--text-sm--line-height));\n  }\n  .text-xl {\n    font-size: var(--text-xl);\n    line-height: var(--tw-leading, var(--text-xl--line-height));\n  }\n  .text-xs {\n    font-size: var(--text-xs);\n    line-height: var(--tw-leading, var(--text-xs--line-height));\n  }\n  .text-\\[10px\\] {\n    font-size: 10px;\n  }\n  .text-\\[11px\\] {\n    font-size: 11px;\n  }\n  .leading-none {\n    --tw-leading: 1;\n    line-height: 1;\n  }\n  .leading-relaxed {\n    --tw-leading: var(--leading-relaxed);\n    line-height: var(--leading-relaxed);\n  }\n  .leading-snug {\n    --tw-leading: var(--leading-snug);\n    line-height: var(--leading-snug);\n  }\n  .leading-tight {\n    --tw-leading: var(--leading-tight);\n    line-height: var(--leading-tight);\n  }\n  .font-black {\n    --tw-font-weight: var(--font-weight-black);\n    font-weight: var(--font-weight-black);\n  }\n  .font-bold {\n    --tw-font-weight: var(--font-weight-bold);\n    font-weight: var(--font-weight-bold);\n  }\n  .font-medium {\n    --tw-font-weight: var(--font-weight-medium);\n    font-weight: var(--font-weight-medium);\n  }\n  .font-normal {\n    --tw-font-weight: var(--font-weight-normal);\n    font-weight: var(--font-weight-normal);\n  }\n  .font-semibold {\n    --tw-font-weight: var(--font-weight-semibold);\n    font-weight: var(--font-weight-semibold);\n  }\n  .tracking-tight {\n    --tw-tracking: var(--tracking-tight);\n    letter-spacing: var(--tracking-tight);\n  }\n  .tracking-wider {\n    --tw-tracking: var(--tracking-wider);\n    letter-spacing: var(--tracking-wider);\n  }\n  .text-amber-300 {\n    color: var(--color-amber-300);\n  }\n  .text-amber-500 {\n    color: var(--color-amber-500);\n  }\n  .text-amber-600 {\n    color: var(--color-amber-600);\n  }\n  .text-amber-700 {\n    color: var(--color-amber-700);\n  }\n  .text-amber-800 {\n    color: var(--color-amber-800);\n  }\n  .text-amber-950 {\n    color: var(--color-amber-950);\n  }\n  .text-blue-600 {\n    color: var(--color-blue-600);\n  }\n  .text-blue-700 {\n    color: var(--color-blue-700);\n  }\n  .text-blue-800 {\n    color: var(--color-blue-800);\n  }\n  .text-blue-950 {\n    color: var(--color-blue-950);\n  }\n  .text-emerald-600 {\n    color: var(--color-emerald-600);\n  }\n  .text-emerald-700 {\n    color: var(--color-emerald-700);\n  }\n  .text-emerald-800 {\n    color: var(--color-emerald-800);\n  }\n  .text-emerald-950 {\n    color: var(--color-emerald-950);\n  }\n  .text-orange-400 {\n    color: var(--color-orange-400);\n  }\n  .text-orange-600 {\n    color: var(--color-orange-600);\n  }\n  .text-orange-700 {\n    color: var(--color-orange-700);\n  }\n  .text-orange-800 {\n    color: var(--color-orange-800);\n  }\n  .text-orange-950 {\n    color: var(--color-orange-950);\n  }\n  .text-rose-600 {\n    color: var(--color-rose-600);\n  }\n  .text-rose-700 {\n    color: var(--color-rose-700);\n  }\n  .text-slate-300 {\n    color: var(--color-slate-300);\n  }\n  .text-slate-400 {\n    color: var(--color-slate-400);\n  }\n  .text-slate-500 {\n    color: var(--color-slate-500);\n  }\n  .text-slate-600 {\n    color: var(--color-slate-600);\n  }\n  .text-slate-700 {\n    color: var(--color-slate-700);\n  }\n  .text-slate-800 {\n    color: var(--color-slate-800);\n  }\n  .text-slate-900 {\n    color: var(--color-slate-900);\n  }\n  .text-transparent {\n    color: transparent;\n  }\n  .text-white {\n    color: var(--color-white);\n  }\n  .uppercase {\n    text-transform: uppercase;\n  }\n  .italic {\n    font-style: italic;\n  }\n  .line-through {\n    text-decoration-line: line-through;\n  }\n  .opacity-60 {\n    opacity: 60%;\n  }\n  .opacity-80 {\n    opacity: 80%;\n  }\n  .shadow-2xl {\n    --tw-shadow: 0 25px 50px -12px var(--tw-shadow-color, rgb(0 0 0 / 0.25));\n    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);\n  }\n  .shadow-2xs {\n    --tw-shadow: 0 1px var(--tw-shadow-color, rgb(0 0 0 / 0.05));\n    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);\n  }\n  .shadow-lg {\n    --tw-shadow: 0 10px 15px -3px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 4px 6px -4px var(--tw-shadow-color, rgb(0 0 0 / 0.1));\n    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);\n  }\n  .shadow-md {\n    --tw-shadow: 0 4px 6px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 2px 4px -2px var(--tw-shadow-color, rgb(0 0 0 / 0.1));\n    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);\n  }\n  .shadow-sm {\n    --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));\n    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);\n  }\n  .shadow-xl {\n    --tw-shadow: 0 20px 25px -5px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 8px 10px -6px var(--tw-shadow-color, rgb(0 0 0 / 0.1));\n    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);\n  }\n  .shadow-xs {\n    --tw-shadow: 0 1px 2px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.05));\n    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);\n  }\n  .ring-2 {\n    --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);\n    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);\n  }\n  .shadow-amber-500\\/10 {\n    --tw-shadow-color: color-mix(in srgb, oklch(0.769 0.188 70.08) 10%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-amber-500) 10%, transparent) var(--tw-shadow-alpha), transparent);\n    }\n  }\n  .shadow-blue-500\\/10 {\n    --tw-shadow-color: color-mix(in srgb, oklch(0.623 0.214 259.815) 10%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-blue-500) 10%, transparent) var(--tw-shadow-alpha), transparent);\n    }\n  }\n  .shadow-emerald-500\\/10 {\n    --tw-shadow-color: color-mix(in srgb, oklch(0.696 0.17 162.48) 10%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-emerald-500) 10%, transparent) var(--tw-shadow-alpha), transparent);\n    }\n  }\n  .shadow-orange-500\\/10 {\n    --tw-shadow-color: color-mix(in srgb, oklch(0.705 0.213 47.604) 10%, transparent);\n    @supports (color: color-mix(in lab, red, red)) {\n      --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-orange-500) 10%, transparent) var(--tw-shadow-alpha), transparent);\n    }\n  }\n  .ring-orange-200 {\n    --tw-ring-color: var(--color-orange-200);\n  }\n  .blur-2xl {\n    --tw-blur: blur(var(--blur-2xl));\n    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);\n  }\n  .blur-3xl {\n    --tw-blur: blur(var(--blur-3xl));\n    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);\n  }\n  .filter {\n    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);\n  }\n  .backdrop-blur {\n    --tw-backdrop-blur: blur(8px);\n    -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);\n    backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);\n  }\n  .transition-all {\n    transition-property: all;\n    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));\n    transition-duration: var(--tw-duration, var(--default-transition-duration));\n  }\n  .transition-transform {\n    transition-property: transform, translate, scale, rotate;\n    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));\n    transition-duration: var(--tw-duration, var(--default-transition-duration));\n  }\n  .select-none {\n    -webkit-user-select: none;\n    user-select: none;\n  }\n  .hover\\:bg-orange-700 {\n    &:hover {\n      @media (hover: hover) {\n        background-color: var(--color-orange-700);\n      }\n    }\n  }\n  .hover\\:bg-slate-700 {\n    &:hover {\n      @media (hover: hover) {\n        background-color: var(--color-slate-700);\n      }\n    }\n  }\n  .md\\:inline-block {\n    @media (width >= 48rem) {\n      display: inline-block;\n    }\n  }\n  .md\\:h-36 {\n    @media (width >= 48rem) {\n      height: calc(var(--spacing) * 36);\n    }\n  }\n  .md\\:w-36 {\n    @media (width >= 48rem) {\n      width: calc(var(--spacing) * 36);\n    }\n  }\n  .md\\:grid-cols-2 {\n    @media (width >= 48rem) {\n      grid-template-columns: repeat(2, minmax(0, 1fr));\n    }\n  }\n  .md\\:grid-cols-3 {\n    @media (width >= 48rem) {\n      grid-template-columns: repeat(3, minmax(0, 1fr));\n    }\n  }\n  .md\\:border-r {\n    @media (width >= 48rem) {\n      border-right-style: var(--tw-border-style);\n      border-right-width: 1px;\n    }\n  }\n  .md\\:border-b-0 {\n    @media (width >= 48rem) {\n      border-bottom-style: var(--tw-border-style);\n      border-bottom-width: 0px;\n    }\n  }\n  .md\\:pr-6 {\n    @media (width >= 48rem) {\n      padding-right: calc(var(--spacing) * 6);\n    }\n  }\n  .md\\:pb-0 {\n    @media (width >= 48rem) {\n      padding-bottom: calc(var(--spacing) * 0);\n    }\n  }\n  .md\\:text-2xl {\n    @media (width >= 48rem) {\n      font-size: var(--text-2xl);\n      line-height: var(--tw-leading, var(--text-2xl--line-height));\n    }\n  }\n  .md\\:text-5xl {\n    @media (width >= 48rem) {\n      font-size: var(--text-5xl);\n      line-height: var(--tw-leading, var(--text-5xl--line-height));\n    }\n  }\n  .md\\:text-7xl {\n    @media (width >= 48rem) {\n      font-size: var(--text-7xl);\n      line-height: var(--tw-leading, var(--text-7xl--line-height));\n    }\n  }\n  .md\\:text-base {\n    @media (width >= 48rem) {\n      font-size: var(--text-base);\n      line-height: var(--tw-leading, var(--text-base--line-height));\n    }\n  }\n  .md\\:text-lg {\n    @media (width >= 48rem) {\n      font-size: var(--text-lg);\n      line-height: var(--tw-leading, var(--text-lg--line-height));\n    }\n  }\n  .md\\:text-sm {\n    @media (width >= 48rem) {\n      font-size: var(--text-sm);\n      line-height: var(--tw-leading, var(--text-sm--line-height));\n    }\n  }\n  .md\\:text-xl {\n    @media (width >= 48rem) {\n      font-size: var(--text-xl);\n      line-height: var(--tw-leading, var(--text-xl--line-height));\n    }\n  }\n}\n@property --tw-translate-x {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: 0;\n}\n@property --tw-translate-y {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: 0;\n}\n@property --tw-translate-z {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: 0;\n}\n@property --tw-rotate-x {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-rotate-y {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-rotate-z {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-skew-x {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-skew-y {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-space-y-reverse {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: 0;\n}\n@property --tw-border-style {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: solid;\n}\n@property --tw-gradient-position {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-gradient-from {\n  syntax: \"<color>\";\n  inherits: false;\n  initial-value: #0000;\n}\n@property --tw-gradient-via {\n  syntax: \"<color>\";\n  inherits: false;\n  initial-value: #0000;\n}\n@property --tw-gradient-to {\n  syntax: \"<color>\";\n  inherits: false;\n  initial-value: #0000;\n}\n@property --tw-gradient-stops {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-gradient-via-stops {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-gradient-from-position {\n  syntax: \"<length-percentage>\";\n  inherits: false;\n  initial-value: 0%;\n}\n@property --tw-gradient-via-position {\n  syntax: \"<length-percentage>\";\n  inherits: false;\n  initial-value: 50%;\n}\n@property --tw-gradient-to-position {\n  syntax: \"<length-percentage>\";\n  inherits: false;\n  initial-value: 100%;\n}\n@property --tw-leading {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-font-weight {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-tracking {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-shadow {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: 0 0 #0000;\n}\n@property --tw-shadow-color {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-shadow-alpha {\n  syntax: \"<percentage>\";\n  inherits: false;\n  initial-value: 100%;\n}\n@property --tw-inset-shadow {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: 0 0 #0000;\n}\n@property --tw-inset-shadow-color {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-inset-shadow-alpha {\n  syntax: \"<percentage>\";\n  inherits: false;\n  initial-value: 100%;\n}\n@property --tw-ring-color {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-ring-shadow {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: 0 0 #0000;\n}\n@property --tw-inset-ring-color {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-inset-ring-shadow {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: 0 0 #0000;\n}\n@property --tw-ring-inset {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-ring-offset-width {\n  syntax: \"<length>\";\n  inherits: false;\n  initial-value: 0px;\n}\n@property --tw-ring-offset-color {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: #fff;\n}\n@property --tw-ring-offset-shadow {\n  syntax: \"*\";\n  inherits: false;\n  initial-value: 0 0 #0000;\n}\n@property --tw-blur {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-brightness {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-contrast {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-grayscale {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-hue-rotate {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-invert {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-opacity {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-saturate {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-sepia {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-drop-shadow {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-drop-shadow-color {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-drop-shadow-alpha {\n  syntax: \"<percentage>\";\n  inherits: false;\n  initial-value: 100%;\n}\n@property --tw-drop-shadow-size {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-backdrop-blur {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-backdrop-brightness {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-backdrop-contrast {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-backdrop-grayscale {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-backdrop-hue-rotate {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-backdrop-invert {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-backdrop-opacity {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-backdrop-saturate {\n  syntax: \"*\";\n  inherits: false;\n}\n@property --tw-backdrop-sepia {\n  syntax: \"*\";\n  inherits: false;\n}\n@keyframes spin {\n  to {\n    transform: rotate(360deg);\n  }\n}\n@keyframes pulse {\n  50% {\n    opacity: 0.5;\n  }\n}\n@layer properties {\n  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {\n    *, ::before, ::after, ::backdrop {\n      --tw-translate-x: 0;\n      --tw-translate-y: 0;\n      --tw-translate-z: 0;\n      --tw-rotate-x: initial;\n      --tw-rotate-y: initial;\n      --tw-rotate-z: initial;\n      --tw-skew-x: initial;\n      --tw-skew-y: initial;\n      --tw-space-y-reverse: 0;\n      --tw-border-style: solid;\n      --tw-gradient-position: initial;\n      --tw-gradient-from: #0000;\n      --tw-gradient-via: #0000;\n      --tw-gradient-to: #0000;\n      --tw-gradient-stops: initial;\n      --tw-gradient-via-stops: initial;\n      --tw-gradient-from-position: 0%;\n      --tw-gradient-via-position: 50%;\n      --tw-gradient-to-position: 100%;\n      --tw-leading: initial;\n      --tw-font-weight: initial;\n      --tw-tracking: initial;\n      --tw-shadow: 0 0 #0000;\n      --tw-shadow-color: initial;\n      --tw-shadow-alpha: 100%;\n      --tw-inset-shadow: 0 0 #0000;\n      --tw-inset-shadow-color: initial;\n      --tw-inset-shadow-alpha: 100%;\n      --tw-ring-color: initial;\n      --tw-ring-shadow: 0 0 #0000;\n      --tw-inset-ring-color: initial;\n      --tw-inset-ring-shadow: 0 0 #0000;\n      --tw-ring-inset: initial;\n      --tw-ring-offset-width: 0px;\n      --tw-ring-offset-color: #fff;\n      --tw-ring-offset-shadow: 0 0 #0000;\n      --tw-blur: initial;\n      --tw-brightness: initial;\n      --tw-contrast: initial;\n      --tw-grayscale: initial;\n      --tw-hue-rotate: initial;\n      --tw-invert: initial;\n      --tw-opacity: initial;\n      --tw-saturate: initial;\n      --tw-sepia: initial;\n      --tw-drop-shadow: initial;\n      --tw-drop-shadow-color: initial;\n      --tw-drop-shadow-alpha: 100%;\n      --tw-drop-shadow-size: initial;\n      --tw-backdrop-blur: initial;\n      --tw-backdrop-brightness: initial;\n      --tw-backdrop-contrast: initial;\n      --tw-backdrop-grayscale: initial;\n      --tw-backdrop-hue-rotate: initial;\n      --tw-backdrop-invert: initial;\n      --tw-backdrop-opacity: initial;\n      --tw-backdrop-saturate: initial;\n      --tw-backdrop-sepia: initial;\n    }\n  }\n}\n"],"sourceRoot":""}]);
 // Exports
 /* export default */ const __rspack_default_export = (___CSS_LOADER_EXPORT___);
 
@@ -19683,7 +19894,7 @@ function styleTagTransform(css, styleElement) {
 module.exports = styleTagTransform;
 
 },
-9378(__unused_rspack_module, __unused_rspack___webpack_exports__, __webpack_require__) {
+4228(__unused_rspack_module, __unused_rspack___webpack_exports__, __webpack_require__) {
 
 // EXTERNAL MODULE: ./node_modules/remotion/dist/esm/index.mjs
 var esm = __webpack_require__(3947);
@@ -21084,7 +21295,7 @@ const Scene3_SolutionPillars = ()=>{
     });
 };
 
-;// CONCATENATED MODULE: ./node_modules/lucide-react/dist/esm/icons/calendar.mjs
+;// CONCATENATED MODULE: ./node_modules/lucide-react/dist/esm/icons/list-filter.mjs
 /**
  * @license lucide-react v1.52.0 - ISC
  *
@@ -21094,45 +21305,20 @@ const Scene3_SolutionPillars = ()=>{
 
 
 
-const calendar_iconData = {
-  name: "calendar",
+const list_filter_iconData = {
+  name: "list-filter",
   size: 24,
   node: [
-    ["path", { d: "M8 2v3", key: "1ioesn" }],
-    ["path", { d: "M16 2v3", key: "otl347" }],
-    ["rect", { x: "3", y: "3", width: "18", height: "18", rx: "2", key: "h1oib" }],
-    ["path", { d: "M3 9h18", key: "1pudct" }]
+    ["path", { d: "M2 5h20", key: "1fs1ex" }],
+    ["path", { d: "M6 12h12", key: "8npq4p" }],
+    ["path", { d: "M9 19h6", key: "456am0" }]
   ]
 };
-calendar_iconData.node;
-const Calendar = createLucideIcon(calendar_iconData);
+list_filter_iconData.node;
+const ListFilter = createLucideIcon(list_filter_iconData);
 
 
-//# sourceMappingURL=calendar.mjs.map
-
-;// CONCATENATED MODULE: ./node_modules/lucide-react/dist/esm/icons/clock.mjs
-/**
- * @license lucide-react v1.52.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-
-
-
-const clock_iconData = {
-  name: "clock",
-  size: 24,
-  node: [
-    ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-    ["path", { d: "M12 6v6l4 2", key: "mmk7yg" }]
-  ]
-};
-clock_iconData.node;
-const Clock = createLucideIcon(clock_iconData);
-
-
-//# sourceMappingURL=clock.mjs.map
+//# sourceMappingURL=list-filter.mjs.map
 
 ;// CONCATENATED MODULE: ./node_modules/lucide-react/dist/esm/icons/lock.mjs
 /**
@@ -21158,112 +21344,53 @@ const Lock = createLucideIcon(lock_iconData);
 
 //# sourceMappingURL=lock.mjs.map
 
-;// CONCATENATED MODULE: ./node_modules/lucide-react/dist/esm/icons/monitor.mjs
-/**
- * @license lucide-react v1.52.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-
-
-
-const monitor_iconData = {
-  name: "monitor",
-  size: 24,
-  node: [
-    ["rect", { width: "20", height: "14", x: "2", y: "3", rx: "2", key: "48i651" }],
-    ["line", { x1: "8", x2: "16", y1: "21", y2: "21", key: "1svkeh" }],
-    ["line", { x1: "12", x2: "12", y1: "17", y2: "21", key: "vw1qmm" }]
-  ]
-};
-monitor_iconData.node;
-const Monitor = createLucideIcon(monitor_iconData);
-
-
-//# sourceMappingURL=monitor.mjs.map
-
-;// CONCATENATED MODULE: ./src/components/BrowserMockup.tsx
+;// CONCATENATED MODULE: ./src/components/CinematicScreenView.tsx
 
 
 
 
-const BrowserMockup = ({ url = "https://kilastugas.vercel.app", children, subtitle, device = "desktop", className = "" })=>{
-    if (device === "mobile") {
-        return /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-            className: `w-[440px] rounded-[44px] border-[10px] border-slate-900 bg-white shadow-2xl overflow-hidden flex flex-col ${className}`,
-            style: {
-                fontFamily: theme.fonts.sans
-            },
-            children: [
-                /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
-                    className: "bg-slate-900 pt-3 pb-2 flex justify-center items-center",
-                    children: /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
-                        className: "w-28 h-5 bg-black rounded-full flex items-center justify-end px-3",
-                        children: /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
-                            className: "w-2.5 h-2.5 bg-slate-800 rounded-full"
-                        })
-                    })
-                }),
-                /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                    className: "bg-slate-100 px-4 py-2 border-b border-slate-200 flex items-center justify-between text-xs text-slate-600",
-                    children: [
-                        /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                            className: "flex items-center gap-1.5 font-medium truncate",
-                            children: [
-                                /*#__PURE__*/ (0,jsx_runtime.jsx)(Lock, {
-                                    className: "w-3 h-3 text-emerald-600"
-                                }),
-                                /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                    className: "truncate",
-                                    children: url.replace("https://", "")
-                                })
-                            ]
-                        }),
-                        /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                            className: "text-[10px] font-bold uppercase tracking-wider text-slate-400 bg-slate-200 px-1.5 py-0.5 rounded",
-                            children: "Mobile MVP"
-                        })
-                    ]
-                }),
-                /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
-                    className: "flex-1 overflow-hidden bg-[#fcece3] relative",
-                    children: children
-                })
-            ]
-        });
-    }
+
+const CinematicScreenView = ({ imageSrc, scale = 1, originX = 50, originY = 50, rotateX = 0, rotateY = 0, children })=>{
     return /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-        className: `w-full max-w-[1560px] rounded-2xl border border-slate-200 bg-white shadow-2xl overflow-hidden flex flex-col ${className}`,
+        className: "w-full h-full flex items-center justify-center relative overflow-hidden",
         style: {
+            perspective: 1400,
+            backgroundColor: theme.colors.bgWarm,
             fontFamily: theme.fonts.sans
         },
         children: [
+            /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
+                className: "absolute inset-0 bg-radial from-orange-200/30 via-transparent to-transparent blur-2xl pointer-events-none"
+            }),
             /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                className: "bg-slate-100/90 backdrop-blur px-5 py-3 border-b border-slate-200 flex items-center justify-between",
+                className: "w-[1600px] h-[920px] rounded-2xl bg-white border border-slate-300 shadow-2xl overflow-hidden flex flex-col relative transition-transform",
+                style: {
+                    transform: `perspective(1400px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
+                    boxShadow: "0 25px 60px -15px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.05)"
+                },
                 children: [
                     /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                        className: "flex items-center gap-2",
-                        children: [
-                            /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
-                                className: "w-3.5 h-3.5 rounded-full bg-rose-400 border border-rose-500/30"
-                            }),
-                            /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
-                                className: "w-3.5 h-3.5 rounded-full bg-amber-400 border border-amber-500/30"
-                            }),
-                            /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
-                                className: "w-3.5 h-3.5 rounded-full bg-emerald-400 border border-emerald-500/30"
-                            })
-                        ]
-                    }),
-                    /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                        className: "flex-1 max-w-xl mx-6 bg-white border border-slate-200 rounded-lg px-3.5 py-1.5 flex items-center justify-between text-sm shadow-xs",
+                        className: "h-11 bg-slate-100/95 border-b border-slate-200/90 px-4 flex items-center justify-between shrink-0 select-none z-30",
                         children: [
                             /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                className: "flex items-center gap-2 text-slate-700 font-mono text-xs",
+                                className: "flex items-center gap-2",
+                                children: [
+                                    /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
+                                        className: "w-3 h-3 rounded-full bg-rose-400 border border-rose-500/20"
+                                    }),
+                                    /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
+                                        className: "w-3 h-3 rounded-full bg-amber-400 border border-amber-500/20"
+                                    }),
+                                    /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
+                                        className: "w-3 h-3 rounded-full bg-emerald-400 border border-emerald-500/20"
+                                    })
+                                ]
+                            }),
+                            /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
+                                className: "flex items-center gap-2 bg-white border border-slate-200 rounded-lg px-4 py-1 text-xs font-mono text-slate-700 shadow-2xs",
                                 children: [
                                     /*#__PURE__*/ (0,jsx_runtime.jsx)(Lock, {
-                                        className: "w-3.5 h-3.5 text-emerald-600"
+                                        className: "w-3 h-3 text-emerald-600"
                                     }),
                                     /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
                                         className: "text-emerald-700 font-semibold",
@@ -21271,451 +21398,351 @@ const BrowserMockup = ({ url = "https://kilastugas.vercel.app", children, subtit
                                     }),
                                     /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
                                         className: "text-slate-900 font-medium",
-                                        children: url.replace("https://", "")
+                                        children: "kilastugas.vercel.app"
                                     })
                                 ]
                             }),
                             /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                className: "flex items-center gap-1.5 text-[11px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full font-medium",
+                                className: "flex items-center gap-2 text-[11px] font-semibold text-emerald-700 bg-emerald-100/80 px-2.5 py-0.5 rounded-full",
                                 children: [
                                     /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
                                         className: "w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"
                                     }),
-                                    "Live MVP"
+                                    "Live App Production"
                                 ]
                             })
                         ]
                     }),
                     /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                        className: "flex items-center gap-3 text-xs text-slate-500",
+                        className: "flex-1 w-full h-full relative overflow-hidden bg-[#fcece3]",
                         children: [
-                            subtitle && /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                className: "hidden md:inline-block font-medium text-slate-600 bg-slate-200/70 px-2.5 py-1 rounded-md",
-                                children: subtitle
+                            /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
+                                className: "w-full h-full absolute inset-0 origin-center transition-transform",
+                                style: {
+                                    transform: `scale(${scale})`,
+                                    transformOrigin: `${originX}% ${originY}%`
+                                },
+                                children: /*#__PURE__*/ (0,jsx_runtime.jsx)(esm.Img, {
+                                    src: (0,esm.staticFile)(imageSrc),
+                                    className: "w-full h-full object-cover object-top",
+                                    alt: "Real Application Screen"
+                                })
                             }),
                             /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
-                                className: "flex items-center gap-1 bg-white border border-slate-200 rounded-md p-1",
-                                children: /*#__PURE__*/ (0,jsx_runtime.jsx)(Monitor, {
-                                    className: "w-3.5 h-3.5 text-slate-700"
-                                })
+                                className: "absolute inset-0 pointer-events-none z-40",
+                                children: children
                             })
                         ]
                     })
                 ]
-            }),
-            /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
-                className: "flex-1 overflow-hidden bg-[#fcece3] relative min-h-[700px]",
-                children: children
             })
         ]
     });
 };
 
-;// CONCATENATED MODULE: ./src/scenes/Scene4_WalkthroughInput.tsx
+;// CONCATENATED MODULE: ./src/components/AnimatedCursor.tsx
 
 
 
-
-
-
-const Scene4_WalkthroughInput = ()=>{
+const AnimatedCursor = ({ startX, startY, endX, endY, startFrame, clickFrame })=>{
     const frame = (0,esm.useCurrentFrame)();
     const { fps } = (0,esm.useVideoConfig)();
-    // Stage timeline
-    // 0 - 30: Modal form shown with filled inputs
-    // 30 - 55: Click button + AI loading spinner
-    // 55+: Subtasks revealed one by one
-    const isFormPhase = frame < 40;
-    const isLoadingPhase = frame >= 40 && frame < 70;
-    const isResultPhase = frame >= 70;
-    const formSpring = (0,esm.spring)({
-        frame,
+    // Move progress
+    const moveSpring = (0,esm.spring)({
+        frame: frame - startFrame,
         fps,
         config: {
-            damping: 14
+            damping: 18,
+            mass: 0.8
         }
     });
-    const buttonClickSpring = (0,esm.spring)({
-        frame: frame - 38,
+    const currentX = (0,esm.interpolate)(moveSpring, [
+        0,
+        1
+    ], [
+        startX,
+        endX
+    ]);
+    const currentY = (0,esm.interpolate)(moveSpring, [
+        0,
+        1
+    ], [
+        startY,
+        endY
+    ]);
+    // Click pulse animation
+    const isClicking = clickFrame !== undefined && frame >= clickFrame;
+    const clickSpring = isClicking ? (0,esm.spring)({
+        frame: frame - clickFrame,
         fps,
         config: {
-            damping: 8,
+            damping: 10,
             mass: 0.5
         }
-    });
-    const subtasks = [
-        {
-            step: 1,
-            title: "Hitung alokasi IP VLSM untuk 4 subnet",
-            desc: "Tentukan prefix /27, /28, /29 dan tabel alamat broadcast.",
-            dur: "45 mnt",
-            day: "Hari Ini (Offset 0)",
-            accent: "border-orange-200 bg-orange-50/30"
-        },
-        {
-            step: 2,
-            title: "Rancang topologi di Packet Tracer & konfigurasi OSPF",
-            desc: "Hubungkan 3 router 2911, masukkan perintah router ospf 1.",
-            dur: "60 mnt",
-            day: "Besok (Offset +1)",
-            accent: "border-slate-200 bg-white"
-        },
-        {
-            step: 3,
-            title: "Uji ping antar host & catat tabel routing CLI",
-            desc: "Simulasikan kegagalan link kabel dan rekam output terminal.",
-            dur: "45 mnt",
-            day: "H+2 (Offset +2)",
-            accent: "border-slate-200 bg-white"
-        },
-        {
-            step: 4,
-            title: "Tulis bab pembahasan analisis performa OSPF",
-            desc: "Bandingkan metrik konvergensi routing dinamis vs statis.",
-            dur: "60 mnt",
-            day: "H+3 (Offset +3)",
-            accent: "border-slate-200 bg-white"
-        },
-        {
-            step: 5,
-            title: "Finalisasi format laporan & ekspor ke PDF",
-            desc: "Cek pedoman margin, daftar pustaka IEEE, dan export PDF.",
-            dur: "30 mnt",
-            day: "H+4 (Offset +4)",
-            accent: "border-slate-200 bg-white"
-        }
-    ];
+    }) : 0;
+    const cursorScale = isClicking ? (0,esm.interpolate)(clickSpring, [
+        0,
+        0.4,
+        1
+    ], [
+        1,
+        0.8,
+        1
+    ]) : 1;
+    const rippleScale = isClicking ? (0,esm.interpolate)(clickSpring, [
+        0,
+        1
+    ], [
+        0.5,
+        2.5
+    ]) : 0;
+    const rippleOpacity = isClicking ? (0,esm.interpolate)(clickSpring, [
+        0,
+        0.8,
+        1
+    ], [
+        0.8,
+        0.4,
+        0
+    ]) : 0;
+    if (frame < startFrame) return null;
     return /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-        className: "w-full h-full flex flex-col justify-between p-10 relative overflow-hidden",
+        className: "absolute pointer-events-none z-50 select-none",
         style: {
-            backgroundColor: theme.colors.bgWarm,
-            fontFamily: theme.fonts.sans
+            left: `${currentX}%`,
+            top: `${currentY}%`,
+            transform: "translate(-3px, -3px)"
         },
         children: [
-            /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                className: "flex items-center justify-between mb-4",
-                children: [
-                    /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                        children: [
-                            /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                className: "text-xs font-bold uppercase tracking-wider text-orange-700 bg-orange-100 border border-orange-200 px-3 py-1 rounded-full",
-                                children: "Live MVP Walkthrough • User Experience (10%)"
-                            }),
-                            /*#__PURE__*/ (0,jsx_runtime.jsxs)("h2", {
-                                className: "text-3xl font-black text-slate-900 mt-1",
-                                children: [
-                                    "Input Tugas & AI Breakdown ",
-                                    /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                        className: "text-orange-600",
-                                        children: "Instan (<2 Detik)"
-                                    })
-                                ]
-                            })
-                        ]
-                    }),
-                    /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                        className: "flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-2xs text-xs font-mono text-slate-700",
-                        children: [
-                            /*#__PURE__*/ (0,jsx_runtime.jsx)(Sparkles, {
-                                className: "w-3.5 h-3.5 text-orange-600 animate-spin"
-                            }),
-                            /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                children: "9Router Gemini AI + Smart Cache"
-                            })
-                        ]
-                    })
-                ]
+            isClicking && /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
+                className: "absolute -top-3 -left-3 w-8 h-8 rounded-full border-2 border-orange-500 bg-orange-400/20",
+                style: {
+                    transform: `scale(${rippleScale})`,
+                    opacity: rippleOpacity
+                }
             }),
-            /*#__PURE__*/ (0,jsx_runtime.jsx)(BrowserMockup, {
-                url: "https://kilastugas.vercel.app",
-                subtitle: "Alur Penguraian Tugas Mahasiswa",
-                children: /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                    className: "p-8 h-full flex items-center justify-center",
-                    children: [
-                        (isFormPhase || isLoadingPhase) && /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                            style: {
-                                transform: `scale(${(0,esm.interpolate)(formSpring, [
-                                    0,
-                                    1
-                                ], [
-                                    0.92,
-                                    1
-                                ])})`,
-                                opacity: formSpring
-                            },
-                            className: "w-full max-w-2xl bg-white rounded-3xl border border-slate-200 p-7 shadow-2xl relative",
-                            children: [
-                                /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                    className: "flex items-center justify-between pb-4 border-b border-slate-100 mb-5",
-                                    children: [
-                                        /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                            className: "flex items-center gap-3",
-                                            children: [
-                                                /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
-                                                    className: "w-9 h-9 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center font-bold",
-                                                    children: "+"
-                                                }),
-                                                /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                                    children: [
-                                                        /*#__PURE__*/ (0,jsx_runtime.jsx)("h3", {
-                                                            className: "text-lg font-bold text-slate-900",
-                                                            children: "Tambah Tugas Baru"
-                                                        }),
-                                                        /*#__PURE__*/ (0,jsx_runtime.jsx)("p", {
-                                                            className: "text-xs text-slate-500",
-                                                            children: "AI memecah silabus tugas menjadi aksi harian terukur"
-                                                        })
-                                                    ]
-                                                })
-                                            ]
-                                        }),
-                                        /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                            className: "text-xs font-semibold px-2.5 py-1 rounded-md bg-orange-50 text-orange-700 border border-orange-200",
-                                            children: "Praktikum Lab"
-                                        })
-                                    ]
-                                }),
-                                /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                    className: "space-y-3.5",
-                                    children: [
-                                        /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                            children: [
-                                                /*#__PURE__*/ (0,jsx_runtime.jsx)("label", {
-                                                    className: "block text-xs font-semibold text-slate-700 mb-1",
-                                                    children: "Judul Tugas"
-                                                }),
-                                                /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
-                                                    className: "px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-sm font-medium text-slate-800",
-                                                    children: "Laporan Akhir Routing Dinamis OSPF & VLSM"
-                                                })
-                                            ]
-                                        }),
-                                        /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                            className: "grid grid-cols-2 gap-3",
-                                            children: [
-                                                /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                                    children: [
-                                                        /*#__PURE__*/ (0,jsx_runtime.jsx)("label", {
-                                                            className: "block text-xs font-semibold text-slate-700 mb-1",
-                                                            children: "Mata Kuliah"
-                                                        }),
-                                                        /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
-                                                            className: "px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-sm font-medium text-slate-800",
-                                                            children: "Jaringan Komputer"
-                                                        })
-                                                    ]
-                                                }),
-                                                /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                                    children: [
-                                                        /*#__PURE__*/ (0,jsx_runtime.jsx)("label", {
-                                                            className: "block text-xs font-semibold text-slate-700 mb-1",
-                                                            children: "Batas Waktu (Deadline)"
-                                                        }),
-                                                        /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                                            className: "px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-sm font-medium text-slate-800 flex items-center justify-between",
-                                                            children: [
-                                                                /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                                                    children: "Jumat, 10 Okt (5 Hari Lagi)"
-                                                                }),
-                                                                /*#__PURE__*/ (0,jsx_runtime.jsx)(Calendar, {
-                                                                    className: "w-3.5 h-3.5 text-slate-400"
-                                                                })
-                                                            ]
-                                                        })
-                                                    ]
-                                                })
-                                            ]
-                                        }),
-                                        /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                            children: [
-                                                /*#__PURE__*/ (0,jsx_runtime.jsx)("label", {
-                                                    className: "block text-xs font-semibold text-slate-700 mb-1",
-                                                    children: "Instruksi Tugas / Silabus Dosen"
-                                                }),
-                                                /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
-                                                    className: "px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 leading-relaxed font-mono",
-                                                    children: '"Susun laporan praktikum 5 bab: topologi jaringan, subnetting VLSM 4 subnet, routing OSPF Packet Tracer, pengujian ping, dan analisis konvergensi."'
-                                                })
-                                            ]
-                                        }),
-                                        /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
-                                            className: "pt-2",
-                                            children: /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
-                                                style: {
-                                                    transform: isFormPhase ? `scale(${(0,esm.interpolate)(buttonClickSpring, [
-                                                        0,
-                                                        1
-                                                    ], [
-                                                        1,
-                                                        0.96
-                                                    ])})` : "scale(1)"
-                                                },
-                                                className: `w-full py-3 rounded-xl font-bold text-sm shadow-md flex items-center justify-center gap-2 transition-all ${isLoadingPhase ? "bg-slate-900 text-white" : "bg-orange-600 text-white hover:bg-orange-700"}`,
-                                                children: isLoadingPhase ? /*#__PURE__*/ (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, {
-                                                    children: [
-                                                        /*#__PURE__*/ (0,jsx_runtime.jsx)(Sparkles, {
-                                                            className: "w-4 h-4 animate-spin text-amber-300"
-                                                        }),
-                                                        /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                                            children: "Mengurai Instruksi dengan AI & Smart Cache..."
-                                                        })
-                                                    ]
-                                                }) : /*#__PURE__*/ (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, {
-                                                    children: [
-                                                        /*#__PURE__*/ (0,jsx_runtime.jsx)(Sparkles, {
-                                                            className: "w-4 h-4"
-                                                        }),
-                                                        /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                                            children: "Pecah Tugas Jadi Aksi Harian (5 Langkah)"
-                                                        })
-                                                    ]
-                                                })
-                                            })
-                                        })
-                                    ]
-                                })
-                            ]
-                        }),
-                        isResultPhase && /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                            className: "w-full max-w-4xl bg-white rounded-3xl border border-slate-200 p-6 shadow-2xl flex flex-col gap-4",
-                            children: [
-                                /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                    className: "flex items-center justify-between pb-3 border-b border-slate-100",
-                                    children: [
-                                        /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                            className: "flex items-center gap-3",
-                                            children: [
-                                                /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                                    className: "w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"
-                                                }),
-                                                /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                                    children: [
-                                                        /*#__PURE__*/ (0,jsx_runtime.jsx)("h3", {
-                                                            className: "text-base font-bold text-slate-900",
-                                                            children: "Laporan Akhir Routing Dinamis OSPF & VLSM"
-                                                        }),
-                                                        /*#__PURE__*/ (0,jsx_runtime.jsx)("p", {
-                                                            className: "text-xs text-slate-500",
-                                                            children: "5 Sub-Tugas Harian Terstruktur • Target Selesai H-1 Deadline"
-                                                        })
-                                                    ]
-                                                })
-                                            ]
-                                        }),
-                                        /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                            className: "flex items-center gap-2",
-                                            children: [
-                                                /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                                    className: "text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full",
-                                                    children: "\uD83D\uDFE2 On Track"
-                                                }),
-                                                /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                                    className: "text-xs font-mono text-slate-400 bg-slate-100 px-2 py-1 rounded-md",
-                                                    children: "Resp: 1.2s"
-                                                })
-                                            ]
-                                        })
-                                    ]
-                                }),
-                                /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
-                                    className: "space-y-2.5",
-                                    children: subtasks.map((st, i)=>{
-                                        const itemSpring = (0,esm.spring)({
-                                            frame: frame - (70 + i * 8),
-                                            fps,
-                                            config: {
-                                                damping: 14
-                                            }
-                                        });
-                                        return /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                            style: {
-                                                transform: `translateY(${(0,esm.interpolate)(itemSpring, [
-                                                    0,
-                                                    1
-                                                ], [
-                                                    20,
-                                                    0
-                                                ])}px)`,
-                                                opacity: itemSpring
-                                            },
-                                            className: `p-3.5 rounded-2xl border transition-all flex items-center justify-between shadow-2xs ${st.accent}`,
-                                            children: [
-                                                /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                                    className: "flex items-center gap-3.5",
-                                                    children: [
-                                                        /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
-                                                            className: "w-7 h-7 rounded-xl bg-orange-100 text-orange-700 font-bold text-xs flex items-center justify-center shrink-0",
-                                                            children: st.step
-                                                        }),
-                                                        /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                                            children: [
-                                                                /*#__PURE__*/ (0,jsx_runtime.jsx)("h4", {
-                                                                    className: "text-sm font-bold text-slate-900 leading-snug",
-                                                                    children: st.title
-                                                                }),
-                                                                /*#__PURE__*/ (0,jsx_runtime.jsx)("p", {
-                                                                    className: "text-xs text-slate-500 leading-tight",
-                                                                    children: st.desc
-                                                                })
-                                                            ]
-                                                        })
-                                                    ]
-                                                }),
-                                                /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                                    className: "flex items-center gap-3 shrink-0",
-                                                    children: [
-                                                        /*#__PURE__*/ (0,jsx_runtime.jsxs)("span", {
-                                                            className: "flex items-center gap-1 text-xs font-mono font-semibold text-slate-600 bg-slate-100 px-2 py-1 rounded-lg",
-                                                            children: [
-                                                                /*#__PURE__*/ (0,jsx_runtime.jsx)(Clock, {
-                                                                    className: "w-3 h-3 text-slate-400"
-                                                                }),
-                                                                st.dur
-                                                            ]
-                                                        }),
-                                                        /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                                            className: "text-xs font-medium text-orange-700 bg-orange-100/70 px-2.5 py-1 rounded-lg",
-                                                            children: st.day
-                                                        })
-                                                    ]
-                                                })
-                                            ]
-                                        }, st.step);
-                                    })
-                                })
-                            ]
-                        })
-                    ]
+            /*#__PURE__*/ (0,jsx_runtime.jsx)("svg", {
+                width: "28",
+                height: "28",
+                viewBox: "0 0 24 24",
+                fill: "none",
+                style: {
+                    transform: `scale(${cursorScale})`,
+                    filter: "drop-shadow(0 2px 5px rgba(0, 0, 0, 0.35))"
+                },
+                children: /*#__PURE__*/ (0,jsx_runtime.jsx)("path", {
+                    d: "M3 3L10.07 20.97L12.58 13.58L19.97 11.07L3 3Z",
+                    fill: "#111113",
+                    stroke: "#ffffff",
+                    strokeWidth: "1.5",
+                    strokeLinejoin: "round"
                 })
             })
         ]
     });
 };
 
-;// CONCATENATED MODULE: ./node_modules/lucide-react/dist/esm/icons/circle-check.mjs
-/**
- * @license lucide-react v1.52.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
+;// CONCATENATED MODULE: ./src/components/FloatingBadge.tsx
 
 
 
-const circle_check_iconData = {
-  name: "circle-check",
-  size: 24,
-  node: [
-    ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
-    ["path", { d: "m16 9-5.5 5.5L8 12", key: "xofnsj" }]
-  ],
-  aliases: ["check-circle-2"]
+
+const FloatingBadge = ({ x, y, delay = 0, icon, title, subtitle, themeColor = "orange" })=>{
+    const frame = (0,esm.useCurrentFrame)();
+    const { fps } = (0,esm.useVideoConfig)();
+    const progress = (0,esm.spring)({
+        frame: frame - delay,
+        fps,
+        config: {
+            damping: 14,
+            mass: 0.8
+        }
+    });
+    if (frame < delay) return null;
+    const colorStyles = {
+        orange: "border-orange-300 bg-white/95 text-orange-950 shadow-orange-500/10",
+        emerald: "border-emerald-300 bg-white/95 text-emerald-950 shadow-emerald-500/10",
+        blue: "border-blue-300 bg-white/95 text-blue-950 shadow-blue-500/10",
+        amber: "border-amber-300 bg-white/95 text-amber-950 shadow-amber-500/10"
+    };
+    const scale = (0,esm.interpolate)(progress, [
+        0,
+        1
+    ], [
+        0.6,
+        1
+    ]);
+    const translateY = (0,esm.interpolate)(progress, [
+        0,
+        1
+    ], [
+        15,
+        0
+    ]);
+    return /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
+        className: `absolute z-40 rounded-2xl border px-4 py-2.5 shadow-xl backdrop-blur flex items-center gap-3 transition-transform ${colorStyles[themeColor]}`,
+        style: {
+            left: `${x}%`,
+            top: `${y}%`,
+            transform: `translate(-50%, -50%) translateY(${translateY}px) scale(${scale})`,
+            fontFamily: theme.fonts.sans
+        },
+        children: [
+            icon && /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
+                className: "w-8 h-8 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center shrink-0",
+                children: icon
+            }),
+            /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
+                children: [
+                    /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
+                        className: "text-xs font-black tracking-tight uppercase leading-none",
+                        children: title
+                    }),
+                    subtitle && /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
+                        className: "text-[11px] text-slate-600 font-medium mt-0.5 leading-snug",
+                        children: subtitle
+                    })
+                ]
+            })
+        ]
+    });
 };
-circle_check_iconData.node;
-const CircleCheck = createLucideIcon(circle_check_iconData);
+
+;// CONCATENATED MODULE: ./src/scenes/RealDemo_01_InputAndBreakdown.tsx
 
 
-//# sourceMappingURL=circle-check.mjs.map
+
+
+
+
+
+const RealDemo_01_InputAndBreakdown = ()=>{
+    const frame = (0,esm.useCurrentFrame)();
+    const { fps } = (0,esm.useVideoConfig)();
+    // Sequence phases:
+    // 0 - 50: Initial Dashboard -> Cursor moves to Add Task button & clicks at frame 40
+    // 50 - 130: Modal Open & Camera Zooms into form -> Cursor clicks submit at frame 120
+    // 130 - 240: AI Breakdown result appears (real 04_dashboard_with_tasks.png) -> Camera pans across subtasks
+    let currentImage = "real_captures/01_dashboard_initial.png";
+    if (frame >= 45 && frame < 90) {
+        currentImage = "real_captures/02_modal_open.png";
+    } else if (frame >= 90 && frame < 135) {
+        currentImage = "real_captures/03_modal_filled.png";
+    } else if (frame >= 135) {
+        currentImage = "real_captures/04_dashboard_with_tasks.png";
+    }
+    // Camera zoom dynamics
+    let cameraScale = 1;
+    let originX = 50;
+    let originY = 50;
+    let rotateY = 0;
+    if (frame >= 45 && frame < 135) {
+        // Zoom into the real modal center
+        const zoomSpring = (0,esm.spring)({
+            frame: frame - 45,
+            fps,
+            config: {
+                damping: 16
+            }
+        });
+        cameraScale = (0,esm.interpolate)(zoomSpring, [
+            0,
+            1
+        ], [
+            1,
+            1.45
+        ]);
+        originX = 50;
+        originY = 55;
+        rotateY = (0,esm.interpolate)(zoomSpring, [
+            0,
+            1
+        ], [
+            0,
+            -2
+        ]);
+    } else if (frame >= 135) {
+        // Pull back and pan slightly across the generated cards
+        const revealSpring = (0,esm.spring)({
+            frame: frame - 135,
+            fps,
+            config: {
+                damping: 14
+            }
+        });
+        cameraScale = (0,esm.interpolate)(revealSpring, [
+            0,
+            1
+        ], [
+            1.4,
+            1.08
+        ]);
+        originX = 50;
+        originY = 60;
+        rotateY = (0,esm.interpolate)(revealSpring, [
+            0,
+            1
+        ], [
+            -2,
+            0
+        ]);
+    }
+    return /*#__PURE__*/ (0,jsx_runtime.jsxs)(CinematicScreenView, {
+        imageSrc: currentImage,
+        scale: cameraScale,
+        originX: originX,
+        originY: originY,
+        rotateY: rotateY,
+        children: [
+            frame < 55 && /*#__PURE__*/ (0,jsx_runtime.jsx)(AnimatedCursor, {
+                startX: 40,
+                startY: 60,
+                endX: 82,
+                endY: 6,
+                startFrame: 5,
+                clickFrame: 42
+            }),
+            frame >= 90 && frame < 140 && /*#__PURE__*/ (0,jsx_runtime.jsx)(AnimatedCursor, {
+                startX: 50,
+                startY: 50,
+                endX: 63,
+                endY: 23,
+                startFrame: 95,
+                clickFrame: 125
+            }),
+            frame >= 15 && frame < 45 && /*#__PURE__*/ (0,jsx_runtime.jsx)(FloatingBadge, {
+                x: 82,
+                y: 15,
+                delay: 15,
+                title: "Klik Tambah Tugas",
+                subtitle: "Buka formulir cerdas KilasTugas",
+                themeColor: "orange"
+            }),
+            frame >= 55 && frame < 130 && /*#__PURE__*/ (0,jsx_runtime.jsx)(FloatingBadge, {
+                x: 50,
+                y: 18,
+                delay: 60,
+                icon: /*#__PURE__*/ (0,jsx_runtime.jsx)(ListFilter, {
+                    className: "w-4 h-4 text-orange-600"
+                }),
+                title: "Input Instruksi Silabus",
+                subtitle: "Pilih kategori praktikum & tentukan target langkah (Otomatis AI)",
+                themeColor: "orange"
+            }),
+            frame >= 140 && /*#__PURE__*/ (0,jsx_runtime.jsx)(FloatingBadge, {
+                x: 50,
+                y: 12,
+                delay: 145,
+                icon: /*#__PURE__*/ (0,jsx_runtime.jsx)(Sparkles, {
+                    className: "w-4 h-4 text-amber-500 animate-spin"
+                }),
+                title: "Hasil AI Breakdown Instan (<2s)",
+                subtitle: "Instruksi panjang diurai menjadi aksi konkret harian",
+                themeColor: "emerald"
+            })
+        ]
+    });
+};
 
 ;// CONCATENATED MODULE: ./node_modules/lucide-react/dist/esm/icons/volume-2.mjs
 /**
@@ -21748,7 +21775,7 @@ const Volume2 = createLucideIcon(volume_2_iconData);
 
 //# sourceMappingURL=volume-2.mjs.map
 
-;// CONCATENATED MODULE: ./node_modules/lucide-react/dist/esm/icons/pause.mjs
+;// CONCATENATED MODULE: ./node_modules/lucide-react/dist/esm/icons/trending-up.mjs
 /**
  * @license lucide-react v1.52.0 - ISC
  *
@@ -21758,351 +21785,158 @@ const Volume2 = createLucideIcon(volume_2_iconData);
 
 
 
-const pause_iconData = {
-  name: "pause",
+const trending_up_iconData = {
+  name: "trending-up",
   size: 24,
   node: [
-    ["rect", { x: "14", y: "3", width: "5", height: "18", rx: "1", key: "kaeet6" }],
-    ["rect", { x: "5", y: "3", width: "5", height: "18", rx: "1", key: "1wsw3u" }]
+    ["path", { d: "M16 7h6v6", key: "box55l" }],
+    ["path", { d: "m22 7-8.5 8.5-5-5L2 17", key: "1t1m79" }]
   ]
 };
-pause_iconData.node;
-const Pause = createLucideIcon(pause_iconData);
+trending_up_iconData.node;
+const TrendingUp = createLucideIcon(trending_up_iconData);
 
 
-//# sourceMappingURL=pause.mjs.map
+//# sourceMappingURL=trending-up.mjs.map
 
-;// CONCATENATED MODULE: ./src/scenes/Scene5_FocusAndPacing.tsx
-
-
-
+;// CONCATENATED MODULE: ./src/scenes/RealDemo_02_FocusAndPacing.tsx
 
 
 
-const Scene5_FocusAndPacing = ()=>{
+
+
+
+
+const RealDemo_02_FocusAndPacing = ()=>{
     const frame = (0,esm.useCurrentFrame)();
     const { fps } = (0,esm.useVideoConfig)();
-    // Timeline events:
-    // 0 - 35: Task list & top progress overview
-    // 35 - 75: Floating Pomodoro timer pops up and ticks
-    // 75+: Step 1 checked, progress circle rises from 0 to 20%
-    const isTimerActive = frame >= 30;
-    const isCompleted = frame >= 75;
-    const timerPopSpring = (0,esm.spring)({
-        frame: frame - 30,
-        fps,
-        config: {
-            damping: 13,
-            mass: 0.8
-        }
-    });
-    const completeSpring = (0,esm.spring)({
-        frame: frame - 75,
-        fps,
-        config: {
-            damping: 12
-        }
-    });
-    const progressPercent = isCompleted ? Math.round((0,esm.interpolate)(completeSpring, [
-        0,
-        1
-    ], [
-        0,
-        20
-    ])) : 0;
-    return /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-        className: "w-full h-full flex flex-col justify-between p-10 relative overflow-hidden",
-        style: {
-            backgroundColor: theme.colors.bgWarm,
-            fontFamily: theme.fonts.sans
-        },
+    // Phase transitions:
+    // 0 - 50: Dashboard with tasks -> Cursor moves to Timer button, clicks at 35
+    // 50 - 110: 05_timer_running.png -> Camera zooms in on bottom Pomodoro floating pill
+    // 110 - 200: Cursor clicks checkbox on Subtask 1 at 120 -> 06_progress_updated.png -> Camera pans to Progress Gauge
+    let currentImage = "real_captures/04_dashboard_with_tasks.png";
+    if (frame >= 40 && frame < 125) {
+        currentImage = "real_captures/05_timer_running.png";
+    } else if (frame >= 125) {
+        currentImage = "real_captures/06_progress_updated.png";
+    }
+    // Camera motions:
+    let cameraScale = 1.05;
+    let originX = 50;
+    let originY = 40;
+    let rotateX = 0;
+    if (frame >= 40 && frame < 125) {
+        // Zoom down to the floating timer at the bottom
+        const timerZoom = (0,esm.spring)({
+            frame: frame - 40,
+            fps,
+            config: {
+                damping: 16
+            }
+        });
+        cameraScale = (0,esm.interpolate)(timerZoom, [
+            0,
+            1
+        ], [
+            1.05,
+            1.35
+        ]);
+        originX = 50;
+        originY = 85; // Pan down to bottom bar
+        rotateX = (0,esm.interpolate)(timerZoom, [
+            0,
+            1
+        ], [
+            0,
+            2
+        ]);
+    } else if (frame >= 125) {
+        // Pan up to the Circular Progress Ring
+        const progressZoom = (0,esm.spring)({
+            frame: frame - 125,
+            fps,
+            config: {
+                damping: 15
+            }
+        });
+        cameraScale = (0,esm.interpolate)(progressZoom, [
+            0,
+            1
+        ], [
+            1.35,
+            1.25
+        ]);
+        originX = 35; // Pan to left hero gauge
+        originY = 22; // Pan up to hero
+        rotateX = (0,esm.interpolate)(progressZoom, [
+            0,
+            1
+        ], [
+            2,
+            0
+        ]);
+    }
+    return /*#__PURE__*/ (0,jsx_runtime.jsxs)(CinematicScreenView, {
+        imageSrc: currentImage,
+        scale: cameraScale,
+        originX: originX,
+        originY: originY,
+        rotateX: rotateX,
         children: [
-            /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                className: "flex items-center justify-between mb-4",
-                children: [
-                    /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                        children: [
-                            /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                className: "text-xs font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100 border border-emerald-200 px-3 py-1 rounded-full",
-                                children: "Fitur Eksekusi Nyata • Solution & Innovation (30%)"
-                            }),
-                            /*#__PURE__*/ (0,jsx_runtime.jsxs)("h2", {
-                                className: "text-3xl font-black text-slate-900 mt-1",
-                                children: [
-                                    "Visual Micro-Pacing & ",
-                                    /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                        className: "text-orange-600",
-                                        children: "Deep Focus Engine"
-                                    })
-                                ]
-                            })
-                        ]
-                    }),
-                    /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                        className: "flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-mono text-slate-700",
-                        children: [
-                            /*#__PURE__*/ (0,jsx_runtime.jsx)(Timer, {
-                                className: "w-3.5 h-3.5 text-orange-600"
-                            }),
-                            /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                children: "Pomodoro 25/5 + Web Audio Chime"
-                            })
-                        ]
-                    })
-                ]
+            frame < 45 && /*#__PURE__*/ (0,jsx_runtime.jsx)(AnimatedCursor, {
+                startX: 45,
+                startY: 30,
+                endX: 68,
+                endY: 45,
+                startFrame: 5,
+                clickFrame: 36
             }),
-            /*#__PURE__*/ (0,jsx_runtime.jsx)(BrowserMockup, {
-                url: "https://kilastugas.vercel.app",
-                subtitle: "Eksekusi Langkah Harian & Pomodoro Focus",
-                children: /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                    className: "p-8 h-full flex flex-col justify-between relative",
-                    children: [
-                        /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                            className: "bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex items-center justify-between",
-                            children: [
-                                /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                    className: "flex items-center gap-4",
-                                    children: [
-                                        /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                            className: "relative w-16 h-16 flex items-center justify-center",
-                                            children: [
-                                                /*#__PURE__*/ (0,jsx_runtime.jsxs)("svg", {
-                                                    className: "w-full h-full -rotate-90",
-                                                    children: [
-                                                        /*#__PURE__*/ (0,jsx_runtime.jsx)("circle", {
-                                                            cx: "32",
-                                                            cy: "32",
-                                                            r: "26",
-                                                            stroke: "#f1f5f9",
-                                                            strokeWidth: "5",
-                                                            fill: "none"
-                                                        }),
-                                                        /*#__PURE__*/ (0,jsx_runtime.jsx)("circle", {
-                                                            cx: "32",
-                                                            cy: "32",
-                                                            r: "26",
-                                                            stroke: "#16a34a",
-                                                            strokeWidth: "5",
-                                                            strokeDasharray: 163,
-                                                            strokeDashoffset: 163 - 163 * progressPercent / 100,
-                                                            strokeLinecap: "round",
-                                                            fill: "none"
-                                                        })
-                                                    ]
-                                                }),
-                                                /*#__PURE__*/ (0,jsx_runtime.jsxs)("span", {
-                                                    className: "absolute text-sm font-black text-slate-900",
-                                                    children: [
-                                                        progressPercent,
-                                                        "%"
-                                                    ]
-                                                })
-                                            ]
-                                        }),
-                                        /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                            children: [
-                                                /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                                    className: "flex items-center gap-2",
-                                                    children: [
-                                                        /*#__PURE__*/ (0,jsx_runtime.jsx)("h3", {
-                                                            className: "text-base font-bold text-slate-900",
-                                                            children: "Progres Keseluruhan Tugas"
-                                                        }),
-                                                        /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                                            className: "text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200",
-                                                            children: "\uD83D\uDFE2 On Track"
-                                                        })
-                                                    ]
-                                                }),
-                                                /*#__PURE__*/ (0,jsx_runtime.jsx)("p", {
-                                                    className: "text-xs text-slate-500",
-                                                    children: isCompleted ? "1 dari 5 langkah selesai • Target harian terpenuhi!" : "Target Hari Ini: Selesaikan 1 langkah awal (45 mnt)"
-                                                })
-                                            ]
-                                        })
-                                    ]
-                                }),
-                                /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
-                                    className: "flex items-center gap-3",
-                                    children: /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                        className: "bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-right",
-                                        children: [
-                                            /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
-                                                className: "text-[10px] font-semibold text-slate-400 uppercase",
-                                                children: "Sisa Waktu"
-                                            }),
-                                            /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
-                                                className: "text-sm font-bold text-slate-800",
-                                                children: "5 Hari Menuju Deadline"
-                                            })
-                                        ]
-                                    })
-                                })
-                            ]
-                        }),
-                        /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                            className: "my-4 space-y-3",
-                            children: [
-                                /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                    className: `p-4 rounded-2xl border transition-all flex items-center justify-between ${isCompleted ? "bg-emerald-50/70 border-emerald-300 shadow-sm" : "bg-white border-orange-300 shadow-md ring-2 ring-orange-200"}`,
-                                    children: [
-                                        /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                            className: "flex items-center gap-4",
-                                            children: [
-                                                /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
-                                                    className: `w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer transition-all ${isCompleted ? "bg-emerald-600 text-white" : "border-2 border-slate-300 bg-white"}`,
-                                                    children: isCompleted && /*#__PURE__*/ (0,jsx_runtime.jsx)(CircleCheck, {
-                                                        className: "w-5 h-5 text-white"
-                                                    })
-                                                }),
-                                                /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                                    children: [
-                                                        /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                                            className: "flex items-center gap-2",
-                                                            children: [
-                                                                /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                                                    className: "text-xs font-mono font-bold text-orange-700 bg-orange-100 px-2 py-0.5 rounded",
-                                                                    children: "Langkah 1"
-                                                                }),
-                                                                /*#__PURE__*/ (0,jsx_runtime.jsx)("h4", {
-                                                                    className: `text-sm font-bold ${isCompleted ? "line-through text-slate-400" : "text-slate-900"}`,
-                                                                    children: "Hitung alokasi IP VLSM untuk 4 subnet"
-                                                                })
-                                                            ]
-                                                        }),
-                                                        /*#__PURE__*/ (0,jsx_runtime.jsx)("p", {
-                                                            className: "text-xs text-slate-500 mt-0.5",
-                                                            children: "Tentukan prefix /27, /28, /29 dan tabel alamat broadcast."
-                                                        })
-                                                    ]
-                                                })
-                                            ]
-                                        }),
-                                        /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                            className: "flex items-center gap-2",
-                                            children: [
-                                                /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                                    className: "text-xs font-mono text-slate-600 bg-slate-100 px-2.5 py-1 rounded-md",
-                                                    children: "45 mnt"
-                                                }),
-                                                !isCompleted && /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                                    className: "flex items-center gap-1.5 px-3 py-1.5 bg-orange-600 text-white rounded-xl text-xs font-bold shadow-xs",
-                                                    children: [
-                                                        /*#__PURE__*/ (0,jsx_runtime.jsx)(Timer, {
-                                                            className: "w-3.5 h-3.5"
-                                                        }),
-                                                        /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                                            children: "Mulai Fokus"
-                                                        })
-                                                    ]
-                                                })
-                                            ]
-                                        })
-                                    ]
-                                }),
-                                /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                    className: "p-3.5 rounded-2xl border border-slate-200 bg-white/70 opacity-60 flex items-center justify-between",
-                                    children: [
-                                        /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                            className: "flex items-center gap-3",
-                                            children: [
-                                                /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
-                                                    className: "w-6 h-6 rounded-md border border-slate-200 bg-slate-50"
-                                                }),
-                                                /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                                    className: "text-xs font-semibold text-slate-600",
-                                                    children: "Langkah 2: Rancang topologi di Packet Tracer & konfigurasi OSPF"
-                                                })
-                                            ]
-                                        }),
-                                        /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                            className: "text-xs text-slate-400",
-                                            children: "Besok • 60 mnt"
-                                        })
-                                    ]
-                                })
-                            ]
-                        }),
-                        isTimerActive && /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                            style: {
-                                transform: `translateY(${(0,esm.interpolate)(timerPopSpring, [
-                                    0,
-                                    1
-                                ], [
-                                    60,
-                                    0
-                                ])}px)`,
-                                opacity: timerPopSpring
-                            },
-                            className: "bg-slate-900 text-white rounded-2xl p-4 shadow-2xl border border-slate-800 flex items-center justify-between z-20",
-                            children: [
-                                /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                    className: "flex items-center gap-3",
-                                    children: [
-                                        /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
-                                            className: "w-10 h-10 rounded-xl bg-orange-600/30 text-orange-400 flex items-center justify-center font-bold",
-                                            children: /*#__PURE__*/ (0,jsx_runtime.jsx)(Timer, {
-                                                className: "w-5 h-5 animate-pulse"
-                                            })
-                                        }),
-                                        /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                            children: [
-                                                /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                                    className: "flex items-center gap-2",
-                                                    children: [
-                                                        /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                                            className: "text-[10px] font-bold uppercase tracking-wider text-orange-400 bg-orange-950 px-2 py-0.5 rounded",
-                                                            children: "Sesi Fokus Aktif"
-                                                        }),
-                                                        /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                                            className: "text-xs font-medium text-slate-300 truncate max-w-xs",
-                                                            children: "Hitung alokasi IP VLSM 4 subnet"
-                                                        })
-                                                    ]
-                                                }),
-                                                /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                                    className: "text-xs text-slate-400 mt-0.5 flex items-center gap-2",
-                                                    children: [
-                                                        /*#__PURE__*/ (0,jsx_runtime.jsx)(Volume2, {
-                                                            className: "w-3 h-3 text-slate-400"
-                                                        }),
-                                                        /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                                            children: "Audio Chime Synthesizer Siap"
-                                                        })
-                                                    ]
-                                                })
-                                            ]
-                                        })
-                                    ]
-                                }),
-                                /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                    className: "flex items-center gap-4",
-                                    children: [
-                                        /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
-                                            className: "font-mono text-2xl font-black text-amber-300 tracking-wider bg-black/40 px-3 py-1 rounded-lg border border-slate-800",
-                                            children: isCompleted ? "00:00" : "24:45"
-                                        }),
-                                        /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
-                                            className: "flex items-center gap-1.5",
-                                            children: /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
-                                                className: "w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 flex items-center justify-center",
-                                                children: /*#__PURE__*/ (0,jsx_runtime.jsx)(Pause, {
-                                                    className: "w-4 h-4 text-white"
-                                                })
-                                            })
-                                        })
-                                    ]
-                                })
-                            ]
-                        })
-                    ]
-                })
+            frame >= 95 && frame < 135 && /*#__PURE__*/ (0,jsx_runtime.jsx)(AnimatedCursor, {
+                startX: 50,
+                startY: 75,
+                endX: 36,
+                endY: 45,
+                startFrame: 100,
+                clickFrame: 122
+            }),
+            frame >= 10 && frame < 45 && /*#__PURE__*/ (0,jsx_runtime.jsx)(FloatingBadge, {
+                x: 68,
+                y: 36,
+                delay: 12,
+                icon: /*#__PURE__*/ (0,jsx_runtime.jsx)(Timer, {
+                    className: "w-4 h-4 text-orange-600"
+                }),
+                title: "Mulai Sesi Fokus",
+                subtitle: "Klik timer pada sub-tugas harian",
+                themeColor: "orange"
+            }),
+            frame >= 45 && frame < 125 && /*#__PURE__*/ (0,jsx_runtime.jsx)(FloatingBadge, {
+                x: 50,
+                y: 78,
+                delay: 50,
+                icon: /*#__PURE__*/ (0,jsx_runtime.jsx)(Volume2, {
+                    className: "w-4 h-4 text-orange-600 animate-pulse"
+                }),
+                title: "Floating Pomodoro 25/5",
+                subtitle: "Persisten di latar belakang dengan Web Audio synthesizer chime",
+                themeColor: "orange"
+            }),
+            frame >= 125 && /*#__PURE__*/ (0,jsx_runtime.jsx)(FloatingBadge, {
+                x: 35,
+                y: 15,
+                delay: 130,
+                icon: /*#__PURE__*/ (0,jsx_runtime.jsx)(TrendingUp, {
+                    className: "w-4 h-4 text-emerald-600"
+                }),
+                title: "Visual Micro-Pacing Naik",
+                subtitle: "Sub-tugas tuntas • Status \uD83D\uDFE2 On Track terjaga",
+                themeColor: "emerald"
             })
         ]
     });
 };
 
-;// CONCATENATED MODULE: ./node_modules/lucide-react/dist/esm/icons/external-link.mjs
+;// CONCATENATED MODULE: ./node_modules/lucide-react/dist/esm/icons/monitor.mjs
 /**
  * @license lucide-react v1.52.0 - ISC
  *
@@ -22112,22 +21946,22 @@ const Scene5_FocusAndPacing = ()=>{
 
 
 
-const external_link_iconData = {
-  name: "external-link",
+const monitor_iconData = {
+  name: "monitor",
   size: 24,
   node: [
-    ["path", { d: "M15 3h6v6", key: "1q9fwt" }],
-    ["path", { d: "M10 14 21 3", key: "gplh6r" }],
-    ["path", { d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6", key: "a6xqqp" }]
+    ["rect", { width: "20", height: "14", x: "2", y: "3", rx: "2", key: "48i651" }],
+    ["line", { x1: "8", x2: "16", y1: "21", y2: "21", key: "1svkeh" }],
+    ["line", { x1: "12", x2: "12", y1: "17", y2: "21", key: "vw1qmm" }]
   ]
 };
-external_link_iconData.node;
-const ExternalLink = createLucideIcon(external_link_iconData);
+monitor_iconData.node;
+const Monitor = createLucideIcon(monitor_iconData);
 
 
-//# sourceMappingURL=external-link.mjs.map
+//# sourceMappingURL=monitor.mjs.map
 
-;// CONCATENATED MODULE: ./node_modules/lucide-react/dist/esm/icons/download.mjs
+;// CONCATENATED MODULE: ./node_modules/lucide-react/dist/esm/icons/calendar.mjs
 /**
  * @license lucide-react v1.52.0 - ISC
  *
@@ -22137,22 +21971,23 @@ const ExternalLink = createLucideIcon(external_link_iconData);
 
 
 
-const download_iconData = {
-  name: "download",
+const calendar_iconData = {
+  name: "calendar",
   size: 24,
   node: [
-    ["path", { d: "M12 15V3", key: "m9g1x1" }],
-    ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
-    ["path", { d: "m7 10 5 5 5-5", key: "brsn70" }]
+    ["path", { d: "M8 2v3", key: "1ioesn" }],
+    ["path", { d: "M16 2v3", key: "otl347" }],
+    ["rect", { x: "3", y: "3", width: "18", height: "18", rx: "2", key: "h1oib" }],
+    ["path", { d: "M3 9h18", key: "1pudct" }]
   ]
 };
-download_iconData.node;
-const Download = createLucideIcon(download_iconData);
+calendar_iconData.node;
+const Calendar = createLucideIcon(calendar_iconData);
 
 
-//# sourceMappingURL=download.mjs.map
+//# sourceMappingURL=calendar.mjs.map
 
-;// CONCATENATED MODULE: ./node_modules/lucide-react/dist/esm/icons/shield-check.mjs
+;// CONCATENATED MODULE: ./node_modules/lucide-react/dist/esm/icons/smartphone.mjs
 /**
  * @license lucide-react v1.52.0 - ISC
  *
@@ -22162,307 +21997,215 @@ const Download = createLucideIcon(download_iconData);
 
 
 
-const shield_check_iconData = {
-  name: "shield-check",
+const smartphone_iconData = {
+  name: "smartphone",
   size: 24,
   node: [
-    [
-      "path",
-      {
-        d: "M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z",
-        key: "oel41y"
-      }
-    ],
-    ["path", { d: "m9 12 2 2 4-4", key: "dzmm74" }]
+    ["rect", { width: "14", height: "20", x: "5", y: "2", rx: "2", ry: "2", key: "1yt0o3" }],
+    ["path", { d: "M12 18h.01", key: "mhygvu" }]
   ]
 };
-shield_check_iconData.node;
-const ShieldCheck = createLucideIcon(shield_check_iconData);
+smartphone_iconData.node;
+const Smartphone = createLucideIcon(smartphone_iconData);
 
 
-//# sourceMappingURL=shield-check.mjs.map
+//# sourceMappingURL=smartphone.mjs.map
 
-;// CONCATENATED MODULE: ./node_modules/lucide-react/dist/esm/icons/users.mjs
-/**
- * @license lucide-react v1.52.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
+;// CONCATENATED MODULE: ./src/components/MobileDeviceMockup.tsx
 
 
 
-const users_iconData = {
-  name: "users",
-  size: 24,
-  node: [
-    ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
-    ["path", { d: "M16 3.128a4 4 0 0 1 0 7.744", key: "16gr8j" }],
-    ["path", { d: "M22 21v-2a4 4 0 0 0-3-3.87", key: "kshegd" }],
-    ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }]
-  ]
+
+const MobileDeviceMockup = ({ imageSrc, className = "", tiltAngle = 0 })=>{
+    return /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
+        className: `relative w-[360px] h-[740px] rounded-[52px] bg-slate-900 p-3.5 shadow-2xl border-4 border-slate-700/80 ${className}`,
+        style: {
+            transform: `perspective(1000px) rotateY(${tiltAngle}deg)`,
+            fontFamily: theme.fonts.sans
+        },
+        children: /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
+            className: "w-full h-full rounded-[42px] bg-[#fcece3] overflow-hidden relative flex flex-col border border-black/20",
+            children: [
+                /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
+                    className: "absolute top-2.5 left-1/2 -translate-x-1/2 w-28 h-6 bg-black rounded-full flex items-center justify-end px-3 z-50",
+                    children: /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
+                        className: "w-2.5 h-2.5 bg-slate-900 rounded-full"
+                    })
+                }),
+                /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
+                    className: "w-full h-full overflow-hidden relative",
+                    children: /*#__PURE__*/ (0,jsx_runtime.jsx)(esm.Img, {
+                        src: (0,esm.staticFile)(imageSrc),
+                        className: "w-full h-full object-cover object-top",
+                        alt: "Real Mobile App"
+                    })
+                })
+            ]
+        })
+    });
 };
-users_iconData.node;
-const Users = createLucideIcon(users_iconData);
 
-
-//# sourceMappingURL=users.mjs.map
-
-;// CONCATENATED MODULE: ./node_modules/lucide-react/dist/esm/icons/copy.mjs
-/**
- * @license lucide-react v1.52.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */
-
-
-
-const copy_iconData = {
-  name: "copy",
-  size: 24,
-  node: [
-    ["rect", { width: "14", height: "14", x: "8", y: "8", rx: "2", ry: "2", key: "17jyea" }],
-    ["path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2", key: "zix9uf" }]
-  ]
-};
-copy_iconData.node;
-const Copy = createLucideIcon(copy_iconData);
-
-
-//# sourceMappingURL=copy.mjs.map
-
-;// CONCATENATED MODULE: ./src/scenes/Scene6_SharingAndCalendar.tsx
+;// CONCATENATED MODULE: ./src/scenes/RealDemo_03_MobileCockpitAndSync.tsx
 
 
 
 
 
 
-const Scene6_SharingAndCalendar = ()=>{
+
+const RealDemo_03_MobileCockpitAndSync = ()=>{
     const frame = (0,esm.useCurrentFrame)();
     const { fps } = (0,esm.useVideoConfig)();
-    const modalSpring = (0,esm.spring)({
-        frame: frame - 15,
+    // Mobile device slide-in animation
+    const mobileSlideSpring = (0,esm.spring)({
+        frame: frame - 20,
         fps,
         config: {
-            damping: 14
+            damping: 14,
+            mass: 0.9
         }
     });
+    const mobileTranslateX = (0,esm.interpolate)(mobileSlideSpring, [
+        0,
+        1
+    ], [
+        400,
+        0
+    ]);
+    const mobileOpacity = (0,esm.interpolate)(mobileSlideSpring, [
+        0,
+        1
+    ], [
+        0,
+        1
+    ]);
+    // Desktop view tilt
+    const desktopTiltSpring = (0,esm.spring)({
+        frame: frame - 20,
+        fps,
+        config: {
+            damping: 16
+        }
+    });
+    const desktopRotateY = (0,esm.interpolate)(desktopTiltSpring, [
+        0,
+        1
+    ], [
+        0,
+        -6
+    ]);
+    const desktopScale = (0,esm.interpolate)(desktopTiltSpring, [
+        0,
+        1
+    ], [
+        1,
+        0.92
+    ]);
     return /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-        className: "w-full h-full flex flex-col justify-between p-10 relative overflow-hidden",
+        className: "w-full h-full flex items-center justify-center p-8 relative overflow-hidden",
         style: {
             backgroundColor: theme.colors.bgWarm,
             fontFamily: theme.fonts.sans
         },
         children: [
+            /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
+                className: "absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[45rem] h-[45rem] rounded-full bg-orange-100/40 blur-3xl pointer-events-none"
+            }),
             /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                className: "flex items-center justify-between mb-4",
+                className: "w-full max-w-[1720px] h-[920px] flex items-center justify-between gap-8 relative z-10",
                 children: [
-                    /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                        children: [
-                            /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                className: "text-xs font-bold uppercase tracking-wider text-amber-800 bg-amber-100 border border-amber-200 px-3 py-1 rounded-full",
-                                children: "Fitur Kolaborasi & Kalender • Solution (30%)"
-                            }),
-                            /*#__PURE__*/ (0,jsx_runtime.jsxs)("h2", {
-                                className: "text-3xl font-black text-slate-900 mt-1",
-                                children: [
-                                    "Ekspor Kalender & ",
-                                    /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                        className: "text-orange-600",
-                                        children: "Task Blueprint Sharing (/p/:id)"
-                                    })
-                                ]
-                            })
-                        ]
+                    /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
+                        className: "flex-1 h-full flex items-center justify-center transition-transform",
+                        style: {
+                            transform: `perspective(1400px) rotateY(${desktopRotateY}deg) scale(${desktopScale})`,
+                            transformOrigin: "center left"
+                        },
+                        children: /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
+                            className: "w-full h-full rounded-2xl bg-white border border-slate-300 shadow-2xl overflow-hidden flex flex-col relative",
+                            children: [
+                                /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
+                                    className: "h-10 bg-slate-100 border-b border-slate-200 px-4 flex items-center justify-between shrink-0",
+                                    children: [
+                                        /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
+                                            className: "flex items-center gap-1.5",
+                                            children: [
+                                                /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
+                                                    className: "w-2.5 h-2.5 rounded-full bg-rose-400"
+                                                }),
+                                                /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
+                                                    className: "w-2.5 h-2.5 rounded-full bg-amber-400"
+                                                }),
+                                                /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
+                                                    className: "w-2.5 h-2.5 rounded-full bg-emerald-400"
+                                                })
+                                            ]
+                                        }),
+                                        /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
+                                            className: "flex items-center gap-1.5 text-xs font-mono text-slate-700 bg-white px-3 py-0.5 rounded border border-slate-200",
+                                            children: [
+                                                /*#__PURE__*/ (0,jsx_runtime.jsx)(Monitor, {
+                                                    className: "w-3 h-3 text-slate-500"
+                                                }),
+                                                /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
+                                                    children: "kilastugas.vercel.app (Desktop)"
+                                                })
+                                            ]
+                                        }),
+                                        /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
+                                            className: "text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full",
+                                            children: "Calendar & Sync"
+                                        })
+                                    ]
+                                }),
+                                /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
+                                    className: "flex-1 relative overflow-hidden bg-[#fcece3]",
+                                    children: [
+                                        /*#__PURE__*/ (0,jsx_runtime.jsx)(esm.Img, {
+                                            src: (0,esm.staticFile)("real_captures/06_progress_updated.png"),
+                                            className: "w-full h-full object-cover object-top",
+                                            alt: "Desktop Cockpit"
+                                        }),
+                                        /*#__PURE__*/ (0,jsx_runtime.jsx)(FloatingBadge, {
+                                            x: 45,
+                                            y: 82,
+                                            delay: 10,
+                                            icon: /*#__PURE__*/ (0,jsx_runtime.jsx)(Calendar, {
+                                                className: "w-4 h-4 text-blue-600"
+                                            }),
+                                            title: "Integrasi Kalender Digital",
+                                            subtitle: "Google Calendar Direct Intent & Unduh Berkas .ics RFC 5545",
+                                            themeColor: "blue"
+                                        })
+                                    ]
+                                })
+                            ]
+                        })
                     }),
                     /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                        className: "flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-mono text-slate-700",
+                        style: {
+                            transform: `translateX(${mobileTranslateX}px)`,
+                            opacity: mobileOpacity
+                        },
+                        className: "shrink-0 flex items-center justify-center relative",
                         children: [
-                            /*#__PURE__*/ (0,jsx_runtime.jsx)(Share2, {
-                                className: "w-3.5 h-3.5 text-amber-600"
+                            /*#__PURE__*/ (0,jsx_runtime.jsx)(MobileDeviceMockup, {
+                                imageSrc: "real_captures/07_mobile_cockpit.png",
+                                tiltAngle: -4
                             }),
-                            /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                children: "1-Click Import Antar Mahasiswa"
+                            /*#__PURE__*/ (0,jsx_runtime.jsx)(FloatingBadge, {
+                                x: 50,
+                                y: 24,
+                                delay: 35,
+                                icon: /*#__PURE__*/ (0,jsx_runtime.jsx)(Smartphone, {
+                                    className: "w-4 h-4 text-emerald-600"
+                                }),
+                                title: "Mobile Edge-to-Edge",
+                                subtitle: "Responsif cepat di layar smartphone mahasiswa",
+                                themeColor: "emerald"
                             })
                         ]
                     })
                 ]
-            }),
-            /*#__PURE__*/ (0,jsx_runtime.jsx)(BrowserMockup, {
-                url: "https://kilastugas.vercel.app/p/jarkom-ospf-2026",
-                subtitle: "Berbagi Cetak Biru Tugas ke Rekan Seangkatan",
-                children: /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
-                    className: "p-8 h-full flex items-center justify-center relative",
-                    children: /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                        className: "w-full max-w-4xl bg-white rounded-3xl border border-slate-200 p-7 shadow-xl grid grid-cols-1 md:grid-cols-2 gap-8 z-10",
-                        children: [
-                            /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                className: "flex flex-col justify-between border-b md:border-b-0 md:border-r border-slate-100 pr-0 md:pr-6 pb-6 md:pb-0",
-                                children: [
-                                    /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                        children: [
-                                            /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                                className: "flex items-center gap-2 mb-2",
-                                                children: [
-                                                    /*#__PURE__*/ (0,jsx_runtime.jsx)("div", {
-                                                        className: "w-8 h-8 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center",
-                                                        children: /*#__PURE__*/ (0,jsx_runtime.jsx)(Calendar, {
-                                                            className: "w-4 h-4"
-                                                        })
-                                                    }),
-                                                    /*#__PURE__*/ (0,jsx_runtime.jsx)("h3", {
-                                                        className: "text-base font-bold text-slate-900",
-                                                        children: "Sinkronisasi Kalender"
-                                                    })
-                                                ]
-                                            }),
-                                            /*#__PURE__*/ (0,jsx_runtime.jsx)("p", {
-                                                className: "text-xs text-slate-500 leading-relaxed mb-5",
-                                                children: "Sub-tugas harian terhubung langsung ke agenda digital mahasiswa dengan alarm otomatis 15 menit sebelum waktu pengerjaan."
-                                            }),
-                                            /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                                className: "space-y-3",
-                                                children: [
-                                                    /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                                        className: "w-full p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between text-xs font-semibold text-slate-800 shadow-2xs",
-                                                        children: [
-                                                            /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                                                className: "flex items-center gap-2.5",
-                                                                children: [
-                                                                    /*#__PURE__*/ (0,jsx_runtime.jsx)(ExternalLink, {
-                                                                        className: "w-4 h-4 text-blue-600"
-                                                                    }),
-                                                                    /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                                                        children: "Buka Langsung di Google Calendar"
-                                                                    })
-                                                                ]
-                                                            }),
-                                                            /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                                                className: "text-[10px] text-blue-600 bg-blue-50 px-2 py-0.5 rounded font-mono",
-                                                                children: "App Intent"
-                                                            })
-                                                        ]
-                                                    }),
-                                                    /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                                        className: "w-full p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between text-xs font-semibold text-slate-800 shadow-2xs",
-                                                        children: [
-                                                            /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                                                className: "flex items-center gap-2.5",
-                                                                children: [
-                                                                    /*#__PURE__*/ (0,jsx_runtime.jsx)(Download, {
-                                                                        className: "w-4 h-4 text-emerald-600"
-                                                                    }),
-                                                                    /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                                                        children: "Unduh Berkas Standar .ics"
-                                                                    })
-                                                                ]
-                                                            }),
-                                                            /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                                                className: "text-[10px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded font-mono",
-                                                                children: "RFC 5545"
-                                                            })
-                                                        ]
-                                                    })
-                                                ]
-                                            })
-                                        ]
-                                    }),
-                                    /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                        className: "mt-6 pt-4 border-t border-slate-100 flex items-center gap-2 text-xs text-slate-500",
-                                        children: [
-                                            /*#__PURE__*/ (0,jsx_runtime.jsx)(ShieldCheck, {
-                                                className: "w-4 h-4 text-emerald-600"
-                                            }),
-                                            /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                                children: "Zero-Barrier Guest Mode (Dual-layer sync LocalStorage & MariaDB)"
-                                            })
-                                        ]
-                                    })
-                                ]
-                            }),
-                            /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                style: {
-                                    transform: `scale(${(0,esm.interpolate)(modalSpring, [
-                                        0,
-                                        1
-                                    ], [
-                                        0.95,
-                                        1
-                                    ])})`,
-                                    opacity: modalSpring
-                                },
-                                className: "bg-amber-50/50 border border-amber-200 rounded-2xl p-5 flex flex-col justify-between",
-                                children: [
-                                    /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                        children: [
-                                            /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                                className: "flex items-center justify-between mb-3",
-                                                children: [
-                                                    /*#__PURE__*/ (0,jsx_runtime.jsxs)("span", {
-                                                        className: "text-xs font-bold text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded-full flex items-center gap-1.5",
-                                                        children: [
-                                                            /*#__PURE__*/ (0,jsx_runtime.jsx)(Users, {
-                                                                className: "w-3 h-3"
-                                                            }),
-                                                            /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                                                children: "Cetak Biru Tugas Bersama"
-                                                            })
-                                                        ]
-                                                    }),
-                                                    /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                                        className: "text-xs font-mono text-slate-500",
-                                                        children: "5 Sub-Tugas"
-                                                    })
-                                                ]
-                                            }),
-                                            /*#__PURE__*/ (0,jsx_runtime.jsx)("h4", {
-                                                className: "text-sm font-bold text-slate-900 mb-1",
-                                                children: "Laporan Routing OSPF & VLSM"
-                                            }),
-                                            /*#__PURE__*/ (0,jsx_runtime.jsx)("p", {
-                                                className: "text-xs text-slate-600 leading-relaxed mb-4",
-                                                children: "Dibagikan oleh rekan sekelas untuk jadwal kerja praktikum terkoordinasi."
-                                            }),
-                                            /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                                className: "bg-white border border-amber-200 rounded-xl p-2.5 flex items-center justify-between text-xs font-mono text-slate-700 mb-4",
-                                                children: [
-                                                    /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                                        className: "truncate max-w-[200px]",
-                                                        children: "https://kilastugas.vercel.app/p/jarkom-ospf-2026"
-                                                    }),
-                                                    /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                                        className: "flex items-center gap-1 text-amber-700 bg-amber-50 px-2 py-1 rounded cursor-pointer",
-                                                        children: [
-                                                            /*#__PURE__*/ (0,jsx_runtime.jsx)(Copy, {
-                                                                className: "w-3 h-3"
-                                                            }),
-                                                            /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                                                children: "Salin"
-                                                            })
-                                                        ]
-                                                    })
-                                                ]
-                                            })
-                                        ]
-                                    }),
-                                    /*#__PURE__*/ (0,jsx_runtime.jsxs)("div", {
-                                        className: "w-full py-3 bg-amber-600 text-white rounded-xl font-bold text-xs text-center shadow-md flex items-center justify-center gap-2",
-                                        children: [
-                                            /*#__PURE__*/ (0,jsx_runtime.jsx)(Download, {
-                                                className: "w-3.5 h-3.5"
-                                            }),
-                                            /*#__PURE__*/ (0,jsx_runtime.jsx)("span", {
-                                                children: "Impor ke Jadwal Saya (1-Detik Selesai)"
-                                            })
-                                        ]
-                                    })
-                                ]
-                            })
-                        ]
-                    })
-                })
             })
         ]
     });
@@ -22956,6 +22699,32 @@ const FileText = createLucideIcon(file_text_iconData);
 
 //# sourceMappingURL=file-text.mjs.map
 
+;// CONCATENATED MODULE: ./node_modules/lucide-react/dist/esm/icons/users.mjs
+/**
+ * @license lucide-react v1.52.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+
+const users_iconData = {
+  name: "users",
+  size: 24,
+  node: [
+    ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
+    ["path", { d: "M16 3.128a4 4 0 0 1 0 7.744", key: "16gr8j" }],
+    ["path", { d: "M22 21v-2a4 4 0 0 0-3-3.87", key: "kshegd" }],
+    ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }]
+  ]
+};
+users_iconData.node;
+const Users = createLucideIcon(users_iconData);
+
+
+//# sourceMappingURL=users.mjs.map
+
 ;// CONCATENATED MODULE: ./node_modules/lucide-react/dist/esm/icons/wifi-off.mjs
 /**
  * @license lucide-react v1.52.0 - ISC
@@ -22984,6 +22753,31 @@ const WifiOff = createLucideIcon(wifi_off_iconData);
 
 
 //# sourceMappingURL=wifi-off.mjs.map
+
+;// CONCATENATED MODULE: ./node_modules/lucide-react/dist/esm/icons/circle-check.mjs
+/**
+ * @license lucide-react v1.52.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+
+const circle_check_iconData = {
+  name: "circle-check",
+  size: 24,
+  node: [
+    ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+    ["path", { d: "m16 9-5.5 5.5L8 12", key: "xofnsj" }]
+  ],
+  aliases: ["check-circle-2"]
+};
+circle_check_iconData.node;
+const CircleCheck = createLucideIcon(circle_check_iconData);
+
+
+//# sourceMappingURL=circle-check.mjs.map
 
 ;// CONCATENATED MODULE: ./src/scenes/Scene8_RoadmapClosing.tsx
 
@@ -23216,23 +23010,23 @@ const MainVideo = ()=>{
                 children: /*#__PURE__*/ (0,jsx_runtime.jsx)(Scene2_Problem, {})
             }),
             /*#__PURE__*/ (0,jsx_runtime.jsx)(esm.Series.Sequence, {
-                durationInFrames: 240,
+                durationInFrames: 210,
                 children: /*#__PURE__*/ (0,jsx_runtime.jsx)(Scene3_SolutionPillars, {})
             }),
             /*#__PURE__*/ (0,jsx_runtime.jsx)(esm.Series.Sequence, {
-                durationInFrames: 360,
-                children: /*#__PURE__*/ (0,jsx_runtime.jsx)(Scene4_WalkthroughInput, {})
-            }),
-            /*#__PURE__*/ (0,jsx_runtime.jsx)(esm.Series.Sequence, {
-                durationInFrames: 360,
-                children: /*#__PURE__*/ (0,jsx_runtime.jsx)(Scene5_FocusAndPacing, {})
+                durationInFrames: 300,
+                children: /*#__PURE__*/ (0,jsx_runtime.jsx)(RealDemo_01_InputAndBreakdown, {})
             }),
             /*#__PURE__*/ (0,jsx_runtime.jsx)(esm.Series.Sequence, {
                 durationInFrames: 300,
-                children: /*#__PURE__*/ (0,jsx_runtime.jsx)(Scene6_SharingAndCalendar, {})
+                children: /*#__PURE__*/ (0,jsx_runtime.jsx)(RealDemo_02_FocusAndPacing, {})
             }),
             /*#__PURE__*/ (0,jsx_runtime.jsx)(esm.Series.Sequence, {
                 durationInFrames: 270,
+                children: /*#__PURE__*/ (0,jsx_runtime.jsx)(RealDemo_03_MobileCockpitAndSync, {})
+            }),
+            /*#__PURE__*/ (0,jsx_runtime.jsx)(esm.Series.Sequence, {
+                durationInFrames: 240,
                 children: /*#__PURE__*/ (0,jsx_runtime.jsx)(Scene7_Architecture, {})
             }),
             /*#__PURE__*/ (0,jsx_runtime.jsx)(esm.Series.Sequence, {
@@ -23261,9 +23055,9 @@ const RemotionRoot = ()=>{
     return /*#__PURE__*/ (0,jsx_runtime.jsxs)(jsx_runtime.Fragment, {
         children: [
             /*#__PURE__*/ (0,jsx_runtime.jsx)(esm.Composition, {
-                id: "TimKilasTugas_KilasTugas_VideoDemo",
+                id: "TimKilasTugas-KilasTugas-VideoDemo",
                 component: MainVideo,
-                durationInFrames: 2190,
+                durationInFrames: 1980,
                 fps: 30,
                 width: 1920,
                 height: 1080
@@ -23272,7 +23066,7 @@ const RemotionRoot = ()=>{
                 name: "Scenes",
                 children: [
                     /*#__PURE__*/ (0,jsx_runtime.jsx)(esm.Composition, {
-                        id: "Scene1_Intro",
+                        id: "01-Intro",
                         component: Scene1_Intro,
                         durationInFrames: 180,
                         fps: 30,
@@ -23280,7 +23074,7 @@ const RemotionRoot = ()=>{
                         height: 1080
                     }),
                     /*#__PURE__*/ (0,jsx_runtime.jsx)(esm.Composition, {
-                        id: "Scene2_Problem",
+                        id: "02-Problem",
                         component: Scene2_Problem,
                         durationInFrames: 240,
                         fps: 30,
@@ -23288,47 +23082,47 @@ const RemotionRoot = ()=>{
                         height: 1080
                     }),
                     /*#__PURE__*/ (0,jsx_runtime.jsx)(esm.Composition, {
-                        id: "Scene3_SolutionPillars",
+                        id: "03-SolutionPillars",
                         component: Scene3_SolutionPillars,
-                        durationInFrames: 240,
+                        durationInFrames: 210,
                         fps: 30,
                         width: 1920,
                         height: 1080
                     }),
                     /*#__PURE__*/ (0,jsx_runtime.jsx)(esm.Composition, {
-                        id: "Scene4_WalkthroughInput",
-                        component: Scene4_WalkthroughInput,
-                        durationInFrames: 360,
-                        fps: 30,
-                        width: 1920,
-                        height: 1080
-                    }),
-                    /*#__PURE__*/ (0,jsx_runtime.jsx)(esm.Composition, {
-                        id: "Scene5_FocusAndPacing",
-                        component: Scene5_FocusAndPacing,
-                        durationInFrames: 360,
-                        fps: 30,
-                        width: 1920,
-                        height: 1080
-                    }),
-                    /*#__PURE__*/ (0,jsx_runtime.jsx)(esm.Composition, {
-                        id: "Scene6_SharingAndCalendar",
-                        component: Scene6_SharingAndCalendar,
+                        id: "04-RealDemo-Breakdown",
+                        component: RealDemo_01_InputAndBreakdown,
                         durationInFrames: 300,
                         fps: 30,
                         width: 1920,
                         height: 1080
                     }),
                     /*#__PURE__*/ (0,jsx_runtime.jsx)(esm.Composition, {
-                        id: "Scene7_Architecture",
-                        component: Scene7_Architecture,
+                        id: "05-RealDemo-Focus",
+                        component: RealDemo_02_FocusAndPacing,
+                        durationInFrames: 300,
+                        fps: 30,
+                        width: 1920,
+                        height: 1080
+                    }),
+                    /*#__PURE__*/ (0,jsx_runtime.jsx)(esm.Composition, {
+                        id: "06-RealDemo-MobileSync",
+                        component: RealDemo_03_MobileCockpitAndSync,
                         durationInFrames: 270,
                         fps: 30,
                         width: 1920,
                         height: 1080
                     }),
                     /*#__PURE__*/ (0,jsx_runtime.jsx)(esm.Composition, {
-                        id: "Scene8_RoadmapClosing",
+                        id: "07-Architecture",
+                        component: Scene7_Architecture,
+                        durationInFrames: 240,
+                        fps: 30,
+                        width: 1920,
+                        height: 1080
+                    }),
+                    /*#__PURE__*/ (0,jsx_runtime.jsx)(esm.Composition, {
+                        id: "08-RoadmapClosing",
                         component: Scene8_RoadmapClosing,
                         durationInFrames: 240,
                         fps: 30,
@@ -42823,7 +42617,7 @@ __webpack_require__.ruid = "bundler=rspack@1.7.11";
 // This entry module is referenced by other modules so it can't be inlined
 __webpack_require__(6507);
 __webpack_require__(3999);
-__webpack_require__(9378);
+__webpack_require__(4228);
 __webpack_require__(3610);
 var __webpack_exports__ = __webpack_require__(3482);
 })()

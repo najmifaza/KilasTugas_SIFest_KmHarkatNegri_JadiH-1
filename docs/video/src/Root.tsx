@@ -5,9 +5,9 @@ import { MainVideo } from "./MainVideo";
 import { Scene1_Intro } from "./scenes/Scene1_Intro";
 import { Scene2_Problem } from "./scenes/Scene2_Problem";
 import { Scene3_SolutionPillars } from "./scenes/Scene3_SolutionPillars";
-import { Scene4_WalkthroughInput } from "./scenes/Scene4_WalkthroughInput";
-import { Scene5_FocusAndPacing } from "./scenes/Scene5_FocusAndPacing";
-import { Scene6_SharingAndCalendar } from "./scenes/Scene6_SharingAndCalendar";
+import { RealDemo_01_InputAndBreakdown } from "./scenes/RealDemo_01_InputAndBreakdown";
+import { RealDemo_02_FocusAndPacing } from "./scenes/RealDemo_02_FocusAndPacing";
+import { RealDemo_03_MobileCockpitAndSync } from "./scenes/RealDemo_03_MobileCockpitAndSync";
 import { Scene7_Architecture } from "./scenes/Scene7_Architecture";
 import { Scene8_RoadmapClosing } from "./scenes/Scene8_RoadmapClosing";
 
@@ -18,7 +18,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="TimKilasTugas-KilasTugas-VideoDemo"
         component={MainVideo}
-        durationInFrames={2190} // ~73 seconds @ 30fps
+        durationInFrames={1890} // 63 seconds @ 30fps (exact scene sum)
         fps={30}
         width={1920}
         height={1080}
@@ -27,7 +27,7 @@ export const RemotionRoot: React.FC = () => {
       {/* Individual Scene Compositions for Studio Editing */}
       <Folder name="Scenes">
         <Composition
-          id="Scene1-Intro"
+          id="01-Intro"
           component={Scene1_Intro}
           durationInFrames={180}
           fps={30}
@@ -35,7 +35,7 @@ export const RemotionRoot: React.FC = () => {
           height={1080}
         />
         <Composition
-          id="Scene2-Problem"
+          id="02-Problem"
           component={Scene2_Problem}
           durationInFrames={240}
           fps={30}
@@ -43,47 +43,47 @@ export const RemotionRoot: React.FC = () => {
           height={1080}
         />
         <Composition
-          id="Scene3-SolutionPillars"
+          id="03-SolutionPillars"
           component={Scene3_SolutionPillars}
-          durationInFrames={240}
+          durationInFrames={210}
           fps={30}
           width={1920}
           height={1080}
         />
         <Composition
-          id="Scene4-WalkthroughInput"
-          component={Scene4_WalkthroughInput}
-          durationInFrames={360}
-          fps={30}
-          width={1920}
-          height={1080}
-        />
-        <Composition
-          id="Scene5-FocusAndPacing"
-          component={Scene5_FocusAndPacing}
-          durationInFrames={360}
-          fps={30}
-          width={1920}
-          height={1080}
-        />
-        <Composition
-          id="Scene6-SharingAndCalendar"
-          component={Scene6_SharingAndCalendar}
+          id="04-RealDemo-Breakdown"
+          component={RealDemo_01_InputAndBreakdown}
           durationInFrames={300}
           fps={30}
           width={1920}
           height={1080}
         />
         <Composition
-          id="Scene7-Architecture"
-          component={Scene7_Architecture}
+          id="05-RealDemo-Focus"
+          component={RealDemo_02_FocusAndPacing}
+          durationInFrames={300}
+          fps={30}
+          width={1920}
+          height={1080}
+        />
+        <Composition
+          id="06-RealDemo-MobileSync"
+          component={RealDemo_03_MobileCockpitAndSync}
           durationInFrames={270}
           fps={30}
           width={1920}
           height={1080}
         />
         <Composition
-          id="Scene8-RoadmapClosing"
+          id="07-Architecture"
+          component={Scene7_Architecture}
+          durationInFrames={240}
+          fps={30}
+          width={1920}
+          height={1080}
+        />
+        <Composition
+          id="08-RoadmapClosing"
           component={Scene8_RoadmapClosing}
           durationInFrames={240}
           fps={30}
