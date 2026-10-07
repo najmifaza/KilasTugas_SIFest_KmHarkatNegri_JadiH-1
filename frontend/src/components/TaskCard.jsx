@@ -23,7 +23,7 @@ const CATEGORY_MAP = {
   custom: 'Tugas Kuliah',
 }
 
-export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
+export default function TaskCard({ task, onOpenDetail, onDeleteTask, onSubtaskChange }) {
   const [subtasks, setSubtasks] = useState([])
   const [loading, setLoading] = useState(false)
   const [expanded, setExpanded] = useState(false)
@@ -57,7 +57,7 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
 
   useEffect(() => {
     fetchSubtasks()
-  }, [task.id])
+  }, [task.id, task.subtasks_done, task.subtasks_total])
 
   const fireConfetti = (e) => {
     if (e) e.stopPropagation()
@@ -90,6 +90,7 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
       }
       setNewStepTitle('')
       setIsAdding(false)
+      if (onSubtaskChange) onSubtaskChange()
     } catch (err) {
       alert('Gagal menambah langkah kerja')
     }
@@ -101,6 +102,7 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
     try {
       await deleteSubtask(subtaskId)
       setSubtasks((prev) => prev.filter((s) => s.id !== subtaskId))
+      if (onSubtaskChange) onSubtaskChange()
     } catch (err) {
       alert('Gagal menghapus langkah kerja')
     }
@@ -247,6 +249,10 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
       navigator.vibrate(25)
     }
 
+    if (onSubtaskChange) {
+      onSubtaskChange(task.id, st.id, nextState)
+    }
+
     try {
       await patchSubtask(st.id, { is_completed: nextState })
     } catch (err) {
@@ -254,12 +260,17 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask }) {
       setSubtasks((prev) =>
         prev.map((s) => (s.id === st.id ? { ...s, is_completed: st.is_completed } : s))
       )
+      if (onSubtaskChange) {
+        onSubtaskChange(task.id, st.id, st.is_completed)
+      }
     }
   }
 
-  const total = subtasks.length
-  const completed = subtasks.filter((s) => s.is_completed).length
-  const percent = total > 0 ? Math.round((completed / total) * 100) : 0
+  const total = subtasks.length > 0 ? subtasks.length : (task.subtasks_total || 0)
+  const completed = subtasks.length > 0
+    ? subtasks.filter((s) => s.is_completed).length
+    : (task.subtasks_done || 0)
+  const percent = total > 0 ? Math.round((completed / total) * 100) : (task.progress_percent || 0)
   const isAllDone = total > 0 && completed === total
 
   const deadlineDate = new Date(task.deadline)

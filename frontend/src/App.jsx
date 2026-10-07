@@ -239,6 +239,29 @@ export default function App() {
     }
   }
 
+  const handleSubtaskChange = async (taskId, subtaskId, isCompleted) => {
+    if (taskId && subtaskId !== undefined && typeof isCompleted === 'boolean') {
+      setTasks((prev) =>
+        prev.map((t) => {
+          if (t.id !== taskId) return t
+          const doneDelta = isCompleted ? 1 : -1
+          const currentDone = t.subtasks_done ?? 0
+          const total = t.subtasks_total ?? 0
+          const newDone = Math.max(0, Math.min(total, currentDone + doneDelta))
+          const newPct = total > 0 ? Math.round((newDone / total) * 100) : 0
+          const allDone = total > 0 && newDone === total
+          return {
+            ...t,
+            subtasks_done: newDone,
+            progress_percent: newPct,
+            is_completed: allDone,
+          }
+        })
+      )
+    }
+    await loadTasks()
+  }
+
   useEffect(() => {
     loadTasks()
   }, [])
@@ -474,7 +497,7 @@ export default function App() {
                   task={t}
                   onOpenDetail={(subtask, task) => setActiveDetail({ subtask, task })}
                   onDeleteTask={handleDeleteTask}
-                  onSubtaskChange={loadTasks}
+                  onSubtaskChange={handleSubtaskChange}
                 />
               ))}
             </div>
@@ -518,7 +541,13 @@ export default function App() {
         task={activeDetail?.task}
         isOpen={Boolean(activeDetail)}
         onClose={() => setActiveDetail(null)}
-        onComplete={() => loadTasks()}
+        onComplete={(updatedSubtask) => {
+          if (activeDetail?.task?.id && updatedSubtask && typeof updatedSubtask.is_completed === 'boolean') {
+            handleSubtaskChange(activeDetail.task.id, updatedSubtask.id, updatedSubtask.is_completed)
+          } else {
+            loadTasks()
+          }
+        }}
         timerState={timerState}
         onStartTimer={handleStartTimer}
         onToggleTimer={handleToggleTimer}
