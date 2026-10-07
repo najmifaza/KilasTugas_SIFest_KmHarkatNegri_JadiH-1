@@ -23,6 +23,67 @@ const CATEGORY_MAP = {
   custom: 'Tugas Kuliah',
 }
 
+const playCheckSound = (isCompleted = true) => {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext
+    if (!AudioCtx) return
+    const ctx = new AudioCtx()
+    if (ctx.state === 'suspended') {
+      ctx.resume()
+    }
+    const osc = ctx.createOscillator()
+    const gain = ctx.createGain()
+
+    if (isCompleted) {
+      // Upward completion chime: D5 (587.33Hz) -> A5 (880Hz)
+      osc.type = 'sine'
+      osc.frequency.setValueAtTime(587.33, ctx.currentTime)
+      osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.12)
+      gain.gain.setValueAtTime(0.25, ctx.currentTime)
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.45)
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+      osc.start()
+      osc.stop(ctx.currentTime + 0.45)
+    } else {
+      // Soft uncheck blip: 440Hz -> 330Hz
+      osc.type = 'sine'
+      osc.frequency.setValueAtTime(440, ctx.currentTime)
+      osc.frequency.exponentialRampToValueAtTime(330, ctx.currentTime + 0.08)
+      gain.gain.setValueAtTime(0.12, ctx.currentTime)
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.18)
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+      osc.start()
+      osc.stop(ctx.currentTime + 0.18)
+    }
+  } catch (e) {}
+}
+
+const playSuccessFanfare = () => {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext
+    if (!AudioCtx) return
+    const ctx = new AudioCtx()
+    if (ctx.state === 'suspended') {
+      ctx.resume()
+    }
+    const notes = [523.25, 659.25, 783.99, 1046.5] // C5, E5, G5, C6
+    notes.forEach((freq, idx) => {
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      osc.type = 'triangle'
+      osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.08)
+      gain.gain.setValueAtTime(0.2, ctx.currentTime + idx * 0.08)
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + idx * 0.08 + 0.5)
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+      osc.start(ctx.currentTime + idx * 0.08)
+      osc.stop(ctx.currentTime + idx * 0.08 + 0.5)
+    })
+  } catch (e) {}
+}
+
 export default function TaskCard({ task, onOpenDetail, onDeleteTask, onSubtaskChange }) {
   const [subtasks, setSubtasks] = useState([])
   const [loading, setLoading] = useState(false)
@@ -241,12 +302,18 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask, onSubtaskCh
     setSubtasks(updated)
 
     const newlyCompleted = updated.filter((s) => s.is_completed).length
-    if (newlyCompleted === total && total > 0 && nextState) {
+    const isFinishedAll = newlyCompleted === total && total > 0 && nextState
+
+    // Instant audio feedback
+    if (isFinishedAll) {
+      playSuccessFanfare()
       fireConfetti()
+    } else {
+      playCheckSound(nextState)
     }
 
     if (navigator.vibrate) {
-      navigator.vibrate(25)
+      navigator.vibrate(isFinishedAll ? [40, 60, 40] : 25)
     }
 
     if (onSubtaskChange) {

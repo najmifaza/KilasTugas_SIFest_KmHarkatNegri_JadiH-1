@@ -15,25 +15,39 @@ import {
 import confetti from 'canvas-confetti'
 import { patchSubtask } from '../api'
 
-const playChime = () => {
+const playCheckSound = (isCompleted = true) => {
   try {
     const AudioCtx = window.AudioContext || window.webkitAudioContext
     if (!AudioCtx) return
     const ctx = new AudioCtx()
+    if (ctx.state === 'suspended') {
+      ctx.resume()
+    }
     const osc = ctx.createOscillator()
     const gain = ctx.createGain()
-    osc.type = 'sine'
-    osc.frequency.setValueAtTime(587.33, ctx.currentTime) // D5
-    osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15) // A5
-    gain.gain.setValueAtTime(0.2, ctx.currentTime)
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6)
-    osc.connect(gain)
-    gain.connect(ctx.destination)
-    osc.start()
-    osc.stop(ctx.currentTime + 0.6)
-  } catch (e) {
-    // Audio context fallback
-  }
+
+    if (isCompleted) {
+      osc.type = 'sine'
+      osc.frequency.setValueAtTime(587.33, ctx.currentTime) // D5
+      osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.12) // A5
+      gain.gain.setValueAtTime(0.25, ctx.currentTime)
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.45)
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+      osc.start()
+      osc.stop(ctx.currentTime + 0.45)
+    } else {
+      osc.type = 'sine'
+      osc.frequency.setValueAtTime(440, ctx.currentTime)
+      osc.frequency.exponentialRampToValueAtTime(330, ctx.currentTime + 0.08)
+      gain.gain.setValueAtTime(0.12, ctx.currentTime)
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.18)
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+      osc.start()
+      osc.stop(ctx.currentTime + 0.18)
+    }
+  } catch (e) {}
 }
 
 export default function TaskDetailModal({
@@ -211,19 +225,22 @@ export default function TaskDetailModal({
     if (!currentSubtask?.id) return
     setIsSubmitting(true)
     const nextStatus = !currentSubtask.is_completed
+
+    // Instant audio feedback
+    playCheckSound(nextStatus)
+    if (nextStatus) {
+      try {
+        confetti({
+          particleCount: 80,
+          spread: 60,
+          origin: { y: 0.8 },
+          colors: ['#18181B', '#C7F263', '#10B981', '#F59E0B'],
+        })
+      } catch (e) {}
+    }
+
     try {
       await patchSubtask(currentSubtask.id, { is_completed: nextStatus })
-      if (nextStatus) {
-        try {
-          playChime()
-          confetti({
-            particleCount: 80,
-            spread: 60,
-            origin: { y: 0.8 },
-            colors: ['#18181B', '#C7F263', '#10B981', '#F59E0B'],
-          })
-        } catch (e) {}
-      }
       if (onComplete) onComplete({ ...currentSubtask, is_completed: nextStatus })
       handleAnimatedClose()
     } catch (err) {
