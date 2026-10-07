@@ -31,3 +31,16 @@ ENV/
 # OS
 Thumbs.db
 .DS_Store
+
+# Media & Video files
+docs/Video_Penjelasan_Aplikasi*
+Video_Penjelasan_Aplikasi*
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+*.flv
+*.wmv
+*.m4v
+
