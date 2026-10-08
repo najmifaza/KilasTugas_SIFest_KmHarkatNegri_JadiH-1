@@ -44,3 +44,18 @@ Video_Penjelasan_Aplikasi*
 *.wmv
 *.m4v
 
+# Temporary & Office lock files
+~$*
+~*
+*.tmp
+
+# KilasTugas non-code directories & agent files
+docs/
+.agents/
+skills/
+anti-slop/
+antislop.md
+AGENTS.md
+.hermes/
+
+
