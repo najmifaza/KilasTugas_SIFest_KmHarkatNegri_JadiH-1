@@ -12,30 +12,28 @@
 
 ---
 
-## 🔗 Tautan Penting
+## Tautan Penting
 
 * **Live Demo (Frontend):** [kilastugas.vercel.app](https://kilastugas.vercel.app)
 * **Production API (Backend):** [api-kilastugas.najmifaza.my.id](https://api-kilastugas.najmifaza.my.id)
-* **Dokumentasi Proposal Resmi:** `docs/JadiH-1_KilasTugas_ProposalRingkas.pdf`
-* **Arsitektur & Spesifikasi Teknis:** `docs/PrdUpdate.md`
-* **Diagram Sistem (Draw.io):** `docs/Diagram_KilasTugas.drawio.xml`
+* **Repositori Kode Sumber:** [github.com/najmifaza/KilasTugas_SIFest_KmHarkatNegri_JadiH-1](https://github.com/najmifaza/KilasTugas_SIFest_KmHarkatNegri_JadiH-1)
 
 ---
 
-## 📌 Latar Belakang & Masalah
+## Latar Belakang dan Masalah
 
 Mahasiswa rata-rata menempuh 4 hingga 7 mata kuliah aktif per semester. Instruksi penugasan yang diberikan dosen sering berbentuk silabus panjang (5–15 halaman) tanpa panduan aksi harian.
 
-Kondisi ini memicu fenomena psikologis **Task Paralysis (Overwhelm Freeze)**: mahasiswa menunda pengerjaan bukan karena malas, melainkan otak mengalami *cognitive overload* dan tidak tahu harus memulai dari mana (*"where to start"*).
+Kondisi ini memicu fenomena psikologis **Task Paralysis (Overwhelm Freeze)**: mahasiswa menunda pengerjaan bukan karena malas, melainkan otak mengalami cognitive overload dan tidak tahu harus memulai dari mana.
 
-### Gap Instrumen Konvensional:
-1. **Pasif & Deadline-Centric (Notion, Google Tasks, Todoist):** Hanya mencatat nama tugas dan tanggal deadline, menyerahkan 100% beban pemecahan langkah kepada pengguna yang sedang kewalahan.
-2. **Nir Micro-Pacing:** Tidak memandu porsi aman yang harus dicicil per hari menuju deadline. Memicu budaya kerja panik H-1 / H-0.
-3. **Friksi Awal Tinggi:** Aplikasi manajemen proyek formal menuntut setup board/database manual sebelum mulai bekerja.
+### Batasan Aplikasi Manajemen Tugas Konvensional:
+1. **Pasif dan Deadline-Centric (Notion, Google Tasks, Todoist):** Hanya mencatat nama tugas dan tanggal deadline, menyerahkan beban pemecahan langkah kerja kepada pengguna yang sedang kewalahan.
+2. **Ketiadaan Micro-Pacing:** Tidak memandu porsi aman yang harus dicicil per hari menuju deadline, sehingga memicu penumpukan kerja pada malam H-1 atau H-0.
+3. **Friksi Awal Tinggi:** Aplikasi manajemen proyek formal menuntut setup board atau database manual sebelum pengguna dapat mulai bekerja.
 
 ---
 
-## 💡 Solusi: KilasTugas
+## Solusi KilasTugas
 
 Filosofi: **"Problem First, Technology Second: Jangan tanya 'kapan selesai', tanyakan 'apa yang dikerjakan hari ini'."**
 
@@ -60,33 +58,33 @@ KilasTugas memecah instruksi tugas panjang menjadi rantai sub-tugas terukur (25�
 
 ---
 
-## ✨ Fitur Utama
+## Fitur Utama
 
-1. **AI Task Decomposition & Opsi Target Langkah:**
+1. **AI Task Decomposition dan Opsi Target Langkah:**
    * Membedah instruksi teks menjadi langkah kerja konkret (kata kerja aktif, panduan 1–2 kalimat, estimasi waktu).
    * Opsi fleksibel: AI Otomatis atau pilih 3, 4, 5, 6, 8 langkah sesuai kapasitas harian.
-2. **Tri-Engine Reliability (Zero Single Point of Failure):**
-   * **Smart Cache (<20ms):** Jika tugas serupa pernah dipecahkan mahasiswa seangkatan, rencana kerja langsung disajikan dari MariaDB (0 konsumsi token AI).
+2. **Arsitektur Redundansi Tri-Engine:**
+   * **Smart Cache (<20ms):** Jika tugas serupa pernah dipecahkan mahasiswa seangkatan, rencana kerja langsung disajikan dari MariaDB (tanpa konsumsi token AI).
    * **AI Inference (<2 detik):** Didukung gateway 9Router (`ag/gemini-3.7-flash-medium`).
-   * **Fallback Template:** Template kurikulum bawaan (Laporan Lab, Makalah, Coding, Presentasi, Custom) jika koneksi internet/AI offline.
-3. **Visual Micro-Pacing & Circular Progress Gauge:**
-   * Indikator real-time status ritme kerja: 🟢 `On Track`, 🟡 `Behind Schedule`, 🔴 `Overdue`.
-   * Hero circular progress ring menghitung rasio penyelesaian sub-tugas riil.
+   * **Fallback Template:** Template kurikulum bawaan (Laporan Lab, Makalah, Coding, Presentasi, Custom) jika koneksi internet atau layanan AI offline.
+3. **Visual Micro-Pacing dan Circular Progress Gauge:**
+   * Indikator real-time status ritme kerja: `On Track`, `Behind Schedule`, `Overdue`.
+   * Komponen progress ring visual menghitung rasio penyelesaian sub-tugas riil.
 4. **Persistent Focus Engine (Pomodoro Timer):**
    * Siklus 25 menit fokus / 5 menit istirahat dengan akurasi timestamp `Date.now()`.
    * Floating mini-timer pill tetap berjalan saat berpindah halaman.
-   * Sinkronisasi countdown ke tab title peramban, audio chime Web Audio API, dan Web Desktop Notification.
-5. **Integrasi Kalender Nyata:**
-   * Direct Google Calendar intent (langsung buka template event di HP/Web).
+   * Sinkronisasi hitung mundur ke tab title peramban, audio chime Web Audio API, dan Web Desktop Notification.
+5. **Integrasi Kalender:**
+   * Direct Google Calendar intent (langsung membuka template event di aplikasi seluler atau web).
    * Ekspor berkas standar RFC 5545 iCalendar (`.ics`) dengan alarm otomatis 15 menit.
 6. **Task Blueprint Sharing (`/p/:id`):**
-   * Salin URL unik rencana tugas. Rekan sekelas dapat mengimpor seluruh langkah ke jadwal pribadi dalam 1 klik.
-7. **Zero-Barrier Guest Mode:**
-   * Tanpa proses registrasi/login yang memperlambat aksi. Sinkronisasi dual-layer antara browser `localStorage` dan MariaDB.
+   * Tautan unik rencana tugas. Rekan sekelas dapat mengimpor seluruh langkah ke jadwal pribadi dalam 1 klik.
+7. **Guest Mode Tanpa Registrasi:**
+   * Tanpa proses registrasi atau login yang memperlambat pengerjaan awal. Sinkronisasi dual-layer antara browser `localStorage` dan MariaDB.
 
 ---
 
-## 🏗️ Arsitektur Sistem
+## Arsitektur Sistem
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
@@ -100,7 +98,7 @@ KilasTugas memecah instruksi tugas panjang menjadi rantai sub-tugas terukur (25�
 │                        BACKEND ENGINE LAYER                            │
 │     Python 3.12 + FastAPI + Pydantic v2 + aiomysql Connection Pool     │
 │     Web Server: Nginx (Reverse Proxy) + SSL Let's Encrypt              │
-│     Host: Ubuntu VPS (IP 48.193.41.19 / api-kilastugas.najmifaza.my.id)│
+│     Host: Ubuntu VPS (api-kilastugas.najmifaza.my.id)                  │
 └───────────────┬────────────────────────────────────────┬───────────────┘
                 │                                        │
                 ▼ Local HTTP (Port 20128)                ▼ TCP / Unix Socket
@@ -114,11 +112,11 @@ KilasTugas memecah instruksi tugas panjang menjadi rantai sub-tugas terukur (25�
 
 ---
 
-## 📁 Struktur Repositori
+## Struktur Repositori
 
 ```text
 .
-├── backend/                  # FastAPI Application
+├── backend/                  # Layanan Aplikasi FastAPI
 │   ├── config/               # Database pool & AI Client configuration
 │   ├── models/               # Pydantic schema validation
 │   ├── routers/              # API Endpoints (breakdown, tasks, subtasks, blueprints, sessions)
@@ -126,28 +124,24 @@ KilasTugas memecah instruksi tugas panjang menjadi rantai sub-tugas terukur (25�
 │   ├── main.py               # Application entrypoint & CORS middleware
 │   ├── requirements.txt      # Python dependencies
 │   └── schema.sql            # MariaDB database DDL
-├── frontend/                 # React 18 + Vite SPA
+├── frontend/                 # Aplikasi Web React 18 + Vite SPA
 │   ├── src/
-│   │   ├── components/       # UI Components (TaskCard, DateStrip, FloatingTimer, BlueprintModal, dll)
+│   │   ├── components/       # UI Components (TaskCard, DateStrip, FloatingTimer, BlueprintModal)
 │   │   ├── services/         # Axios API clients & local storage bridge
 │   │   ├── utils/            # iCalendar generator, audio synthesizer, formatting helpers
 │   │   ├── App.jsx           # Root view, state machine, multi-device layouts
 │   │   └── main.jsx          # React DOM entrypoint
 │   ├── package.json          # Node.js dependencies
 │   └── vite.config.js        # Vite bundler configuration
-└── docs/                     # Berkas Proposal, Presentasi, & Diagram
-    ├── JadiH-1_KilasTugas_ProposalRingkas.pdf  # Dokumen Proposal Resmi (7 Halaman)
-    ├── Diagram_KilasTugas.drawio.xml          # Master Diagram Vector Draw.io
-    ├── PrdUpdate.md                           # Spesifikasi Teknis Lengkap
-    └── FUTURE.md                              # Roadmap Pengembangan Grand Final
+└── README.md                 # Dokumentasi Resmi Proyek
 ```
 
 ---
 
-## 🚀 Panduan Menjalankan Secara Lokal (Local Development)
+## Panduan Menjalankan Secara Lokal (Local Development)
 
 ### 1. Prasyarat
-* Node.js v18+ & npm
+* Node.js v18+ dan npm
 * Python 3.10+
 * MariaDB / MySQL Server aktif
 
@@ -159,6 +153,8 @@ cd backend
 
 # Buat virtual environment
 python -m venv venv
+
+# Aktivasi virtual environment
 # Linux/macOS:
 source venv/bin/activate
 # Windows:
@@ -218,10 +214,10 @@ Buka peramban di: `http://localhost:5173`
 
 ---
 
-## 📡 Ringkasan API Endpoints
+## Ringkasan API Endpoints
 
 | Method | Endpoint | Deskripsi |
-|---|---|---|
+| :--- | :--- | :--- |
 | `POST` | `/api/session` | Inisialisasi guest session UUID idempotent |
 | `POST` | `/api/breakdown` | Dekomposisi tugas via Smart Cache / AI / Fallback |
 | `GET` | `/api/tasks/{session_id}` | Ambil semua tugas beserta kalkulasi progres |
@@ -237,16 +233,16 @@ Buka peramban di: `http://localhost:5173`
 
 ---
 
-## 👥 Tim Pengembang (Tim Jadi H-1)
+## Tim Pengembang (Tim Jadi H-1)
 
 Karya inovasi digital ini disusun dan dikembangkan oleh mahasiswa **Informatika, Universitas Jenderal Soedirman** untuk **SIFest Digital Innovation Challenge 2026**:
 
-* **Adridinan Najmi Faza** — Team Leader / Fullstack & AI Integration
-* **Timotius Willy Narendra** — Frontend Architect & UX Research
-* **Fardizza Finda Rahman** — Backend & System Reliability Engineer
+* **Adridinan Najmi Faza:** Team Leader / Fullstack & AI Integration
+* **Timotius Willy Narendra:** Frontend Architect & UX Research
+* **Fardizza Finda Rahman:** Backend & System Reliability Engineer
 
 ---
 
-## 📜 Lisensi & Integritas Kompetisi
+## Lisensi dan Integritas Kompetisi
 
 Proyek ini dirilis di bawah lisensi [MIT License](LICENSE). Seluruh ideasi produk, arsitektur sistem, riset survei empiris 28 responden, serta kode pengontrol dibangun secara orisinal dengan kepatuhan penuh terhadap **Bab 5.3 & Bab 5.6 Guidebook SIFest 2026 (AI Usage Declaration)**.
