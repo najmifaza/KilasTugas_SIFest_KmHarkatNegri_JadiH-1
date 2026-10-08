@@ -149,7 +149,7 @@ Tanggal Deadline: {deadline_naive.strftime('%A, %d %B %Y')}"""
         except Exception as e:
             logger.warning(f"AI breakdown failed ({type(e).__name__}: {e}), using template fallback")
             source = "template"
-            raw_subtasks = get_template_by_category(req.category, days_left)
+            raw_subtasks = get_template_by_category(req.category, days_left, target_count)
 
     # Sanitasi data subtask agar aman masuk DB
     clean_subtasks = []
@@ -165,8 +165,32 @@ Tanggal Deadline: {deadline_naive.strftime('%A, %d %B %Y')}"""
         })
 
     if not clean_subtasks:
-        clean_subtasks = get_template_by_category(req.category, days_left)
+        clean_subtasks = get_template_by_category(req.category, days_left, target_count)
         source = "template"
+
+    # Jaminan ketat: Jika user menentukan target_count, pastikan jumlah subtask PERSIS target_count
+    if target_count and len(clean_subtasks) != target_count:
+        while len(clean_subtasks) > target_count:
+            # Pangkas langkah tengah sebelum review/submit terakhir
+            clean_subtasks.pop(-2)
+        while len(clean_subtasks) < target_count:
+            longest_idx = max(range(len(clean_subtasks)), key=lambda i: clean_subtasks[i]["duration_minutes"])
+            longest = clean_subtasks[longest_idx]
+            half_dur = max(20, longest["duration_minutes"] // 2)
+            longest["duration_minutes"] = half_dur
+            new_step = {
+                "step": longest["step"] + 1,
+                "title": f"{longest['title']} (Lanjutan)",
+                "description": longest.get("description", ""),
+                "duration_minutes": half_dur,
+                "target_day_offset": longest["target_day_offset"],
+            }
+            clean_subtasks.insert(longest_idx + 1, new_step)
+
+        # Normalisasi penomoran step 1..target_count dan distribusi tanggal
+        for idx, s in enumerate(clean_subtasks):
+            s["step"] = idx + 1
+            s["target_day_offset"] = int((idx / max(1, target_count - 1)) * max(days_left - 1, 0)) if target_count > 1 else 0
 
     # Simpan ke MariaDB
     db_source = "template" if source in ("template", "blueprint_cache", "blueprint") else "ai"

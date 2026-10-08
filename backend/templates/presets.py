@@ -3,7 +3,7 @@ from datetime import timedelta
 # Template preset: 4-6 subtask default per kategori
 # target_day_offset didistribusikan merata berdasarkan days_left
 
-def get_template_by_category(category: str, days_left: int) -> list[dict]:
+def get_template_by_category(category: str, days_left: int, target_count: int | None = None) -> list[dict]:
     templates = {
         "laporan_lab": [
             {"step": 1, "title": "Baca & pahami modul praktikum", "description": "Baca seluruh modul/instruksi praktikum. Catat poin utama, tujuan, dan alat yang dibutuhkan.", "duration_minutes": 30},
@@ -46,13 +46,32 @@ def get_template_by_category(category: str, days_left: int) -> list[dict]:
         ],
     }
 
-    steps = templates.get(category, templates["custom"])
-    total = len(steps)
+    base_steps = [dict(s) for s in templates.get(category, templates["custom"])]
+
+    # Sesuaikan jumlah langkah jika target_count spesifik diminta
+    if target_count and 2 <= target_count <= 10:
+        while len(base_steps) > target_count:
+            # Hapus langkah dari tengah (sebelum langkah review/submit terakhir)
+            base_steps.pop(-2)
+        while len(base_steps) < target_count:
+            longest_idx = max(range(len(base_steps)), key=lambda idx: base_steps[idx]["duration_minutes"])
+            longest = base_steps[longest_idx]
+            half_dur = max(20, longest["duration_minutes"] // 2)
+            longest["duration_minutes"] = half_dur
+            new_s = {
+                "step": longest["step"] + 1,
+                "title": f"{longest['title']} (Lanjutan)",
+                "description": longest.get("description", ""),
+                "duration_minutes": half_dur,
+            }
+            base_steps.insert(longest_idx + 1, new_s)
+
+    total = len(base_steps)
 
     # distribusi day_offset merata berdasarkan sisa hari
     result = []
-    for i, s in enumerate(steps):
-        offset = int((i / total) * max(days_left - 1, 1))
-        result.append({**s, "target_day_offset": offset})
+    for i, s in enumerate(base_steps):
+        offset = int((i / max(1, total - 1)) * max(days_left - 1, 0)) if total > 1 else 0
+        result.append({**s, "step": i + 1, "target_day_offset": offset})
 
     return result
