@@ -31,18 +31,21 @@ async function capture() {
     executablePath: CHROME_PATH,
     headless: 'new',
     args: [
-      '--window-size=1440,900',
+      '--window-size=430,932',
       '--no-sandbox',
       '--disable-gpu',
     ],
     defaultViewport: {
-      width: 1440,
-      height: 900,
-      deviceScaleFactor: 2,
+      width: 430,
+      height: 932,
+      deviceScaleFactor: 2.5,
+      isMobile: true,
+      hasTouch: true,
     },
   });
 
   const page = await browser.newPage();
+  await page.setViewport({ width: 430, height: 932, deviceScaleFactor: 2.5, isMobile: true, hasTouch: true });
   page.on('dialog', async (dialog) => {
     console.log('Dialog auto-dismissed:', dialog.message());
     await dialog.accept();
@@ -102,6 +105,24 @@ async function capture() {
   await page.select('select', 'laporan_lab');
   await sleep(300);
 
+  console.log('[03] Selecting 5 Langkah manually...');
+  await page.evaluate(() => {
+    // Toggle off Otomatis AI
+    const aiBtn = Array.from(document.querySelectorAll('button')).find((x) =>
+      x.textContent.includes('Otomatis AI')
+    );
+    if (aiBtn) aiBtn.click();
+
+    // Increment to 5 Langkah
+    const plusBtn = document.querySelector('button[aria-label="Tambah jumlah langkah"]');
+    const container = plusBtn?.parentElement;
+    for (let i = 0; i < 10; i++) {
+      if (container && container.textContent.includes('5')) break;
+      if (plusBtn) plusBtn.click();
+    }
+  });
+  await sleep(600);
+
   console.log('[03] Capturing modal_filled...');
   await page.screenshot({ path: path.join(OUT_DIR, '03_modal_filled.png'), fullPage: false });
 
@@ -132,12 +153,33 @@ async function capture() {
   }
   await sleep(2000);
 
-  // Scroll down so the task card is fully visible on screen (not hidden below hero)
-  console.log('[04] Scrolling to task card...');
+  console.log('[04] Scrolling to task card & trimming to 5 steps...');
   await page.evaluate(() => {
     const card = document.querySelector('article');
     if (card) {
-      // Scroll so card is near top of viewport with some breathing room above
+      const expandBtn = card.querySelector('button[aria-label="Buka rincian"]') || card.querySelector('div.cursor-pointer');
+      if (expandBtn) expandBtn.click();
+    }
+  });
+  await sleep(1000);
+
+  // Trim to exactly 5 steps
+  await page.evaluate(() => {
+    const trashBtns = Array.from(document.querySelectorAll('article button')).filter(
+      (b) => b.getAttribute('aria-label') === 'Hapus langkah'
+    );
+    if (trashBtns.length > 5) {
+      trashBtns[trashBtns.length - 1].click();
+    }
+  });
+  await sleep(1200);
+
+  // Collapse back for 04_dashboard_with_tasks
+  await page.evaluate(() => {
+    const card = document.querySelector('article');
+    if (card) {
+      const expandBtn = card.querySelector('button[aria-label="Buka rincian"]') || card.querySelector('div.cursor-pointer');
+      if (expandBtn) expandBtn.click();
       const rect = card.getBoundingClientRect();
       const targetY = window.scrollY + rect.top - 80;
       window.scrollTo({ top: Math.max(0, targetY), behavior: 'instant' });
@@ -145,7 +187,7 @@ async function capture() {
   });
   await sleep(600);
 
-  console.log('[04] Capturing dashboard_with_tasks (full card visible)...');
+  console.log('[04] Capturing dashboard_with_tasks (full card visible, 5 steps)...');
   await page.screenshot({ path: path.join(OUT_DIR, '04_dashboard_with_tasks.png'), fullPage: false });
 
   // ─────────────────────────────────────────────
@@ -159,6 +201,18 @@ async function capture() {
     if (card) { card.querySelector('div.cursor-pointer')?.click(); }
   });
   await sleep(1000);
+
+  // Ensure exactly 5 subtasks remain (matching user request of 5 steps)
+  console.log('[05] Trimming subtasks to exactly 5...');
+  await page.evaluate(() => {
+    const trashBtns = Array.from(document.querySelectorAll('article button')).filter(
+      (b) => b.getAttribute('aria-label') === 'Hapus langkah'
+    );
+    if (trashBtns.length > 5) {
+      trashBtns[trashBtns.length - 1].click();
+    }
+  });
+  await sleep(1500);
 
   // Scroll so the expanded card (with all subtasks) fills the viewport
   console.log('[05] Scrolling to center expanded card with all subtasks visible...');
@@ -181,11 +235,17 @@ async function capture() {
   // ─────────────────────────────────────────────
   console.log('[06] Checking first subtask...');
   await page.evaluate(() => {
-    const checkBtns = [...document.querySelectorAll('button[aria-label^="Tandai"]')]
-      .filter((b) => b.getAttribute('aria-label').includes('selesai'));
-    if (checkBtns.length > 0) checkBtns[0].click();
+    const card = document.querySelector('article');
+    const btn = card ? (card.querySelector('button[aria-label*="selesai"]') || card.querySelector('button[aria-label*="Tandai"]')) : null;
+    if (btn) {
+      btn.scrollIntoView({ block: 'center' });
+      btn.click();
+      ['pointerdown', 'mousedown', 'pointerup', 'mouseup', 'click'].forEach((evt) => {
+        btn.dispatchEvent(new MouseEvent(evt, { bubbles: true, cancelable: true, view: window }));
+      });
+    }
   });
-  await sleep(1200);
+  await sleep(2500);
 
   // Stay scrolled to card position so progress bar is visible
   await page.evaluate(() => {
@@ -221,12 +281,11 @@ async function capture() {
   await sleep(500);
 
   // ─────────────────────────────────────────────
-  // 08. Mobile viewport (iPhone 14 Pro: 393x852)
+  // 08. Capture mobile cockpit overview with progress
   // ─────────────────────────────────────────────
-  console.log('[08] Switching to mobile viewport...');
-  await page.setViewport({ width: 393, height: 852, deviceScaleFactor: 2, isMobile: true });
-  await page.goto(APP_URL, { waitUntil: 'networkidle2', timeout: 45000 });
-  await sleep(2000);
+  console.log('[08] Scrolling to top to capture mobile cockpit...');
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+  await sleep(1000);
 
   console.log('[08] Capturing mobile_cockpit...');
   await page.screenshot({ path: path.join(OUT_DIR, '08_mobile_cockpit.png'), fullPage: false });
