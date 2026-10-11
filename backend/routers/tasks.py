@@ -1,8 +1,13 @@
 from fastapi import APIRouter, HTTPException
 from config.db import get_db
+from config.ai import ai_client, AI_MODEL
 from models.schemas import TaskCreate, TaskOut, TaskPatch, SyncBatchRequest, MutationItem
 from datetime import datetime
+import json
+import logging
 import uuid
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api", tags=["tasks"])
 
@@ -116,6 +121,69 @@ async def rebalance_task_pacing(task_id: str):
         # Kompresi durasi adaptif jika deadline mepet (sisa menit < total durasi langkah tersisa)
         should_compress = (minutes_left > 0 and minutes_left < total_current_duration) or (minutes_left <= 0)
 
+        # Re-scoping tugas jika deadline mepet (Emergency Micro-Pacing)
+        rescoped_map = {}
+        if should_compress and num_uncompleted > 0:
+            # 1. Coba AI Re-scoping
+            try:
+                ai_prompt = f"""Kamu adalah perencana tugas darurat mahasiswa KilasTugas.
+Tugas: '{task['title']}'
+Tenggat waktu sangat mepet: tersisa {max(1, minutes_left)} menit!
+Ada {num_uncompleted} sub-tugas yang belum selesai:
+"""
+                for s in uncompleted:
+                    ai_prompt += f"- ID: {s['id']} | Judul Lama: {s['title']}\n"
+
+                ai_prompt += f"""
+Rombak dan sederhanakan {num_uncompleted} langkah kerja di atas agar fokus pada 'Minimum Viable Submission' yang realistis dituntaskan dalam sisa waktu {max(1, minutes_left)} menit (pangkas yang tidak perlu, prioritaskan poin penilaian inti, langkah terakhir wajib untuk submit).
+Format HANYA JSON array:
+[
+  {{"id": "ID subtask sama persis", "title": "[Sprint Kilat / Fokus Inti / Submit] Judul aksi konkret (max 60 karakter)", "description": "Arahan aksi darurat 1 kalimat"}}
+]"""
+
+                response = await ai_client.chat.completions.create(
+                    model=AI_MODEL,
+                    messages=[
+                        {"role": "system", "content": "Kamu adalah asisten dekomposisi tugas darurat. Keluarkan HANYA JSON array murni."},
+                        {"role": "user", "content": ai_prompt},
+                    ],
+                    temperature=0.2,
+                    max_tokens=600,
+                )
+                raw = (response.choices[0].message.content or "").strip()
+                if "```" in raw:
+                    parts = raw.split("```")
+                    raw = parts[1]
+                    if raw.startswith("json"):
+                        raw = raw[4:]
+                raw = raw.strip()
+                parsed = json.loads(raw)
+                if isinstance(parsed, list):
+                    for item in parsed:
+                        if isinstance(item, dict) and "id" in item and "title" in item:
+                            rescoped_map[item["id"]] = {
+                                "title": str(item["title"])[:250],
+                                "description": str(item.get("description") or ""),
+                            }
+            except Exception as e:
+                logger.warning(f"AI task re-scoping fallback to heuristics: {e}")
+
+            # 2. Heuristik fallback jika AI tidak merespon / gagal
+            if not rescoped_map:
+                for idx, s in enumerate(uncompleted):
+                    orig_t = s["title"]
+                    clean_t = orig_t.split("] ", 1)[-1] if orig_t.startswith("[") else orig_t
+                    if idx == num_uncompleted - 1:
+                        new_t = f"[Finalisasi & Submit] {clean_t}"
+                        desc = "Rapikan format berkas esensial dan kumpulkan sebelum batas waktu."
+                    elif idx == 0:
+                        new_t = f"[Fokus Inti] {clean_t}"
+                        desc = "Prioritaskan poin penilaian paling berbobot, pangkas bagian opsional."
+                    else:
+                        new_t = f"[Sprint Ringkas] {clean_t}"
+                        desc = "Selesaikan draf minimum yang dapat dinilai tanpa menunda."
+                    rescoped_map[s["id"]] = {"title": new_t[:250], "description": desc}
+
         # Distribusikan tanggal target dan sesuaikan durasi secara proporsional
         for idx, st in enumerate(uncompleted):
             if days_left == 0 or num_uncompleted == 1:
@@ -135,12 +203,22 @@ async def rebalance_task_pacing(task_id: str):
             else:
                 new_dur = orig_dur
 
+            update_sets = [
+                "target_date = DATE_ADD(CURDATE(), INTERVAL %s DAY)",
+                "duration_minutes = %s",
+            ]
+            update_vals = [day_offset, new_dur]
+
+            if st["id"] in rescoped_map:
+                update_sets.append("title = %s")
+                update_vals.append(rescoped_map[st["id"]]["title"])
+                update_sets.append("description = %s")
+                update_vals.append(rescoped_map[st["id"]]["description"])
+
+            update_vals.append(st["id"])
             await db.execute(
-                """UPDATE subtasks
-                   SET target_date = DATE_ADD(CURDATE(), INTERVAL %s DAY),
-                       duration_minutes = %s
-                   WHERE id = %s""",
-                (day_offset, new_dur, st["id"]),
+                f"UPDATE subtasks SET {', '.join(update_sets)} WHERE id = %s",
+                tuple(update_vals),
             )
 
         # Ambil data subtasks terbaru setelah rebalance
@@ -152,10 +230,19 @@ async def rebalance_task_pacing(task_id: str):
         )
         updated_subtasks = await db.fetchall()
 
+        msg = (
+            f"Mode Sprint Darurat aktif! {len(uncompleted)} langkah disederhanakan agar selesai dalam sisa {max(1, minutes_left)} menit."
+            if should_compress
+            else "Jadwal dan ritme kerja berhasil diseimbangkan kembali."
+        )
+
         return {
             "success": True,
             "rebalanced_count": len(uncompleted),
             "days_left": days_left,
+            "minutes_left": minutes_left,
+            "is_emergency_sprint": should_compress,
+            "message": msg,
             "data": updated_subtasks,
         }
 

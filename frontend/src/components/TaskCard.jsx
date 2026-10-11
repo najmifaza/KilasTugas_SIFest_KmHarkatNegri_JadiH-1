@@ -744,13 +744,22 @@ export default function TaskCard({
 
                   {/* Title and metadata */}
                   <div className="flex-1 min-w-0 pr-1">
-                    <p
-                      className={`text-xs font-semibold leading-snug line-clamp-1 ${
-                        st.is_completed ? 'line-through text-slate-400' : 'text-slate-900'
-                      }`}
-                    >
-                      {st.title}
-                    </p>
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      {st.title && st.title.startsWith('[') && st.title.includes(']') && (
+                        <span className="px-1.5 py-0.5 bg-amber-100 text-amber-800 text-[9px] font-bold rounded-md">
+                          {st.title.slice(1, st.title.indexOf(']'))}
+                        </span>
+                      )}
+                      <p
+                        className={`text-xs font-semibold leading-snug line-clamp-1 ${
+                          st.is_completed ? 'line-through text-slate-400' : 'text-slate-900'
+                        }`}
+                      >
+                        {st.title && st.title.startsWith('[') && st.title.includes(']')
+                          ? st.title.slice(st.title.indexOf(']') + 1).trim()
+                          : st.title}
+                      </p>
+                    </div>
                     <div className="flex items-center gap-2 mt-0.5 text-[10px] text-slate-500 font-mono">
                       <span>{st.duration_minutes || 25}m</span>
                       {st.target_date && <span>• {st.target_date}</span>}
