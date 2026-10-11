@@ -294,8 +294,8 @@
           <div class="p-5 rounded-2xl bg-[#FBF9F6] border border-black/5 flex gap-4 items-start">
             <div class="w-10 h-10 rounded-xl bg-brandLime flex items-center justify-center font-bold text-brandDark shrink-0">3</div>
             <div>
-              <h3 class="font-bold text-brandDark mb-1">Persistent Pomodoro Engine</h3>
-              <p class="text-xs text-muted">Floating timer 25/5 persisten di tab browser dengan audio chime synthesizer saat sesi selesai.</p>
+              <h3 class="font-bold text-brandDark mb-1">Adaptive Focus &amp; Break Engine</h3>
+              <p class="text-xs text-muted">Durasi fokus fleksibel (25–90 mnt) dengan <b>Adaptive Break (5–15 mnt)</b> proporsional 20%, persisten di background tab &amp; audio chime.</p>
             </div>
           </div>
           <div class="p-5 rounded-2xl bg-[#FBF9F6] border border-black/5 flex gap-4 items-start">
@@ -311,98 +311,385 @@
 
     <!-- SLIDE 6 -->
     <section class="slide flex-col justify-center" data-slide="6">
-      <div class="bg-white/80 backdrop-blur-md rounded-3xl p-5 sm:p-6 border border-black/5 shadow-xl">
-        <div class="flex items-center gap-2 mb-1.5">
-          <span class="px-3 py-1 rounded-full bg-brandLime text-brandDark text-xs font-bold uppercase tracking-wider">Slide 06</span>
-          <span class="text-xs font-semibold text-muted uppercase tracking-wider">Product Demo</span>
+      <div class="bg-white/85 backdrop-blur-md rounded-3xl p-6 sm:p-8 border border-black/5 shadow-xl flex flex-col justify-between">
+        
+        <!-- Header -->
+        <div class="flex items-center justify-between gap-3 mb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-3 py-1 rounded-full bg-brandLime text-brandDark text-xs font-bold uppercase tracking-wider">Slide 06</span>
+            <span class="text-xs font-semibold text-muted uppercase tracking-wider">Product Demo &amp; User Flow</span>
+          </div>
+          <div class="hidden sm:flex items-center gap-2 text-[11px] font-mono text-muted bg-[#FBF9F6] px-3 py-1 rounded-full border border-black/5">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            Guest Mode (Zero Setup)
+          </div>
         </div>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-brandDark mb-3 leading-none">
-          Alur Pengalaman Pengguna
-        </h2>
+
+        <div class="mb-4">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-brandDark tracking-tight leading-tight">
+            Alur Pengalaman Pengguna
+          </h2>
+          <p class="text-xs text-muted mt-1">
+            Ubah instruksi tugas yang membingungkan menjadi rangkaian aksi harian yang ringan dan terukur.
+          </p>
+        </div>
+
+        <!-- Main Layout: Process Cards (Left) & Hero Mockup (Right) -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
-          <div class="lg:col-span-7 space-y-2">
-            <div class="p-2.5 rounded-xl bg-[#FBF9F6] border border-black/5 flex items-center gap-3">
-              <span class="w-7 h-7 rounded-full bg-brandDark text-white text-xs font-extrabold flex items-center justify-center shrink-0">1</span>
-              <div>
-                <h3 class="font-bold text-sm text-brandDark leading-tight">Quick Input</h3>
-                <p class="text-xs font-medium text-muted">Paste modul tugas kuliah dan pilih target 3-8 langkah.</p>
+          
+          <!-- Kolom Kiri: 5 Langkah Alur Terstruktur -->
+          <div class="lg:col-span-7 flex flex-col justify-between space-y-2.5">
+            
+            <!-- Grid 2x2: Langkah 1 s.d. 4 -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              
+              <!-- Langkah 1: Quick Input -->
+              <div class="p-3.5 rounded-2xl bg-[#FBF9F6] border border-black/5 hover:border-black/20 transition-all flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="w-6 h-6 rounded-lg bg-brandDark text-white text-xs font-black flex items-center justify-center">1</span>
+                    <span class="text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded-full bg-black/5 text-muted">Inisiasi</span>
+                  </div>
+                  <h3 class="font-bold text-sm text-brandDark leading-snug mb-1">Quick Input Tugas</h3>
+                  <p class="text-xs text-muted leading-relaxed">
+                    Tempel modul/silabus tugas panjang &amp; pilih target <b>3–8 langkah</b> harian.
+                  </p>
+                </div>
               </div>
-            </div>
-            <div class="p-2.5 rounded-xl bg-[#FBF9F6] border border-black/5 flex items-center gap-3">
-              <span class="w-7 h-7 rounded-full bg-brandDark text-white text-xs font-extrabold flex items-center justify-center shrink-0">2</span>
-              <div>
-                <h3 class="font-bold text-sm text-brandDark leading-tight">AI Decomposition</h3>
-                <p class="text-xs font-medium text-muted">AI susun urutan aksi konkret dengan estimasi waktu terukur.</p>
+
+              <!-- Langkah 2: AI Decomposition -->
+              <div class="p-3.5 rounded-2xl bg-[#FBF9F6] border border-brandLime shadow-2xs flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="w-6 h-6 rounded-lg bg-brandLime text-brandDark text-xs font-black flex items-center justify-center">2</span>
+                    <span class="text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded-full bg-brandLime/40 text-brandDark">AI Engine</span>
+                  </div>
+                  <h3 class="font-bold text-sm text-brandDark leading-snug mb-1">AI Decomposition</h3>
+                  <p class="text-xs text-muted leading-relaxed">
+                    Gemini susun aksi mikro konkret (25–90 mnt) berbasis <b>JSON Schema murni</b>.
+                  </p>
+                </div>
               </div>
-            </div>
-            <div class="p-2.5 rounded-xl bg-[#FBF9F6] border border-black/5 flex items-center gap-3">
-              <span class="w-7 h-7 rounded-full bg-brandDark text-white text-xs font-extrabold flex items-center justify-center shrink-0">3</span>
-              <div>
-                <h3 class="font-bold text-sm text-brandDark leading-tight">Today Focus & Micro-Pacing</h3>
-                <p class="text-xs font-medium text-muted">Pantau status On Track/Behind dan fokus kuota hari ini.</p>
+
+              <!-- Langkah 3: Visual Micro-Pacing -->
+              <div class="p-3.5 rounded-2xl bg-[#FBF9F6] border border-black/5 hover:border-black/20 transition-all flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="w-6 h-6 rounded-lg bg-brandDark text-white text-xs font-black flex items-center justify-center">3</span>
+                    <span class="text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded-full bg-black/5 text-muted">Pacing</span>
+                  </div>
+                  <h3 class="font-bold text-sm text-brandDark leading-snug mb-1">Today Micro-Pacing</h3>
+                  <p class="text-xs text-muted leading-relaxed">
+                    Circular gauge pantau ritme kerja harian: <b>On Track</b> vs <b>Behind</b> secara real-time.
+                  </p>
+                </div>
               </div>
-            </div>
-            <div class="p-2.5 rounded-xl bg-[#FBF9F6] border border-black/5 flex items-center gap-3">
-              <span class="w-7 h-7 rounded-full bg-brandDark text-white text-xs font-extrabold flex items-center justify-center shrink-0">4</span>
-              <div>
-                <h3 class="font-bold text-sm text-brandDark leading-tight">Persistent Pomodoro</h3>
-                <p class="text-xs font-medium text-muted">Fokus 25/5 lewat floating timer dan lonceng audio.</p>
+
+              <!-- Langkah 4: Adaptive Focus & Break -->
+              <div class="p-3.5 rounded-2xl bg-[#FBF9F6] border border-black/5 hover:border-black/20 transition-all flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="w-6 h-6 rounded-lg bg-brandDark text-white text-xs font-black flex items-center justify-center">4</span>
+                    <span class="text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded-full bg-black/5 text-muted">Adaptive Break</span>
+                  </div>
+                  <h3 class="font-bold text-sm text-brandDark leading-snug mb-1">Adaptive Focus &amp; Break</h3>
+                  <p class="text-xs text-muted leading-relaxed">
+                    Sesi kerja fleksibel (25–90 mnt) + jeda istirahat adaptif <b>20% (5–15 mnt)</b> di background tab &amp; <b>Web Audio chime</b>.
+                  </p>
+                </div>
               </div>
+
             </div>
-            <div class="p-2.5 rounded-xl bg-[#FBF9F6] border border-black/5 flex items-center gap-3">
-              <span class="w-7 h-7 rounded-full bg-brandDark text-white text-xs font-extrabold flex items-center justify-center shrink-0">5</span>
-              <div>
-                <h3 class="font-bold text-sm text-brandDark leading-tight">Sync & Peer Sharing</h3>
-                <p class="text-xs font-medium text-muted">Ekspor kalender .ics/GCal dan bagikan blueprint sekelas.</p>
+
+            <!-- Langkah 5: Sync & Peer Sharing (Full-Width Card) -->
+            <div class="p-3.5 rounded-2xl bg-[#FBF9F6] border border-black/5 flex items-center justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <span class="w-6 h-6 rounded-lg bg-brandDark text-white text-xs font-black flex items-center justify-center shrink-0">5</span>
+                <div>
+                  <h3 class="font-bold text-sm text-brandDark leading-tight">Sync &amp; Peer Sharing</h3>
+                  <p class="text-xs text-muted leading-snug mt-0.5">
+                    1-klik ekspor ke <b>Google Calendar / .ics</b> dan bagikan blueprint ke teman sekelas via tautan <code class="font-mono text-[10px] bg-black/5 px-1 py-0.5 rounded text-brandDark font-bold">/p/:id</code>.
+                  </p>
+                </div>
               </div>
+              <span class="text-[10px] font-mono font-bold uppercase px-2 py-1 rounded-md bg-white border border-black/5 text-brandDark shrink-0 hidden sm:inline">1-Click Import</span>
             </div>
-            <div class="p-2.5 rounded-xl bg-brandLime/25 border border-brandLime flex items-center justify-between">
-              <span class="text-xs font-bold text-brandDark">Live Demo: kilastugas.vercel.app</span>
-              <span class="text-[11px] font-semibold text-muted">Guest Mode Aktif</span>
+
+            <!-- Live Demo Strip -->
+            <div class="p-2.5 rounded-xl bg-brandLime/25 border border-brandLime flex items-center justify-between text-xs">
+              <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-brandDark animate-ping"></span>
+                <span class="font-bold text-brandDark">Live Demo:</span>
+                <a href="https://kilastugas.vercel.app" target="_blank" class="font-mono font-bold text-brandDark underline hover:text-emerald-700">kilastugas.vercel.app</a>
+              </div>
+              <span class="text-[11px] font-semibold text-brandDark/80">Guest Mode Aktif · Tanpa Registrasi</span>
             </div>
+
           </div>
-          <div class="lg:col-span-5 flex justify-center items-center">
-            <div class="max-h-[360px] rounded-3xl overflow-hidden shadow-card border border-black/5 bg-white p-1.5 flex items-center justify-center">
-              <img src="mockupIphone.png" alt="Mockup Aplikasi KilasTugas" class="max-h-[350px] w-auto object-contain rounded-2xl mx-auto">
+
+          <!-- Kolom Kanan: Hero Mockup dengan Floating Callout Badges -->
+          <div class="lg:col-span-5 flex justify-center items-center relative py-2">
+            
+            <!-- Soft Ambient Glow -->
+            <div class="absolute inset-0 bg-gradient-to-tr from-brandLime/30 via-purple-300/15 to-transparent rounded-full blur-2xl transform scale-90 -z-10"></div>
+            
+            <!-- Floating Annotation Top-Left -->
+            <div class="absolute top-4 -left-2 sm:-left-5 z-10 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-xl border border-black/10 shadow-lg flex items-center gap-2 hover:scale-105 transition-transform">
+              <span class="w-2.5 h-2.5 rounded-full bg-brandLime animate-pulse"></span>
+              <div>
+                <p class="text-[9px] font-bold text-muted uppercase tracking-wider leading-none">Micro-Pacing</p>
+                <p class="text-[11px] font-extrabold text-brandDark leading-tight">100% On Track</p>
+              </div>
             </div>
+
+            <!-- Phone Mockup Image -->
+            <img src="mockupIphone.png" alt="Mockup Aplikasi KilasTugas" class="max-h-[355px] w-auto object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-transform duration-300">
+
+            <!-- Floating Annotation Bottom-Right -->
+            <div class="absolute bottom-6 -right-2 sm:-right-4 z-10 bg-brandDark text-white px-3 py-1.5 rounded-xl shadow-lg flex items-center gap-2 hover:scale-105 transition-transform">
+              <span class="text-xs">⏱️</span>
+              <div>
+                <p class="text-[9px] font-mono text-neutral-400 uppercase tracking-wider leading-none">Adaptive Timer</p>
+                <p class="text-[11px] font-mono font-bold text-brandLime leading-tight">Jeda 5–15m Adaptif</p>
+              </div>
+            </div>
+
           </div>
+
         </div>
+
       </div>
     </section>
 
     <!-- SLIDE 7 -->
     <section class="slide flex-col justify-center" data-slide="7">
-      <div class="bg-white/80 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-black/5 shadow-xl">
-        <div class="flex items-center gap-2 mb-6">
-          <span class="px-3 py-1 rounded-full bg-brandLime text-brandDark text-xs font-bold uppercase tracking-wider">Slide 07</span>
-          <span class="text-xs font-semibold text-muted uppercase tracking-wider">Product Defense & Tech Stack</span>
-        </div>
-        <h2 class="text-3xl sm:text-4xl font-extrabold text-brandDark mb-6">
-          Teknologi: Bukan Sekadar AI Chatbot / Wrapper.
-        </h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="p-6 rounded-2xl bg-[#FBF9F6] border border-black/5">
-            <span class="px-2.5 py-1 rounded-md bg-white border border-black/5 text-[11px] font-mono font-bold text-brandDark">01 · Inference Engine</span>
-            <h3 class="text-lg font-bold text-brandDark mt-3 mb-2">9Router & Gemini</h3>
-            <p class="text-xs text-muted leading-relaxed">
-              Model <b>ag/gemini-3.7-flash-medium</b> dengan output <b>JSON Schema murni</b> (aksi singkat, durasi terukur, day offset), bukan sekadar teks percakapan bebas.
-            </p>
+      <div class="bg-white/80 backdrop-blur-md rounded-3xl p-6 sm:p-10 border border-black/5 shadow-xl flex flex-col justify-between">
+        
+        <!-- Header Info -->
+        <div class="flex items-center justify-between gap-3 mb-4">
+          <div class="flex items-center gap-2">
+            <span class="px-3 py-1 rounded-full bg-brandLime text-brandDark text-xs font-bold uppercase tracking-wider">Slide 07</span>
+            <span class="text-xs font-semibold text-muted uppercase tracking-wider">Tech Stack & Infrastructure Architecture</span>
           </div>
-          <div class="p-6 rounded-2xl bg-[#FBF9F6] border border-brandLime">
-            <span class="px-2.5 py-1 rounded-md bg-brandLime text-[11px] font-mono font-bold text-brandDark">02 · Execution Ecosystem</span>
-            <h3 class="text-lg font-bold text-brandDark mt-3 mb-2">Pacing & Timer Nyata</h3>
-            <p class="text-xs text-muted leading-relaxed">
-              Tiap langkah terhubung langsung ke <b>Visual Progress Gauge</b> harian (On Track / Behind) dan <b>Persistent Pomodoro Timer</b> dengan audio chime bawaan peramban.
-            </p>
-          </div>
-          <div class="p-6 rounded-2xl bg-[#FBF9F6] border border-black/5">
-            <span class="px-2.5 py-1 rounded-md bg-white border border-black/5 text-[11px] font-mono font-bold text-brandDark">03 · Zero Downtime</span>
-            <h3 class="text-lg font-bold text-brandDark mt-3 mb-2">Smart Cache & Fallback</h3>
-            <p class="text-xs text-muted leading-relaxed">
-              Cache MariaDB sajikan tugas sekelas <b>&lt;20ms</b> (hemat 70% token AI). Jika AI timeout, <b>Deterministic Fallback</b> template kurikulum aktif otomatis.
-            </p>
+          <div class="hidden sm:flex items-center gap-2 text-[11px] font-mono text-muted bg-[#FBF9F6] px-3 py-1 rounded-full border border-black/5">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            Production Live Architecture
           </div>
         </div>
+
+        <div class="mb-4">
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-brandDark tracking-tight">
+            Arsitektur Teknologi, Database & Deployment Produksi
+          </h2>
+          <p class="text-xs text-muted mt-1">
+            Bukan sekadar AI wrapper: Solusi end-to-end terintegrasi dengan Client Edge, Asynchronous Backend, Enterprise DB, dan AI Inference Gateway.
+          </p>
+        </div>
+
+        <!-- 4 Pillars Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 mb-4">
+
+          <!-- 01: Client Layer (Frontend) -->
+          <div class="p-4 rounded-2xl bg-[#FBF9F6] border border-black/5 flex flex-col justify-between hover:border-black/20 transition-all">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-[10px] font-mono font-bold uppercase text-muted tracking-wider">01 · Client Layer</span>
+                <span class="px-2 py-0.5 rounded-full bg-brandLime/40 text-[10px] font-bold text-brandDark">Edge CDN</span>
+              </div>
+              
+              <!-- Tech Logos -->
+              <div class="flex items-center gap-1.5 mb-2.5">
+                <!-- React -->
+                <div class="w-7 h-7 rounded-lg bg-white border border-black/5 flex items-center justify-center shadow-2xs" title="React 18">
+                  <svg class="w-4 h-4 text-[#00D8FE]" viewBox="-11.5 -10.23174 23 20.46348" fill="currentColor">
+                    <circle cx="0" cy="0" r="2.05" fill="#00D8FE"/>
+                    <g stroke="#00D8FE" stroke-width="1" fill="none">
+                      <ellipse rx="11" ry="4.2"/>
+                      <ellipse rx="11" ry="4.2" transform="rotate(60)"/>
+                      <ellipse rx="11" ry="4.2" transform="rotate(120)"/>
+                    </g>
+                  </svg>
+                </div>
+                <!-- Vite -->
+                <div class="w-7 h-7 rounded-lg bg-white border border-black/5 flex items-center justify-center shadow-2xs" title="Vite 5">
+                  <svg class="w-4 h-4" viewBox="0 0 32 32" fill="none">
+                    <path d="M29.8 5.7 16.7 29.5a1 1 0 0 1-1.4 0L2.2 5.7c-.5-.8.1-1.7 1-1.7h25.6c.9 0 1.5.9 1 1.7Z" fill="#BD34FE"/>
+                    <path d="M20.2 4 11.1 20.8c-.3.6-.9.6-1.2 0L7 15c-.4-.7.1-1.5.9-1.5h5.1l2.3-4.5c.3-.6 1.1-.6 1.4 0l3.5 7z" fill="#FFD62E"/>
+                  </svg>
+                </div>
+                <!-- Tailwind CSS -->
+                <div class="w-7 h-7 rounded-lg bg-white border border-black/5 flex items-center justify-center shadow-2xs" title="Tailwind CSS 3.4">
+                  <svg class="w-4 h-4 text-[#38BDF8]" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12.001 4.8c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624C13.666 10.618 15.027 12 18.001 12c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C16.337 6.182 14.976 4.8 12.001 4.8zm-6 7.2c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624 1.177 1.194 2.538 2.576 5.512 2.576 3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.228-1.565-.89-2.288-1.624C10.337 13.382 8.976 12 6.001 12z"/>
+                  </svg>
+                </div>
+                <!-- Vercel -->
+                <div class="w-7 h-7 rounded-lg bg-white border border-black/5 flex items-center justify-center shadow-2xs" title="Vercel Edge Network">
+                  <svg class="w-3.5 h-3.5 text-brandDark" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="m12 1 12 21H0L12 1z"/>
+                  </svg>
+                </div>
+              </div>
+
+              <h3 class="text-sm font-bold text-brandDark leading-snug">React 18 + Vite 5</h3>
+              <p class="text-[11px] text-muted mb-2 font-medium">Tailwind CSS · Lucide · Web Audio</p>
+
+              <ul class="text-[11px] text-muted space-y-1.5 border-t border-black/5 pt-2">
+                <li><b class="text-brandDark">Deploy:</b> Vercel Global Edge Network</li>
+                <li><b class="text-brandDark">Domain:</b> <code class="font-mono text-[10px] bg-black/5 px-1 py-0.5 rounded text-brandDark">kilastugas.vercel.app</code></li>
+                <li>• Single Page App (SPA) responsif &amp; ringan</li>
+                <li>• Adaptive Focus Engine (Break 5–15 mnt) &amp; Web Chime</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- 02: Backend API & Service -->
+          <div class="p-4 rounded-2xl bg-[#FBF9F6] border border-black/5 flex flex-col justify-between hover:border-black/20 transition-all">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-[10px] font-mono font-bold uppercase text-muted tracking-wider">02 · Backend Layer</span>
+                <span class="px-2 py-0.5 rounded-full bg-blue-100 text-[10px] font-bold text-blue-800">Async API</span>
+              </div>
+              
+              <!-- Tech Logos -->
+              <div class="flex items-center gap-1.5 mb-2.5">
+                <!-- Python -->
+                <div class="w-7 h-7 rounded-lg bg-white border border-black/5 flex items-center justify-center shadow-2xs" title="Python 3.12">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                    <path d="M11.9 1.5c-5.5 0-5.2 2.4-5.2 2.4l.03 2.5h5.3v.7H4.3S1.5 6.7 1.5 12.2s2.5 5.3 2.5 5.3h1.5v-2.1s-.1-2.5 2.5-2.5h4.2c2.4 0 2.4-2.4 2.4-2.4V4c0-2.5-2.7-2.5-2.7-2.5zm-2.8 1.5a.8.8 0 1 1 0 1.6.8.8 0 0 1 0-1.6z" fill="#387EB8"/>
+                    <path d="M12.1 22.5c5.5 0 5.2-2.4 5.2-2.4l-.03-2.5h-5.3v-.7h7.7s2.8.4 2.8-5.1-2.5-5.3-2.5-5.3h-1.5v2.1s.1 2.5-2.5 2.5h-4.2c-2.4 0-2.4 2.4-2.4 2.4V20c0 2.5 2.7 2.5 2.7 2.5zm2.8-1.5a.8.8 0 1 1 0-1.6.8.8 0 0 1 0 1.6z" fill="#FFE052"/>
+                  </svg>
+                </div>
+                <!-- FastAPI -->
+                <div class="w-7 h-7 rounded-lg bg-white border border-black/5 flex items-center justify-center shadow-2xs" title="FastAPI 0.115">
+                  <svg class="w-4 h-4 text-[#009688]" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0C5.373 0 0 5.373 0 12c0 6.627 5.373 12 12 12s12-5.373 12-12C24 5.373 18.627 0 12 0zm-.807 4.908h3.351l-2.456 6.075h3.047L8.694 19.092l2.499-8.109H8.225l2.968-6.075z"/>
+                  </svg>
+                </div>
+                <!-- Nginx -->
+                <div class="w-7 h-7 rounded-lg bg-white border border-black/5 flex items-center justify-center shadow-2xs" title="Nginx Reverse Proxy">
+                  <svg class="w-4 h-4 text-[#009639]" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0L1.6 6v12L12 24l10.4-6V6L12 0zm6.1 16.9l-2.7-3.9v3.9H13V7.1h2.4l2.7 3.9V7.1h2.4v9.8h-2.4zM8.6 16.9H6.2V7.1h2.4v9.8z"/>
+                  </svg>
+                </div>
+                <!-- Ubuntu -->
+                <div class="w-7 h-7 rounded-lg bg-white border border-black/5 flex items-center justify-center shadow-2xs" title="Ubuntu 22.04 LTS VPS">
+                  <svg class="w-4 h-4 text-[#E95420]" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm-7.6 10.3c.9 0 1.7.8 1.7 1.7s-.8 1.7-1.7 1.7-1.7-.8-1.7-1.7.8-1.7 1.7-1.7zm11.2-5.9c.9 0 1.7.8 1.7 1.7s-.8 1.7-1.7 1.7-1.7-.8-1.7-1.7.8-1.7 1.7-1.7zm0 15.2c-.9 0-1.7-.8-1.7-1.7s.8-1.7 1.7-1.7 1.7.8 1.7 1.7-.8 1.7-1.7 1.7zM12 3.6c3.2 0 6 1.8 7.3 4.6-.7.4-1.3 1.1-1.6 1.9-1.3-1.8-3.4-3-5.7-3-3.6 0-6.6 2.8-6.9 6.3h-3C2.4 7.9 6.8 3.6 12 3.6zm0 16.8c-5.2 0-9.6-4.3-9.9-9.8h3c.3 3.5 3.3 6.3 6.9 6.3 2.3 0 4.4-1.2 5.7-3 .3.8.9 1.5 1.6 1.9-1.3 2.8-4.1 4.6-7.3 4.6z"/>
+                  </svg>
+                </div>
+              </div>
+
+              <h3 class="text-sm font-bold text-brandDark leading-snug">Python 3.12 + FastAPI</h3>
+              <p class="text-[11px] text-muted mb-2 font-medium">Pydantic v2 · aiomysql · Nginx SSL</p>
+
+              <ul class="text-[11px] text-muted space-y-1.5 border-t border-black/5 pt-2">
+                <li><b class="text-brandDark">Deploy:</b> Ubuntu VPS (Cloud Host)</li>
+                <li><b class="text-brandDark">API:</b> <code class="font-mono text-[10px] bg-black/5 px-1 py-0.5 rounded text-brandDark">api-kilastugas.najmifaza.my.id</code></li>
+                <li>• Asynchronous Non-blocking I/O &amp; Pool</li>
+                <li>• Nginx Reverse Proxy + SSL Let's Encrypt</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- 03: Persistence & Database -->
+          <div class="p-4 rounded-2xl bg-[#FBF9F6] border border-brandLime flex flex-col justify-between shadow-2xs">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-[10px] font-mono font-bold uppercase text-brandDark tracking-wider">03 · Persistence &amp; Cache</span>
+                <span class="px-2 py-0.5 rounded-full bg-brandLime text-[10px] font-bold text-brandDark">&lt;20ms Cache</span>
+              </div>
+              
+              <!-- Tech Logos -->
+              <div class="flex items-center gap-1.5 mb-2.5">
+                <!-- MariaDB -->
+                <div class="w-7 h-7 rounded-lg bg-[#003545] border border-black/5 flex items-center justify-center shadow-2xs" title="MariaDB 10.x Enterprise">
+                  <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                    <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                    <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                  </svg>
+                </div>
+                <span class="text-xs font-mono font-extrabold text-[#003545] tracking-tight">MariaDB</span>
+              </div>
+
+              <h3 class="text-sm font-bold text-brandDark leading-snug">MariaDB 10.x Enterprise</h3>
+              <p class="text-[11px] text-muted mb-2 font-medium">Smart Cache Engine · Dual-Storage</p>
+
+              <ul class="text-[11px] text-muted space-y-1.5 border-t border-black/5 pt-2">
+                <li><b class="text-brandDark">Database:</b> <code class="font-mono text-[10px] bg-black/5 px-1 py-0.5 rounded text-brandDark">kilastugas_db</code></li>
+                <li>• <b>Smart Cache (&lt;20ms):</b> Query hash tugas sekelas</li>
+                <li>• <b>Hemat Biaya:</b> Pangkas 70% konsumsi token AI</li>
+                <li>• Persistensi Blueprint shareable (<code class="font-mono text-[10px] bg-black/5 px-1 py-0.5 rounded text-brandDark">/p/:id</code>)</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- 04: AI Gateway & Resilience -->
+          <div class="p-4 rounded-2xl bg-[#FBF9F6] border border-black/5 flex flex-col justify-between hover:border-black/20 transition-all">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-[10px] font-mono font-bold uppercase text-muted tracking-wider">04 · AI Engine</span>
+                <span class="px-2 py-0.5 rounded-full bg-purple-100 text-[10px] font-bold text-purple-800">JSON Schema</span>
+              </div>
+              
+              <!-- Tech Logos -->
+              <div class="flex items-center gap-1.5 mb-2.5">
+                <!-- Gemini -->
+                <div class="w-7 h-7 rounded-lg bg-white border border-black/5 flex items-center justify-center shadow-2xs" title="Google Gemini 3.7 Flash">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                    <defs>
+                      <linearGradient id="geminiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#1A73E8"/>
+                        <stop offset="50%" stop-color="#8AB4F8"/>
+                        <stop offset="100%" stop-color="#C58AF9"/>
+                      </linearGradient>
+                    </defs>
+                    <path d="M12 0C12 6.627 6.627 12 0 12C6.627 12 12 17.373 12 24C12 17.373 17.373 12 24 12C17.373 12 12 6.627 12 0Z" fill="url(#geminiGrad)"/>
+                  </svg>
+                </div>
+                <!-- 9Router -->
+                <span class="text-xs font-mono font-extrabold text-brandDark bg-white px-1.5 py-0.5 rounded border border-black/5">9Router</span>
+              </div>
+
+              <h3 class="text-sm font-bold text-brandDark leading-snug">Gemini 3.7 Flash + 9Router</h3>
+              <p class="text-[11px] text-muted mb-2 font-medium">Deterministic Fallback · Structured Data</p>
+
+              <ul class="text-[11px] text-muted space-y-1.5 border-t border-black/5 pt-2">
+                <li><b class="text-brandDark">Model:</b> <code class="font-mono text-[10px] bg-black/5 px-1 py-0.5 rounded text-brandDark">ag/gemini-3.7-flash</code></li>
+                <li>• Output murni <b>JSON Schema</b> (terukur &amp; presisi)</li>
+                <li>• Latensi inferensi super cepat (&lt;2.0 detik)</li>
+                <li>• <b>Deterministic Fallback:</b> Zero Downtime jika API down</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Bottom Deployment & Performance Status Bar -->
+        <div class="p-3 rounded-2xl bg-brandDark text-white flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-brandLime animate-ping"></span>
+            <span class="font-bold text-brandLime">Live Production Endpoints:</span>
+          </div>
+          <div class="flex flex-wrap items-center gap-4 text-[11px] text-neutral-300">
+            <div class="flex items-center gap-1.5">
+              <span class="text-neutral-400">Frontend (Vercel):</span>
+              <a href="https://kilastugas.vercel.app" target="_blank" class="font-mono text-white underline hover:text-brandLime">kilastugas.vercel.app</a>
+            </div>
+            <span class="text-neutral-600 hidden sm:inline">•</span>
+            <div class="flex items-center gap-1.5">
+              <span class="text-neutral-400">Backend API (Ubuntu VPS):</span>
+              <a href="https://api-kilastugas.najmifaza.my.id" target="_blank" class="font-mono text-white underline hover:text-brandLime">api-kilastugas.najmifaza.my.id</a>
+            </div>
+            <span class="text-neutral-600 hidden sm:inline">•</span>
+            <div class="flex items-center gap-1.5">
+              <span class="text-neutral-400">Database:</span>
+              <span class="font-semibold text-brandLime">MariaDB (Cache &lt;20ms)</span>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -500,7 +787,7 @@
             <ul class="text-xs text-muted space-y-2">
               <li>✓ AI Task Breakdown terarah (3-8 langkah kustom)</li>
               <li>✓ Visual Micro-Pacing ring & circular gauge status</li>
-              <li>✓ Persistent Pomodoro Timer di background tab</li>
+              <li>✓ Adaptive Focus & Break Engine (jeda adaptif 20% proporsional)</li>
               <li>✓ Blueprint URL sharing (/p/:id) & ekspor iCal/GCal</li>
             </ul>
           </div>
