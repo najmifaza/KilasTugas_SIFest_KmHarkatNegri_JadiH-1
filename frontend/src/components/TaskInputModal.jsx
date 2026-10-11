@@ -195,16 +195,19 @@ export default function TaskInputModal({
     try {
       const res = await extractSyllabus(file)
       if (res?.success && res?.suggested) {
-        const { title, subject, category, description } = res.suggested
+        const { title, subject, category, description, deadline_date, deadline_time } = res.suggested
         setForm((prev) => ({
           ...prev,
           title: title || prev.title,
           description: description || prev.description,
           subject: subject || prev.subject,
           category: category || prev.category,
+          date: deadline_date || prev.date,
+          time: deadline_time || prev.time,
         }))
         setExtractedFileName(file.name)
-        setExtractSuccessMsg(`Silabus "${file.name}" berhasil diekstrak (${res.extracted_chars || 0} karakter)!`)
+        const deadlineInfo = deadline_date ? ` • Deadline otomatis diatur: ${deadline_date}${deadline_time ? ' ' + deadline_time : ''}` : ''
+        setExtractSuccessMsg(`Silabus "${file.name}" berhasil diekstrak${deadlineInfo}!`)
       }
     } catch (err) {
       setError(err?.response?.data?.detail || err?.message || 'Gagal mengekstrak berkas silabus')

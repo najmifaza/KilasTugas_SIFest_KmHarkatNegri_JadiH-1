@@ -135,6 +135,8 @@ def fallback_heuristics(text: str) -> dict:
         "subject": subject if subject != "Mata Kuliah" else None,
         "category": cat,
         "description": text[:800],
+        "deadline_date": None,
+        "deadline_time": None,
     }
 
 @router.post("/extract-syllabus")
@@ -201,13 +203,17 @@ Aturan Ekstraksi:
 2. "subject": Ambil nama mata kuliah resmi jika ada di dokumen (misal: "Pemrograman Web", "Kecerdasan Buatan"), maksimal 40 karakter. Jika tidak ditemukan, isi null.
 3. "category": Pilih salah satu kategori paling relevan dari daftar di atas.
 4. "description": Tulis rangkuman instruksi konkret tugas ini (tujuan tugas, batasan teknologi/format pengumpulan, dan luaran utama yang diminta dosen), padat dalam 2-4 kalimat.
+5. "deadline_date": Cari tanggal tenggat/batas pengumpulan tugas jika tertulis di dokumen. Format WAJIB "YYYY-MM-DD" (contoh: "2026-10-25"). Jika tidak ada tanggal tertera, isi null.
+6. "deadline_time": Jam batas pengumpulan jika tertulis di dokumen. Format "HH:MM" (contoh: "23:59" atau "17:00"). Jika tidak ada jam tertera, isi null.
 
 Format JSON murni (tanpa markdown, tanpa backtick, tanpa kata pengantar):
 {{
   "title": "Judul spesifik tugas",
   "subject": "Nama mata kuliah",
   "category": "coding",
-  "description": "Deskripsi instruksi tugas..."
+  "description": "Deskripsi instruksi tugas...",
+  "deadline_date": "2026-10-25",
+  "deadline_time": "23:59"
 }}
 
 Teks Panduan Dokumen:
@@ -234,11 +240,21 @@ Teks Panduan Dokumen:
         resp_raw = resp_raw.strip()
         parsed = json.loads(resp_raw)
         if isinstance(parsed, dict) and "title" in parsed:
+            d_date = parsed.get("deadline_date")
+            d_time = parsed.get("deadline_time")
+            # Validasi format YYYY-MM-DD
+            if d_date and not re.match(r'^\d{4}-\d{2}-\d{2}$', str(d_date).strip()):
+                d_date = None
+            if d_time and not re.match(r'^\d{1,2}:\d{2}$', str(d_time).strip()):
+                d_time = None
+
             suggested = {
                 "title": str(parsed.get("title", ""))[:60],
                 "subject": str(parsed.get("subject", ""))[:40],
                 "category": str(parsed.get("category", "custom")),
                 "description": str(parsed.get("description", "")),
+                "deadline_date": str(d_date).strip() if d_date else None,
+                "deadline_time": str(d_time).strip() if d_time else None,
             }
     except Exception as ai_err:
         logger.warning(f"AI extraction fallback to heuristics: {ai_err}")
