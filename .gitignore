@@ -51,6 +51,7 @@ Video_Penjelasan_Aplikasi*
 
 # KilasTugas non-code directories & agent files
 docs/
+scripts/
 .agents/
 skills/
 anti-slop/
