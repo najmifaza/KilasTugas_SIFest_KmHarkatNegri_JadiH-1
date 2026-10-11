@@ -49,6 +49,13 @@ export const isTaskCompleted = (t) => {
   return false
 }
 
+// Adaptive Break: 20% durasi fokus, dibatasi 5 - 15 menit
+const getAdaptiveBreakSeconds = (subtask) => {
+  const workMins = Number(subtask?.duration_minutes) || 25
+  const breakMins = Math.min(15, Math.max(5, Math.round(workMins * 0.2)))
+  return breakMins * 60
+}
+
 export default function App() {
   const [tasks, setTasks] = useState([])
   const [loading, setLoading] = useState(true)
@@ -106,7 +113,7 @@ export default function App() {
               isBreak: !wasBreak,
               remainingSeconds: wasBreak
                 ? (Number(parsed.subtask?.duration_minutes) || 25) * 60
-                : 5 * 60,
+                : getAdaptiveBreakSeconds(parsed.subtask),
               endTime: null,
             }
           }
@@ -153,10 +160,12 @@ export default function App() {
         }
 
         const wasBreak = timerState.isBreak
+        const breakSecs = getAdaptiveBreakSeconds(timerState.subtask)
+        const breakMins = Math.round(breakSecs / 60)
         const title = wasBreak ? 'Istirahat Selesai! 🔔' : 'Sesi Fokus Selesai! 🎉'
         const body = wasBreak
           ? 'Waktu istirahat habis. Siap untuk target langkah berikutnya?'
-          : `Langkah "${timerState.subtask?.title}" tuntas! Istirahat sejenak 5 menit.`
+          : `Langkah "${timerState.subtask?.title}" tuntas! Istirahat adaptif ${breakMins} menit.`
 
         if ('Notification' in window && Notification.permission === 'granted') {
           try {
@@ -165,8 +174,7 @@ export default function App() {
         }
 
         if (!wasBreak) {
-          // Switch to 5 min break
-          const breakSecs = 5 * 60
+          // Switch to adaptive break (5-15 min proporsional)
           setTimerState((prev) => ({
             ...prev,
             isBreak: true,
@@ -265,7 +273,7 @@ export default function App() {
         const secs =
           prev.remainingSeconds > 0
             ? prev.remainingSeconds
-            : (prev.isBreak ? 5 * 60 : (Number(prev.subtask.duration_minutes) || 25) * 60)
+            : (prev.isBreak ? getAdaptiveBreakSeconds(prev.subtask) : (Number(prev.subtask.duration_minutes) || 25) * 60)
         schedulePushForActiveTimer(prev.subtask, prev.isBreak, secs)
         return {
           ...prev,
@@ -282,7 +290,7 @@ export default function App() {
     setTimerState((prev) => {
       if (!prev.subtask) return prev
       const defaultSecs = prev.isBreak
-        ? 5 * 60
+        ? getAdaptiveBreakSeconds(prev.subtask)
         : (Number(prev.subtask.duration_minutes) || 25) * 60
       return {
         ...prev,

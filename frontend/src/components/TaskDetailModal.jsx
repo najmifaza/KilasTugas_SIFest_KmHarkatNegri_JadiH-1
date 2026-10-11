@@ -422,6 +422,8 @@ export default function TaskDetailModal({
                   <option value={25}>25 Menit (Standar Pomodoro)</option>
                   <option value={35}>35 Menit</option>
                   <option value={45}>45 Menit</option>
+                  <option value={60}>60 Menit (Deep Focus)</option>
+                  <option value={90}>90 Menit (Sprint Maksimal)</option>
                 </select>
               </div>
 
@@ -502,7 +504,7 @@ export default function TaskDetailModal({
                   <span className={`w-2 h-2 rounded-full ${isTimerActive ? 'bg-amber-500 animate-pulse' : 'bg-zinc-400'}`} />
                   <span>
                     {isTimerBreak
-                      ? 'Sesi Istirahat (5 Menit)'
+                      ? `Sesi Istirahat Adaptif (${Math.max(1, Math.round((displaySeconds || 300) / 60))} Menit)`
                       : isTimerActive
                       ? 'Fokus Berjalan'
                       : 'Timer Fokus Pomodoro'}
