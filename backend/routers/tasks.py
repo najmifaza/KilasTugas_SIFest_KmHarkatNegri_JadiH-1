@@ -96,7 +96,7 @@ async def patch_task(task_id: str, body: TaskPatch):
         )
         await db.execute(
             """SELECT t.id, t.session_id, t.title, t.description, t.subject, t.category,
-                      t.deadline, t.is_completed, t.progress_percent,
+                      t.deadline, t.is_completed,
                       COUNT(s.id) as subtasks_total,
                       SUM(CASE WHEN s.is_completed THEN 1 ELSE 0 END) as subtasks_done
                FROM tasks t
@@ -108,6 +108,11 @@ async def patch_task(task_id: str, body: TaskPatch):
         task = await db.fetchone()
         if not task:
             raise HTTPException(status_code=404, detail="Task tidak ditemukan")
+
+    total = task["subtasks_total"] or 0
+    done = int(task["subtasks_done"] or 0)
+    task = dict(task)
+    task["progress_percent"] = round(done / total * 100) if total > 0 else 0
 
     return {"success": True, "data": task}
 

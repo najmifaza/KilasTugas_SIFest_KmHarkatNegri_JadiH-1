@@ -99,5 +99,16 @@ async def patch_subtask(subtask_id: str, body: SubtaskPatch):
 @router.delete("/subtasks/{subtask_id}")
 async def delete_subtask(subtask_id: str):
     async with get_db() as db:
+        # Ambil task_id sebelum hapus untuk update parent
+        await db.execute("SELECT task_id FROM subtasks WHERE id = %s", (subtask_id,))
+        row = await db.fetchone()
         await db.execute("DELETE FROM subtasks WHERE id = %s", (subtask_id,))
+        if row:
+            await db.execute(
+                """UPDATE tasks SET is_completed = (
+                       SELECT IF(COUNT(id) > 0 AND SUM(is_completed) = COUNT(id), 1, 0)
+                       FROM subtasks WHERE task_id = %s
+                   ) WHERE id = %s""",
+                (row["task_id"], row["task_id"]),
+            )
     return {"success": True, "message": "subtask deleted"}

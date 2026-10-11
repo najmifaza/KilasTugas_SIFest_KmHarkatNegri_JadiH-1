@@ -14,7 +14,7 @@ async def get_pool():
             host=os.getenv("DB_HOST", "localhost"),
             port=int(os.getenv("DB_PORT", 3306)),
             user=os.getenv("DB_USER", "kilas_user"),
-            password=os.getenv("DB_PASS", ""),
+            password=os.getenv("DB_PASS") or os.getenv("DB_PASSWORD", ""),
             db=os.getenv("DB_NAME", "kilastugas_db"),
             autocommit=True,
             charset="utf8mb4",

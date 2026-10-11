@@ -73,7 +73,7 @@ export default function TaskInputModal({
         if (editingTask.deadline) {
           const d = new Date(editingTask.deadline)
           if (!isNaN(d.getTime())) {
-            dateVal = d.toISOString().slice(0, 10)
+            dateVal = d.toLocaleDateString('sv') // YYYY-MM-DD waktu lokal (LOGIC-14)
             timeVal = d.toTimeString().slice(0, 5)
           }
         }

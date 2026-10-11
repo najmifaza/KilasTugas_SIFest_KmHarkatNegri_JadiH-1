@@ -112,7 +112,7 @@ Tanggal Deadline: {deadline_naive.strftime('%A, %d %B %Y')}"""
                             "title": r["title"],
                             "description": r["description"],
                             "duration_minutes": r["duration_minutes"],
-                            "target_day_offset": int((idx / max(1, len(cached_rows) - 1)) * days_left) if len(cached_rows) > 1 else 0,
+                            "target_day_offset": int((idx / max(1, len(cached_rows) - 1)) * max(days_left - 1, 0)) if len(cached_rows) > 1 else 0,
                         }
                         for idx, r in enumerate(cached_rows)
                     ]

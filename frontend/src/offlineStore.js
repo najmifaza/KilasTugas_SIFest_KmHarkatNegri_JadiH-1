@@ -173,7 +173,12 @@ export async function getPendingMutations() {
     return new Promise((resolve) => {
       const tx = db.transaction('mutation_queue', 'readonly')
       const req = tx.objectStore('mutation_queue').getAll()
-      req.onsuccess = () => resolve(req.result || [])
+      req.onsuccess = () => {
+        const items = req.result || []
+        // LOGIC-03: sort kronologis agar urutan centang offline benar
+        items.sort((a, b) => new Date(a.client_timestamp) - new Date(b.client_timestamp))
+        resolve(items)
+      }
       req.onerror = () => resolve([])
     })
   } catch (err) {

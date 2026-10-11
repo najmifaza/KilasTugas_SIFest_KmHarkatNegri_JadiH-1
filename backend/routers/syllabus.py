@@ -51,8 +51,9 @@ def sliding_window_filter(raw_text: str, max_chars: int = 3000) -> str:
         score = sum(1 for kw in INSTRUCTION_KEYWORDS if kw in lower)
         scored_chunks.append((score, chunk))
 
-    # Jika ada chunk relevan yang lolos
+    # Sort by score descending agar rubrik/instruksi penting diprioritaskan (LOGIC-07)
     if scored_chunks:
+        scored_chunks.sort(key=lambda x: x[0], reverse=True)
         selected = []
         cur_len = 0
         for score, chunk in scored_chunks:

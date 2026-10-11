@@ -387,9 +387,9 @@ export default function TaskCard({
   const now = new Date()
   const diffDays = Math.ceil((deadlineDate - now) / (1000 * 60 * 60 * 24))
   const diffHours = (deadlineDate - now) / (1000 * 60 * 60)
-  const isOverdue = diffDays < 0 && !isAllDone
+  const isOverdue = !isAllDone && (deadlineDate.getTime() < now.getTime())
 
-  const todayStr = new Date().toISOString().slice(0, 10)
+  const todayStr = new Date().toLocaleDateString('sv') // YYYY-MM-DD waktu lokal (LOGIC-05)
   const delayedSubtasks = subtasks.filter(
     (s) => !s.is_completed && s.target_date && String(s.target_date).slice(0, 10) < todayStr
   )

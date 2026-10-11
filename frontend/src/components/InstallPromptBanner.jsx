@@ -79,7 +79,7 @@ export default function InstallPromptBanner() {
   return (
     <aside
       aria-label="Pemberitahuan instalasi aplikasi"
-      className="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-md z-50 animate-in fade-in slide-in-from-bottom-5 duration-300"
+      className="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-md z-40 animate-in fade-in slide-in-from-bottom-5 duration-300"
     >
       <div className="bg-[#18181B] text-white rounded-3xl p-4 sm:p-5 shadow-2xl border border-zinc-800 flex flex-col gap-3 font-sans">
         {/* Header bar */}

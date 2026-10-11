@@ -95,9 +95,16 @@ export default function App() {
           const now = Date.now()
           const diff = Math.round((parsed.endTime - now) / 1000)
           if (diff > 0) {
+            return { ...parsed, remainingSeconds: diff }
+          }
+          // LOGIC-11: timer habis saat tab ditutup — transisi ke break state
+          if (diff <= 0 && parsed.subtask) {
             return {
               ...parsed,
-              remainingSeconds: diff,
+              isActive: false,
+              isBreak: !parsed.isBreak,
+              remainingSeconds: parsed.isBreak ? (Number(parsed.subtask?.duration_minutes) || 25) * 60 : 5 * 60,
+              endTime: null,
             }
           }
         }
@@ -411,7 +418,15 @@ export default function App() {
 
   const handleTaskUpdated = (updatedTask) => {
     setTasks((prev) => {
-      const next = prev.map((t) => (t.id === updatedTask.id ? { ...t, ...updatedTask } : t))
+      const next = prev.map((t) => {
+        if (t.id !== updatedTask.id) return t
+        const merged = { ...t, ...updatedTask }
+        // LOGIC-15: hitung ulang progress_percent agar tidak NaN
+        const total = merged.subtasks_total ?? t.subtasks_total ?? 0
+        const done = merged.subtasks_done ?? t.subtasks_done ?? 0
+        merged.progress_percent = total > 0 ? Math.round((done / total) * 100) : 0
+        return merged
+      })
       cacheTasks(next)
       return next
     })
@@ -445,6 +460,11 @@ export default function App() {
     .sort((a, b) => new Date(a.deadline) - new Date(b.deadline))
 
   const [focusedTaskIndex, setFocusedTaskIndex] = useState(0)
+
+  // LOGIC-12: clamp focusedTaskIndex saat filteredTasks berubah
+  useEffect(() => {
+    setFocusedTaskIndex((prev) => (filteredTasks.length === 0 ? 0 : Math.min(prev, filteredTasks.length - 1)))
+  }, [filteredTasks.length])
 
   // Power Keyboard Shortcuts: Space (Timer), J/K (Navigasi), C (Centang), N (Tugas Baru), Escape (Tutup)
   useEffect(() => {
