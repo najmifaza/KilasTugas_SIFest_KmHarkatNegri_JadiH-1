@@ -8,6 +8,7 @@ import TaskDetailModal from './components/TaskDetailModal'
 import TaskInputModal from './components/TaskInputModal'
 import FloatingTimer from './components/FloatingTimer'
 import BlueprintModal from './components/BlueprintModal'
+import InstallPromptBanner from './components/InstallPromptBanner'
 import { getTasks, initSession, deleteTask, getBlueprint, syncBatchMutations, getSessionId } from './api'
 import { cacheTasks, getCachedTasks, getPendingMutations, removeMutations } from './offlineStore'
 
@@ -630,6 +631,9 @@ export default function App() {
           loadTasks()
         }}
       />
+
+      {/* PWA Install Prompt Banner (Apple vs Non-Apple) */}
+      <InstallPromptBanner />
     </div>
   )
 }
