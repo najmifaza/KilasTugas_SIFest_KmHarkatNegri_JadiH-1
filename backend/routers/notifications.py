@@ -35,10 +35,12 @@ async def schedule_timer_push(body: PushScheduleRequest):
         raise HTTPException(status_code=400, detail="Subscription data required")
 
     title = "Istirahat Selesai! 🔔" if body.is_break else "Sesi Fokus Selesai! 🎉"
+    work_mins = max(1, int(body.duration_seconds // 60))
+    break_mins = min(15, max(5, round(work_mins * 0.2)))
     desc = (
         "Waktu istirahat habis. Siap untuk target langkah berikutnya?"
         if body.is_break
-        else f'Langkah "{body.subtask_title}" tuntas! Istirahat sejenak 5 menit.'
+        else f'Langkah "{body.subtask_title}" tuntas! Istirahat adaptif {break_mins} menit.'
     )
 
     payload = {
