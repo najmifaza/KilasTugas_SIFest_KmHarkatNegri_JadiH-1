@@ -354,12 +354,16 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask, onSubtaskCh
     try {
       await patchSubtask(st.id, { is_completed: nextState })
     } catch (err) {
-      // Rollback on network failure
-      setSubtasks((prev) =>
-        prev.map((s) => (s.id === st.id ? { ...s, is_completed: st.is_completed } : s))
-      )
-      if (onSubtaskChange) {
-        onSubtaskChange(task.id, st.id, st.is_completed)
+      // Hanya rollback jika server mengembalikan respon error eksplisit (400/500)
+      // JANGAN rollback jika sedang offline atau kendala jaringan
+      if (err?.response && err.response.status >= 400) {
+        setSubtasks((prev) =>
+          prev.map((s) => (s.id === st.id ? { ...s, is_completed: st.is_completed } : s))
+        )
+        cacheSubtasks(task.id, subtasks)
+        if (onSubtaskChange) {
+          onSubtaskChange(task.id, st.id, st.is_completed)
+        }
       }
     }
   }
@@ -381,7 +385,7 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask, onSubtaskCh
     (s) => !s.is_completed && s.target_date && String(s.target_date).slice(0, 10) < todayStr
   )
   const hasDelayedSubtasks = delayedSubtasks.length > 0
-  const isBehindSchedule = !isAllDone && (hasDelayedSubtasks || (diffDays <= 2 && percent < 50))
+  const isBehindSchedule = !isAllDone && hasDelayedSubtasks
 
   let pacing = {
     label: 'On Track',
@@ -495,7 +499,7 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask, onSubtaskCh
                         : 'top-10 origin-top-right'
                     }`}
                   >
-                    {!isAllDone && (
+                    {!isAllDone && hasDelayedSubtasks && (
                       <button
                         type="button"
                         onClick={(e) => {

@@ -52,22 +52,37 @@ export const getSubtasks = async (taskId) => {
 }
 
 export const patchSubtask = async (subtaskId, updates) => {
+  // Jika sedang offline, langsung simpan mutasi lokal tanpa menunggu timeout jaringan
+  if (typeof navigator !== 'undefined' && !navigator.onLine) {
+    try {
+      await enqueueMutation({
+        entity_type: 'subtask',
+        entity_id: subtaskId,
+        action: 'patch',
+        data: updates,
+      })
+      return { success: true, offline: true }
+    } catch (e) {
+      console.warn('Gagal mencatat mutasi offline:', e)
+      return { success: true, offline: true }
+    }
+  }
+
   try {
     const res = await apiClient.patch(`/api/subtasks/${subtaskId}`, updates)
     return res.data
   } catch (err) {
-    if (!navigator.onLine || err?.code === 'ERR_NETWORK' || !err?.response) {
-      try {
-        await enqueueMutation({
-          entity_type: 'subtask',
-          entity_id: subtaskId,
-          action: 'patch',
-          data: updates,
-        })
-        return { success: true, offline: true }
-      } catch (e) {
-        console.warn('Gagal mencatat mutasi offline:', e)
-      }
+    // Tangani fallback jika jaringan terputus tiba-tiba
+    try {
+      await enqueueMutation({
+        entity_type: 'subtask',
+        entity_id: subtaskId,
+        action: 'patch',
+        data: updates,
+      })
+      return { success: true, offline: true }
+    } catch (e) {
+      console.warn('Gagal mencatat mutasi offline fallback:', e)
     }
     throw err
   }

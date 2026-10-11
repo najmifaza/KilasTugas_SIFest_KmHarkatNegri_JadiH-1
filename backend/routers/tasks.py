@@ -108,18 +108,39 @@ async def rebalance_task_pacing(task_id: str):
         days_left = max((deadline_naive.date() - now_naive.date()).days, 0)
         num_uncompleted = len(uncompleted)
 
-        # Distribusikan tanggal target secara proporsional mulai hari ini (offset 0) hingga sisa hari
+        # Hitung sisa menit riil menuju deadline
+        seconds_left = (deadline_naive - now_naive).total_seconds()
+        minutes_left = int(seconds_left / 60)
+        total_current_duration = sum(int(st.get("duration_minutes") or 25) for st in uncompleted)
+
+        # Kompresi durasi adaptif jika deadline mepet (sisa menit < total durasi langkah tersisa)
+        should_compress = (minutes_left > 0 and minutes_left < total_current_duration) or (minutes_left <= 0)
+
+        # Distribusikan tanggal target dan sesuaikan durasi secara proporsional
         for idx, st in enumerate(uncompleted):
             if days_left == 0 or num_uncompleted == 1:
                 day_offset = 0
             else:
                 day_offset = int(round((idx / max(1, num_uncompleted - 1)) * days_left))
 
+            orig_dur = int(st.get("duration_minutes") or 25)
+            if should_compress:
+                if minutes_left <= 0:
+                    new_dur = 15
+                else:
+                    usable_minutes = max(minutes_left, num_uncompleted * 10)
+                    prop_dur = int(round((orig_dur / max(1, total_current_duration)) * usable_minutes))
+                    min_floor = max(10, min(15, usable_minutes // num_uncompleted))
+                    new_dur = max(min_floor, min(orig_dur, prop_dur))
+            else:
+                new_dur = orig_dur
+
             await db.execute(
                 """UPDATE subtasks
-                   SET target_date = DATE_ADD(CURDATE(), INTERVAL %s DAY)
+                   SET target_date = DATE_ADD(CURDATE(), INTERVAL %s DAY),
+                       duration_minutes = %s
                    WHERE id = %s""",
-                (day_offset, st["id"]),
+                (day_offset, new_dur, st["id"]),
             )
 
         # Ambil data subtasks terbaru setelah rebalance

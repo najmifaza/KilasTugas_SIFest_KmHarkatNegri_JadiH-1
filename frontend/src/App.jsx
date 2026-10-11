@@ -270,8 +270,8 @@ export default function App() {
 
   const handleSubtaskChange = async (taskId, subtaskId, isCompleted) => {
     if (taskId && subtaskId !== undefined && typeof isCompleted === 'boolean') {
-      setTasks((prev) =>
-        prev.map((t) => {
+      setTasks((prev) => {
+        const next = prev.map((t) => {
           if (t.id !== taskId) return t
           const doneDelta = isCompleted ? 1 : -1
           const currentDone = t.subtasks_done ?? 0
@@ -286,9 +286,13 @@ export default function App() {
             is_completed: allDone,
           }
         })
-      )
+        cacheTasks(next)
+        return next
+      })
     }
-    await loadTasks()
+    if (navigator.onLine) {
+      await loadTasks()
+    }
   }
 
   useEffect(() => {
