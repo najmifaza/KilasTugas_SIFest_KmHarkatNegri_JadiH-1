@@ -9,8 +9,18 @@ import TaskInputModal from './components/TaskInputModal'
 import FloatingTimer from './components/FloatingTimer'
 import BlueprintModal from './components/BlueprintModal'
 import InstallPromptBanner from './components/InstallPromptBanner'
-import { getTasks, initSession, deleteTask, getBlueprint, syncBatchMutations, getSessionId } from './api'
+import {
+  getTasks,
+  initSession,
+  deleteTask,
+  getBlueprint,
+  syncBatchMutations,
+  getSessionId,
+  scheduleTimerPush,
+  cancelTimerPush,
+} from './api'
 import { cacheTasks, getCachedTasks, getPendingMutations, removeMutations } from './offlineStore'
+import { getOrRegisterPushSubscription } from './pushManager'
 
 const playChime = () => {
   try {
@@ -74,15 +84,40 @@ export default function App() {
     }
   }, [])
 
-  // Persistent Pomodoro Focus Timer State
-  const [timerState, setTimerState] = useState({
-    subtask: null,
-    task: null,
-    isActive: false,
-    isBreak: false,
-    remainingSeconds: 25 * 60,
-    endTime: null,
+  // Persistent Pomodoro Focus Timer State (Auto-Resume via State Persistence)
+  const [timerState, setTimerState] = useState(() => {
+    try {
+      const saved = localStorage.getItem('kilastugas_timer_state')
+      if (saved) {
+        const parsed = JSON.parse(saved)
+        if (parsed?.endTime && parsed?.isActive) {
+          const now = Date.now()
+          const diff = Math.round((parsed.endTime - now) / 1000)
+          if (diff > 0) {
+            return {
+              ...parsed,
+              remainingSeconds: diff,
+            }
+          }
+        }
+      }
+    } catch (e) {}
+    return {
+      subtask: null,
+      task: null,
+      isActive: false,
+      isBreak: false,
+      remainingSeconds: 25 * 60,
+      endTime: null,
+    }
   })
+
+  // Persist timer state to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem('kilastugas_timer_state', JSON.stringify(timerState))
+    } catch (e) {}
+  }, [timerState])
 
   // Request browser notification permission once
   useEffect(() => {
@@ -159,7 +194,32 @@ export default function App() {
     }
   }, [timerState.isActive, timerState.remainingSeconds, timerState.subtask])
 
-  // Timer Actions
+  // Timer Actions & Background Web Push Scheduler
+  const schedulePushForActiveTimer = async (subtask, isBreak, durationSeconds) => {
+    try {
+      const subscription = await getOrRegisterPushSubscription()
+      if (subscription) {
+        const sid = getSessionId()
+        await scheduleTimerPush({
+          session_id: sid,
+          duration_seconds: Math.max(1, Math.round(durationSeconds)),
+          subtask_title: subtask?.title || 'Langkah Fokus',
+          is_break: Boolean(isBreak),
+          subscription,
+        })
+      }
+    } catch (err) {
+      console.warn('Gagal menjadwalkan background web push:', err?.message)
+    }
+  }
+
+  const cancelPushForTimer = async () => {
+    try {
+      const sid = getSessionId()
+      await cancelTimerPush(sid)
+    } catch (err) {}
+  }
+
   const handleStartTimer = (subtask, task, durationMinutes = 25) => {
     const secs = Number(durationMinutes) * 60 || 25 * 60
     setTimerState({
@@ -170,6 +230,7 @@ export default function App() {
       remainingSeconds: secs,
       endTime: Date.now() + secs * 1000,
     })
+    schedulePushForActiveTimer(subtask, false, secs)
   }
 
   const handleToggleTimer = () => {
@@ -177,6 +238,7 @@ export default function App() {
       if (!prev.subtask) return prev
       if (prev.isActive) {
         // Pause
+        cancelPushForTimer()
         const now = Date.now()
         const remaining = prev.endTime
           ? Math.max(0, Math.round((prev.endTime - now) / 1000))
@@ -193,6 +255,7 @@ export default function App() {
           prev.remainingSeconds > 0
             ? prev.remainingSeconds
             : (prev.isBreak ? 5 * 60 : (Number(prev.subtask.duration_minutes) || 25) * 60)
+        schedulePushForActiveTimer(prev.subtask, prev.isBreak, secs)
         return {
           ...prev,
           isActive: true,
@@ -204,6 +267,7 @@ export default function App() {
   }
 
   const handleResetTimer = () => {
+    cancelPushForTimer()
     setTimerState((prev) => {
       if (!prev.subtask) return prev
       const defaultSecs = prev.isBreak
@@ -219,6 +283,7 @@ export default function App() {
   }
 
   const handleCloseTimer = () => {
+    cancelPushForTimer()
     setTimerState({
       subtask: null,
       task: null,

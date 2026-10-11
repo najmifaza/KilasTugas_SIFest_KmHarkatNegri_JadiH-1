@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
 from config.db import get_pool, close_pool
-from routers import sessions, tasks, subtasks, breakdown, blueprints, syllabus
+from routers import sessions, tasks, subtasks, breakdown, blueprints, syllabus, notifications
 
 load_dotenv()
 
@@ -39,6 +39,7 @@ app.include_router(subtasks.router)
 app.include_router(breakdown.router)
 app.include_router(blueprints.router)
 app.include_router(syllabus.router)
+app.include_router(notifications.router)
 
 @app.get("/")
 @app.get("/health")

@@ -145,5 +145,21 @@ export const syncBatchMutations = async (sessionId, mutations) => {
   return res.data
 }
 
+export const getVapidPublicKey = async () => {
+  const res = await apiClient.get('/api/push/vapid-public-key')
+  return res.data?.public_key
+}
+
+export const scheduleTimerPush = async (payload) => {
+  const res = await apiClient.post('/api/push/schedule-timer', payload)
+  return res.data
+}
+
+export const cancelTimerPush = async (sessionId) => {
+  const res = await apiClient.post('/api/push/cancel-timer', { session_id: sessionId })
+  return res.data
+}
+
+
 
 

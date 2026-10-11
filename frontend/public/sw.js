@@ -74,3 +74,52 @@ self.addEventListener('fetch', (event) => {
     })
   )
 })
+
+// ── Web Push Notification & Alarm Handler (RFC 8291/8292) ──
+self.addEventListener('push', (event) => {
+  let data = {
+    title: 'Sesi Fokus Selesai! 🎉',
+    body: 'Waktu fokus 25 menit tuntas. Istirahat sejenak 5 menit.',
+  }
+  try {
+    if (event.data) {
+      data = event.data.json()
+    }
+  } catch (e) {
+    if (event.data) {
+      data.body = event.data.text()
+    }
+  }
+
+  const options = {
+    body: data.body,
+    icon: '/logo-192.png',
+    badge: '/favicon-64.png',
+    vibrate: [200, 100, 200, 100, 200],
+    tag: 'kilastugas-timer',
+    renotify: true,
+    data: { url: '/' },
+    actions: [
+      { action: 'open', title: 'Buka KilasTugas' },
+    ],
+  }
+
+  event.waitUntil(self.registration.showNotification(data.title, options))
+})
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close()
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      for (const client of clientList) {
+        if (client.url.includes('/') && 'focus' in client) {
+          return client.focus()
+        }
+      }
+      if (clients.openWindow) {
+        return clients.openWindow('/')
+      }
+    })
+  )
+})
+
