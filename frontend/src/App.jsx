@@ -360,6 +360,71 @@ export default function App() {
     })
     .sort((a, b) => new Date(a.deadline) - new Date(b.deadline))
 
+  const [focusedTaskIndex, setFocusedTaskIndex] = useState(0)
+
+  // Power Keyboard Shortcuts: Space (Timer), J/K (Navigasi), C (Centang), N (Tugas Baru), Escape (Tutup)
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (
+        e.target.tagName === 'INPUT' ||
+        e.target.tagName === 'TEXTAREA' ||
+        e.target.isContentEditable ||
+        isInputModalOpen
+      ) {
+        return
+      }
+
+      if (e.key === 'Escape') {
+        if (activeDetail) setActiveDetail(null)
+        if (isInputModalOpen) setIsInputModalOpen(false)
+        if (sharedBlueprint) setSharedBlueprint(null)
+        return
+      }
+
+      if (e.code === 'Space') {
+        if (timerState.subtask) {
+          e.preventDefault()
+          handleToggleTimer()
+        }
+      } else if (e.key === 'j' || e.key === 'J') {
+        if (filteredTasks.length > 0) {
+          e.preventDefault()
+          setFocusedTaskIndex((prev) => {
+            const next = Math.min(filteredTasks.length - 1, prev + 1)
+            const el = document.getElementById(`task-card-${filteredTasks[next]?.id}`)
+            el?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+            return next
+          })
+        }
+      } else if (e.key === 'k' || e.key === 'K') {
+        if (filteredTasks.length > 0) {
+          e.preventDefault()
+          setFocusedTaskIndex((prev) => {
+            const next = Math.max(0, prev - 1)
+            const el = document.getElementById(`task-card-${filteredTasks[next]?.id}`)
+            el?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+            return next
+          })
+        }
+      } else if (e.key === 'c' || e.key === 'C') {
+        const currentTask = filteredTasks[focusedTaskIndex]
+        if (currentTask) {
+          e.preventDefault()
+          const cardTrigger = document.getElementById(`complete-next-subtask-${currentTask.id}`)
+          if (cardTrigger) {
+            cardTrigger.click()
+          }
+        }
+      } else if (e.key === 'n' || e.key === 'N') {
+        e.preventDefault()
+        setIsInputModalOpen(true)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [filteredTasks, focusedTaskIndex, timerState.subtask, isInputModalOpen, activeDetail, sharedBlueprint])
+
   return (
     <div className="min-h-screen bg-canvas-mesh flex flex-col selection:bg-slate-900 selection:text-white font-sans overflow-x-hidden w-full">
       {/* Offline Mode Banner (Auto PWA Sync) */}
@@ -558,16 +623,43 @@ export default function App() {
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
-              {filteredTasks.map((t) => (
-                <TaskCard
-                  key={t.id}
-                  task={t}
-                  onOpenDetail={(subtask, task) => setActiveDetail({ subtask, task })}
-                  onDeleteTask={handleDeleteTask}
-                  onSubtaskChange={handleSubtaskChange}
-                />
-              ))}
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+                {filteredTasks.map((t, idx) => (
+                  <TaskCard
+                    key={t.id}
+                    task={t}
+                    isFocused={idx === focusedTaskIndex}
+                    onOpenDetail={(subtask, task) => setActiveDetail({ subtask, task })}
+                    onDeleteTask={handleDeleteTask}
+                    onSubtaskChange={handleSubtaskChange}
+                  />
+                ))}
+              </div>
+
+              {/* Desktop Power Shortcuts Hint */}
+              <div className="hidden lg:flex items-center justify-center gap-3 py-3 text-[11px] font-medium text-zinc-500 select-none">
+                <span className="flex items-center gap-1.5">
+                  <kbd className="px-1.5 py-0.5 bg-white border border-zinc-200 rounded text-[10px] font-mono shadow-2xs text-zinc-700">Space</kbd>
+                  <span>Timer</span>
+                </span>
+                <span className="text-zinc-300">•</span>
+                <span className="flex items-center gap-1.5">
+                  <kbd className="px-1.5 py-0.5 bg-white border border-zinc-200 rounded text-[10px] font-mono shadow-2xs text-zinc-700">J</kbd>
+                  <kbd className="px-1.5 py-0.5 bg-white border border-zinc-200 rounded text-[10px] font-mono shadow-2xs text-zinc-700">K</kbd>
+                  <span>Navigasi</span>
+                </span>
+                <span className="text-zinc-300">•</span>
+                <span className="flex items-center gap-1.5">
+                  <kbd className="px-1.5 py-0.5 bg-white border border-zinc-200 rounded text-[10px] font-mono shadow-2xs text-zinc-700">C</kbd>
+                  <span>Centang Langkah</span>
+                </span>
+                <span className="text-zinc-300">•</span>
+                <span className="flex items-center gap-1.5">
+                  <kbd className="px-1.5 py-0.5 bg-white border border-zinc-200 rounded text-[10px] font-mono shadow-2xs text-zinc-700">N</kbd>
+                  <span>Tugas Baru</span>
+                </span>
+              </div>
             </div>
           )}
         </main>

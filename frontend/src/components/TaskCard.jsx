@@ -86,7 +86,13 @@ const playSuccessFanfare = () => {
   } catch (e) {}
 }
 
-export default function TaskCard({ task, onOpenDetail, onDeleteTask, onSubtaskChange }) {
+export default function TaskCard({
+  task,
+  isFocused = false,
+  onOpenDetail,
+  onDeleteTask,
+  onSubtaskChange,
+}) {
   const [subtasks, setSubtasks] = useState([])
   const [loading, setLoading] = useState(false)
   const [expanded, setExpanded] = useState(false)
@@ -425,10 +431,28 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask, onSubtaskCh
 
   return (
     <article
-      className={`bg-white rounded-[28px] border border-white/80 shadow-[0_10px_30px_rgba(0,0,0,0.04)] transition-all ${
+      id={`task-card-${task.id}`}
+      className={`bg-white rounded-[28px] border transition-all ${
+        isFocused
+          ? 'ring-2 ring-zinc-900 border-zinc-900 shadow-md'
+          : 'border-white/80 shadow-[0_10px_30px_rgba(0,0,0,0.04)]'
+      } ${
         showMenu ? 'relative z-30 overflow-visible' : 'overflow-hidden'
       }`}
     >
+      {/* Hidden button for keyboard shortcut C */}
+      <button
+        type="button"
+        id={`complete-next-subtask-${task.id}`}
+        className="sr-only"
+        tabIndex={-1}
+        onClick={(e) => {
+          const nextUncompleted = subtasks.find((s) => !s.is_completed)
+          if (nextUncompleted) {
+            toggleSubtask(e, nextUncompleted)
+          }
+        }}
+      />
       {/* Card Header (Clickable to expand / collapse) */}
       <div
         onClick={() => setExpanded(!expanded)}
