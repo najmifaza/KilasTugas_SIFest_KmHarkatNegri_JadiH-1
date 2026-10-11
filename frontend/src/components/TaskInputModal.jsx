@@ -209,7 +209,11 @@ export default function TaskInputModal({
         setExtractSuccessMsg(`Silabus "${file.name}" berhasil diekstrak${deadlineInfo}!`)
       }
     } catch (err) {
-      setError(err?.response?.data?.detail || err?.message || 'Gagal mengekstrak berkas silabus')
+      if (err?.message === 'Network Error' || err?.code === 'ERR_NETWORK') {
+        setError('Gagal mengunggah berkas (Network Error). Ukuran berkas melebihi batas Nginx VPS (1 MB) atau jaringan terputus.')
+      } else {
+        setError(err?.response?.data?.detail || err?.message || 'Gagal mengekstrak berkas silabus')
+      }
     } finally {
       setExtracting(false)
     }
