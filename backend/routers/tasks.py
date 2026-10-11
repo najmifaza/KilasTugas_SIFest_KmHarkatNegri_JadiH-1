@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from config.db import get_db
 from config.ai import ai_client, AI_MODEL
 from models.schemas import TaskCreate, TaskOut, TaskPatch, SyncBatchRequest, MutationItem
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 import json
 import logging
 import uuid
@@ -295,8 +295,18 @@ Format HANYA JSON array:
 async def sync_batch_mutations(body: SyncBatchRequest):
     processed_ids = []
     async with get_db() as db:
+        # LOGIC-02: konversi client_timestamp UTC ke waktu lokal server untuk LWW
+        # MariaDB DATETIME disimpan sebagai waktu lokal server (WIB UTC+7)
+        _wib = timezone(timedelta(hours=7))
+        def to_server_naive(ts):
+            if ts is None:
+                return None
+            if ts.tzinfo is not None:
+                return ts.astimezone(_wib).replace(tzinfo=None)
+            return ts  # sudah naive, asumsikan waktu lokal server
+
         for m in body.mutations:
-            c_time = m.client_timestamp.replace(tzinfo=None) if m.client_timestamp.tzinfo else m.client_timestamp
+            c_time = to_server_naive(m.client_timestamp)
             
             if m.entity_type == "subtask":
                 await db.execute(

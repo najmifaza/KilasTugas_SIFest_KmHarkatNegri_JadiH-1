@@ -223,14 +223,16 @@ export default function TaskInputModal({
     setLoading(true)
 
     try {
-      const deadlineISO = new Date(`${form.date}T${form.time}:00`).toISOString()
+      // LOGIC-04: Kirim deadline sebagai string waktu lokal (bukan UTC ISO)
+      // agar MariaDB DATETIME menyimpan jam yang dimaksud pengguna tanpa drift -7 jam
+      const deadlineLocal = `${form.date}T${form.time}:00`
 
       if (editingTask) {
         const updatePayload = {
           title: form.title.trim(),
           subject: form.subject.trim() || null,
           category: form.category,
-          deadline: deadlineISO,
+          deadline: deadlineLocal,
           description: form.description.trim() || null,
         }
         const updatedRes = await updateTask(editingTask.id, updatePayload)
@@ -252,7 +254,7 @@ export default function TaskInputModal({
         title: form.title.trim(),
         subject: form.subject.trim() || null,
         category: form.category,
-        deadline: deadlineISO,
+        deadline: deadlineLocal,
         description: form.description.trim() || null,
       })
 
@@ -263,7 +265,7 @@ export default function TaskInputModal({
         title: form.title.trim(),
         description: form.description.trim() || form.title.trim(),
         category: form.category,
-        deadline: deadlineISO,
+        deadline: deadlineLocal,
         subtasks_count: subtasksCount,
       })
 
