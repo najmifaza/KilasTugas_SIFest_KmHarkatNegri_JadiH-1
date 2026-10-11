@@ -75,3 +75,17 @@ class BreakdownOut(BaseModel):
     success: bool
     source: str
     data: list[SubtaskItem]
+
+# ── Offline Sync Batch (LWW) ──────────────────────────────
+class MutationItem(BaseModel):
+    id: str
+    entity_type: str  # "subtask" or "task"
+    entity_id: str
+    action: str  # "patch" or "create" or "delete"
+    data: dict
+    client_timestamp: datetime
+
+class SyncBatchRequest(BaseModel):
+    session_id: str
+    mutations: list[MutationItem]
+

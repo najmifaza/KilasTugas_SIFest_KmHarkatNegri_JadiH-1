@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import confetti from 'canvas-confetti'
 import { getSubtasks, patchSubtask, createSubtask, deleteSubtask, rebalanceTaskPacing } from '../api'
+import { cacheSubtasks, getCachedSubtasks } from '../offlineStore'
 
 const CATEGORY_MAP = {
   laporan_lab: 'Laporan Lab',
@@ -131,9 +132,15 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask, onSubtaskCh
     setLoading(true)
     try {
       const res = await getSubtasks(task.id)
-      setSubtasks(res.data || [])
+      const list = res.data || []
+      setSubtasks(list)
+      cacheSubtasks(task.id, list)
     } catch (err) {
-      console.error('Failed fetching subtasks:', err)
+      console.error('Failed fetching subtasks, trying offline cache:', err)
+      const cached = await getCachedSubtasks(task.id)
+      if (cached && cached.length > 0) {
+        setSubtasks(cached)
+      }
     } finally {
       setLoading(false)
     }
@@ -323,6 +330,7 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask, onSubtaskCh
     // Optimistic UI update
     const updated = subtasks.map((s) => (s.id === st.id ? { ...s, is_completed: nextState } : s))
     setSubtasks(updated)
+    cacheSubtasks(task.id, updated)
 
     const newlyCompleted = updated.filter((s) => s.is_completed).length
     const isFinishedAll = newlyCompleted === total && total > 0 && nextState

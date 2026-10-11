@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { enqueueMutation } from './offlineStore'
 
 const API_BASE = import.meta.env.VITE_API_URL || 'https://api-kilastugas.najmifaza.my.id'
 
@@ -51,8 +52,25 @@ export const getSubtasks = async (taskId) => {
 }
 
 export const patchSubtask = async (subtaskId, updates) => {
-  const res = await apiClient.patch(`/api/subtasks/${subtaskId}`, updates)
-  return res.data
+  try {
+    const res = await apiClient.patch(`/api/subtasks/${subtaskId}`, updates)
+    return res.data
+  } catch (err) {
+    if (!navigator.onLine || err?.code === 'ERR_NETWORK' || !err?.response) {
+      try {
+        await enqueueMutation({
+          entity_type: 'subtask',
+          entity_id: subtaskId,
+          action: 'patch',
+          data: updates,
+        })
+        return { success: true, offline: true }
+      } catch (e) {
+        console.warn('Gagal mencatat mutasi offline:', e)
+      }
+    }
+    throw err
+  }
 }
 
 export const createSubtask = async (taskId, subtaskData) => {
@@ -103,5 +121,14 @@ export const rebalanceTaskPacing = async (taskId) => {
   const res = await apiClient.post(`/api/tasks/${taskId}/rebalance`)
   return res.data
 }
+
+export const syncBatchMutations = async (sessionId, mutations) => {
+  const res = await apiClient.post('/api/tasks/sync-batch', {
+    session_id: sessionId,
+    mutations,
+  })
+  return res.data
+}
+
 
 

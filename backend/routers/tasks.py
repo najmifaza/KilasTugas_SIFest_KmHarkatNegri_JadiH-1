@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from config.db import get_db
-from models.schemas import TaskCreate, TaskOut, TaskPatch
+from models.schemas import TaskCreate, TaskOut, TaskPatch, SyncBatchRequest, MutationItem
 from datetime import datetime
 import uuid
 
@@ -137,4 +137,94 @@ async def rebalance_task_pacing(task_id: str):
             "days_left": days_left,
             "data": updated_subtasks,
         }
+
+@router.post("/tasks/sync-batch")
+async def sync_batch_mutations(body: SyncBatchRequest):
+    processed_ids = []
+    async with get_db() as db:
+        for m in body.mutations:
+            c_time = m.client_timestamp.replace(tzinfo=None) if m.client_timestamp.tzinfo else m.client_timestamp
+            
+            if m.entity_type == "subtask":
+                await db.execute(
+                    "SELECT updated_at FROM subtasks WHERE id = %s",
+                    (m.entity_id,),
+                )
+                row = await db.fetchone()
+                if row:
+                    server_updated = row["updated_at"]
+                    # Last-Write-Wins check
+                    if not server_updated or c_time >= server_updated:
+                        sets, vals = [], []
+                        if "is_completed" in m.data:
+                            sets.append("is_completed = %s")
+                            vals.append(bool(m.data["is_completed"]))
+                            if m.data["is_completed"]:
+                                sets.append("completed_at = %s")
+                                vals.append(c_time)
+                            else:
+                                sets.append("completed_at = NULL")
+                        if "title" in m.data:
+                            sets.append("title = %s")
+                            vals.append(str(m.data["title"]))
+                        if "duration_minutes" in m.data:
+                            sets.append("duration_minutes = %s")
+                            vals.append(int(m.data["duration_minutes"]))
+                        if "target_date" in m.data:
+                            sets.append("target_date = %s")
+                            vals.append(m.data["target_date"])
+
+                        if sets:
+                            sets.append("updated_at = %s")
+                            vals.append(c_time)
+                            vals.append(m.entity_id)
+                            await db.execute(
+                                f"UPDATE subtasks SET {', '.join(sets)} WHERE id = %s",
+                                vals,
+                            )
+                            if "is_completed" in m.data:
+                                await db.execute(
+                                    """UPDATE tasks
+                                       SET is_completed = (
+                                           SELECT IF(COUNT(id) > 0 AND SUM(is_completed) = COUNT(id), 1, 0)
+                                           FROM (SELECT * FROM subtasks) AS s
+                                           WHERE s.task_id = (SELECT task_id FROM (SELECT * FROM subtasks) AS s2 WHERE s2.id = %s)
+                                       )
+                                       WHERE id = (SELECT task_id FROM (SELECT * FROM subtasks) AS s3 WHERE s3.id = %s)""",
+                                    (m.entity_id, m.entity_id),
+                                )
+                processed_ids.append(m.id)
+
+            elif m.entity_type == "task":
+                await db.execute(
+                    "SELECT updated_at FROM tasks WHERE id = %s",
+                    (m.entity_id,),
+                )
+                row = await db.fetchone()
+                if row:
+                    server_updated = row["updated_at"]
+                    if not server_updated or c_time >= server_updated:
+                        sets, vals = [], []
+                        if "is_completed" in m.data:
+                            sets.append("is_completed = %s")
+                            vals.append(bool(m.data["is_completed"]))
+                        if "title" in m.data:
+                            sets.append("title = %s")
+                            vals.append(str(m.data["title"]))
+                        if sets:
+                            sets.append("updated_at = %s")
+                            vals.append(c_time)
+                            vals.append(m.entity_id)
+                            await db.execute(
+                                f"UPDATE tasks SET {', '.join(sets)} WHERE id = %s",
+                                vals,
+                            )
+                processed_ids.append(m.id)
+
+    return {
+        "success": True,
+        "synced_count": len(processed_ids),
+        "processed_ids": processed_ids,
+    }
+
 

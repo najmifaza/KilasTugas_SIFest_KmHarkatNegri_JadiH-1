@@ -8,7 +8,8 @@ import TaskDetailModal from './components/TaskDetailModal'
 import TaskInputModal from './components/TaskInputModal'
 import FloatingTimer from './components/FloatingTimer'
 import BlueprintModal from './components/BlueprintModal'
-import { getTasks, initSession, deleteTask, getBlueprint } from './api'
+import { getTasks, initSession, deleteTask, getBlueprint, syncBatchMutations, getSessionId } from './api'
+import { cacheTasks, getCachedTasks, getPendingMutations, removeMutations } from './offlineStore'
 
 const playChime = () => {
   try {
@@ -227,13 +228,40 @@ export default function App() {
     })
   }
 
+  const [isOnline, setIsOnline] = useState(
+    typeof navigator !== 'undefined' ? navigator.onLine : true
+  )
+
+  const flushOfflineMutations = async () => {
+    try {
+      const pending = await getPendingMutations()
+      if (pending && pending.length > 0) {
+        const sid = getSessionId()
+        const res = await syncBatchMutations(sid, pending)
+        if (res?.processed_ids && res.processed_ids.length > 0) {
+          await removeMutations(res.processed_ids)
+        }
+        return true
+      }
+    } catch (err) {
+      console.warn('Gagal sinkronisasi antrean offline:', err)
+    }
+    return false
+  }
+
   const loadTasks = async () => {
     try {
       const sid = await initSession()
       const res = await getTasks(sid)
-      setTasks(res.data || [])
+      const list = res.data || []
+      setTasks(list)
+      cacheTasks(list)
     } catch (err) {
-      console.warn('Gagal memuat tugas:', err)
+      console.warn('Gagal memuat tugas online, mencoba cache lokal:', err)
+      const cached = await getCachedTasks()
+      if (cached && cached.length > 0) {
+        setTasks(cached)
+      }
     } finally {
       setLoading(false)
     }
@@ -263,7 +291,31 @@ export default function App() {
   }
 
   useEffect(() => {
-    loadTasks()
+    const handleOnline = async () => {
+      setIsOnline(true)
+      const synced = await flushOfflineMutations()
+      if (synced) await loadTasks()
+    }
+
+    const handleOffline = () => {
+      setIsOnline(false)
+    }
+
+    window.addEventListener('online', handleOnline)
+    window.addEventListener('offline', handleOffline)
+
+    // Initial load + flush pending mutations
+    loadTasks().then(async () => {
+      if (navigator.onLine) {
+        const synced = await flushOfflineMutations()
+        if (synced) await loadTasks()
+      }
+    })
+
+    return () => {
+      window.removeEventListener('online', handleOnline)
+      window.removeEventListener('offline', handleOffline)
+    }
   }, [])
 
   const handleDeleteTask = async (taskId) => {
@@ -305,6 +357,17 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-canvas-mesh flex flex-col selection:bg-slate-900 selection:text-white font-sans overflow-x-hidden w-full">
+      {/* Offline Mode Banner (Auto PWA Sync) */}
+      {!isOnline && (
+        <aside
+          role="status"
+          aria-live="polite"
+          className="bg-amber-700 text-amber-50 text-xs font-medium py-2 px-4 shadow-sm flex items-center justify-center gap-2 select-none"
+        >
+          <span className="w-2 h-2 rounded-full bg-amber-200 animate-pulse shrink-0" />
+          <span>Mode Offline — Perubahan tersimpan lokal di IndexedDB dan akan disinkronkan otomatis saat terhubung.</span>
+        </aside>
+      )}
       {/* Top Header across all device viewports */}
       <div className="w-full max-w-md md:max-w-3xl lg:max-w-5xl xl:max-w-6xl mx-auto px-4 sm:px-6 box-border">
         <AppHeader onOpenCreate={() => setIsInputModalOpen(true)} />
