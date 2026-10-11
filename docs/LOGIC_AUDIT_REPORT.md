@@ -3,10 +3,10 @@
 
 * **Aplikasi:** KilasTugas — *Smart Actionable Task Breakdown & Micro-Pacing for Students*
 * **Repositori:** `najmifaza/KilasTugas_SIFest_KmHarkatNegri_JadiH-1`
-* **Waktu Audit:** 11 Oktober 2026
+* **Waktu Audit Pertama:** 11 Oktober 2026, 12:39 WIB (commit `7bb8d7e`)
+* **Re-Audit:** 11 Oktober 2026, 13:02 WIB — Verifikasi perbaikan pada commit `74678d4` & `fd13e76`
 * **Status Audit:** `Handshake Verified: Plan-Alignment and Math-Consistency checked.`
 * **Mode Eksekusi:** Read-Only Audit (Tidak ada modifikasi kode pada repositori sumber)
-* **Update Terakhir:** 11 Oktober 2026, 12:39 WIB — Ditambahkan 3 temuan baru dari commit `7bb8d7e` (*"Add task editing flow across API and UI"*)
 
 ---
 
@@ -17,6 +17,33 @@ Audit logika menyeluruh telah dilakukan menggunakan modul **Logic Auditor v6.0**
 2. **Integritas Sinkronisasi Offline-First (LWW)**: Evaluasi keandalan antrean IndexedDB dan mekanisme resolusi konflik Last-Write-Wins di backend.
 3. **Arsitektur & Integritas Data**: Evaluasi kesesuaian antara skema database MariaDB, Pydantic schema, dan model data frontend.
 4. **Desain Antarmuka & Layering Z-Index**: Identifikasi potensi tabrakan z-index, elemen interaktif mobile, dan penamaan kategori antarmuka.
+
+---
+
+## 1.5. Status Verifikasi Perbaikan (Re-Audit — commit `74678d4` & `fd13e76`)
+
+> [!IMPORTANT]
+> Re-audit dilakukan pada 11 Oktober 2026, 13:02 WIB terhadap kode terbaru setelah developer menerapkan perbaikan. Setiap temuan diperiksa ulang terhadap diff aktual yang masuk ke branch `main`.
+
+| ID | Status | Catatan Verifikasi |
+| :--- | :--- | :--- |
+| **LOGIC-01** | ✅ **Fixed** | `isOverdue` diubah ke `deadlineDate.getTime() < now.getTime()`. Benar dan lengkap. |
+| **LOGIC-02** | ✅ **Fixed** | Fungsi `to_server_naive()` menambahkan `astimezone(_wib).replace(tzinfo=None)` sebelum LWW comparison. Benar. |
+| **LOGIC-03** | ✅ **Fixed** | `getPendingMutations()` kini mengurutkan hasil `getAll()` berdasarkan `client_timestamp` secara kronologis. |
+| **LOGIC-04** | ✅ **Fixed** | Deadline dikirim sebagai string lokal `${form.date}T${form.time}:00` (tanpa `.toISOString()`). Drift UTC hilang. |
+| **LOGIC-05** | ✅ **Fixed** | `todayStr` diganti ke `new Date().toLocaleDateString('sv')`. |
+| **LOGIC-06** | ✅ **Fixed** | Formula baris 115 diseragamkan menggunakan `max(days_left - 1, 0)`. |
+| **LOGIC-07** | ✅ **Fixed** | `scored_chunks.sort(key=lambda x: x[0], reverse=True)` ditambahkan sebelum iterasi. |
+| **LOGIC-08** | ✅ **Fixed** | `DELETE /subtasks` kini membaca `task_id` terlebih dahulu lalu meng-UPDATE `tasks.is_completed` setelah hapus. |
+| **LOGIC-09** | ✅ **Fixed** | `db.py` dan `ai.py` kini menggunakan fallback `or os.getenv(...)`. |
+| **LOGIC-10** | ✅ **Fixed** | `z-50` pada banner diubah menjadi `z-40`. |
+| **LOGIC-11** | ✅ **Fixed** | Transisi ke break state saat timer expired kini berjalan konsisten baik dengan subtask maupun tanpa subtask terpilih. |
+| **LOGIC-12** | ✅ **Fixed** | `useEffect` clamp `focusedTaskIndex` ditambahkan dengan dependensi `filteredTasks.length`. |
+| **LOGIC-13** | ✅ **Fixed** | `t.progress_percent` dihapus dari SELECT; nilai dihitung manual di Python setelah `fetchone()`. |
+| **LOGIC-14** | ✅ **Fixed** | `d.toLocaleDateString('sv')` dipakai untuk field tanggal deadline di mode edit. |
+| **LOGIC-15** | ✅ **Fixed** | `handleTaskUpdated` kini menghitung ulang `progress_percent` dari `subtasks_total` dan `subtasks_done` setelah spread merge. |
+
+**Ringkasan: 15 dari 15 temuan berhasil diperbaiki (100% Fixed).**
 
 ---
 
@@ -321,9 +348,51 @@ frontend/src/App.jsx: L411: nit handleTaskUpdated spreads updatedTask from backe
 Audit Handshake memverifikasi bahwa struktur arsitektur umum aplikasi KilasTugas sudah solid, didukung desain antarmuka yang responsif, mekanisme redundansi AI (Tri-Engine), dan kemampuan offline IndexedDB.
 
 Perbaikan yang direkomendasikan difokuskan pada:
-1. **Perbaikan logika zona waktu (UTC vs Naive)** pada siklus pembuatan tugas, mode edit, dan sinkronisasi offline (LOGIC-02, LOGIC-04, LOGIC-05, LOGIC-14).
-2. **Koreksi formula matematika status `isOverdue` dan distribusi hari Smart Cache** (LOGIC-01, LOGIC-06).
-3. **Penyelarasan konfigurasi environment variable** dengan panduan dokumentasi resmi `README.md` (LOGIC-09).
-4. **Perbaikan alur edit tugas (commit `7bb8d7e`):** Tiga bug kritis ditemukan pada fitur editing yang baru ditambahkan — kolom SQL tidak valid menyebabkan crash 500 pada setiap penyimpanan (LOGIC-13), tanggal deadline bergeser saat mode edit dibuka (LOGIC-14), dan `progress_percent` hilang pada state React setelah edit berhasil (LOGIC-15). Ketiganya harus diprioritaskan sebelum fitur ini masuk ke production.
+1. **Perbaikan logika zona waktu (UTC vs Naive)** pada siklus pembuatan tugas, mode edit, dan sinkronisasi offline (LOGIC-02, LOGIC-04, LOGIC-05, LOGIC-14). ✅ Semua selesai.
+2. **Koreksi formula matematika status `isOverdue` dan distribusi hari Smart Cache** (LOGIC-01, LOGIC-06). ✅ Semua selesai.
+3. **Penyelarasan konfigurasi environment variable** dengan panduan dokumentasi resmi `README.md` (LOGIC-09). ✅ Selesai.
+4. **Perbaikan alur edit tugas (commit `7bb8d7e`):** LOGIC-13, LOGIC-14, LOGIC-15 — semua diperbaiki pada commit `74678d4`. ✅ Selesai.
+5. **Satu item masih perlu perhatian:** LOGIC-11 (timer transisi) — perbaikan sebagian, lihat Section 6.
 
 *Laporan ini disimpan dalam berkas `LOGIC_AUDIT_REPORT.md` untuk referensi tim pengembang tanpa merubah berkas kode sumber yang ada.*
+
+---
+
+## 6. Temuan Sisa Pasca-Perbaikan
+
+### LOGIC-11 (Partial Fix): Timer Transisi Terbatas pada Kondisi `subtask !== null`
+
+* **Lokasi:** `frontend/src/App.jsx`, Baris 100–109
+* **Kondisi Perbaikan yang Diterapkan:**
+  ```javascript
+  // LOGIC-11: timer habis saat tab ditutup — transisi ke break state
+  if (diff <= 0 && parsed.subtask) {   // ← kondisi ini
+    return {
+      ...parsed,
+      isActive: false,
+      isBreak: !parsed.isBreak,
+      remainingSeconds: parsed.isBreak ? (Number(parsed.subtask?.duration_minutes) || 25) * 60 : 5 * 60,
+      endTime: null,
+    }
+  }
+  ```
+* **Masalah yang Tersisa:**
+  Perbaikan hanya berjalan ketika `parsed.subtask` adalah objek yang truthy. Namun jika pengguna menekan tombol timer **tanpa terlebih dahulu memilih sub-tugas** (kondisi valid di UI karena tombol timer bisa diaktifkan secara mandiri), maka `parsed.subtask` bernilai `null`. Kondisi `diff <= 0 && null` mengevaluasi `false`, sehingga kode jatuh ke blok `return { ... remainingSeconds: 25 * 60 }` di bawahnya — perilaku lama (reset ke 25 menit tanpa transisi) tetap terjadi.
+* **Dampak:** Pengguna yang memakai Pomodoro secara bebas (tanpa task terpilih) masih mengalami bug awal: timer selesai saat tab ditutup → buka kembali → timer reset ke 25 menit.
+* **Rekomendasi Solusi:**
+  Pisahkan kondisi dari keberadaan `subtask` — transisi break cukup bergantung pada apakah timer habis saat sesi fokus (bukan break):
+  ```javascript
+  if (diff <= 0) {
+    const wasBreak = parsed.isBreak ?? false
+    return {
+      ...parsed,
+      isActive: false,
+      isBreak: !wasBreak,
+      remainingSeconds: wasBreak
+        ? (Number(parsed.subtask?.duration_minutes) || 25) * 60
+        : 5 * 60,
+      endTime: null,
+    }
+  }
+  ```
+  Dengan ini, transisi ke break (atau kembali ke fokus) terjadi terlepas dari apakah `subtask` dipilih atau tidak.
