@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { X, Check, Loader2, Calendar, Clock, Folder, ChevronDown, Minus, Plus } from 'lucide-react'
-import { createTask, triggerBreakdown, getSessionId } from '../api'
+import { X, Check, Loader2, Calendar, Clock, Folder, ChevronDown, Minus, Plus, UploadCloud, FileText } from 'lucide-react'
+import { createTask, triggerBreakdown, getSessionId, extractSyllabus } from '../api'
 
 const DEFAULT_TAGS = ['Design', 'UI/UX', 'Work']
 
@@ -24,6 +24,11 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [extracting, setExtracting] = useState(false)
+  const [extractedFileName, setExtractedFileName] = useState(null)
+  const [extractSuccessMsg, setExtractSuccessMsg] = useState('')
+  const [dragOverDropzone, setDragOverDropzone] = useState(false)
+  const fileInputRef = useRef(null)
   const [priority, setPriority] = useState('medium')
   const [subtasksCount, setSubtasksCount] = useState(null)
   const [tags, setTags] = useState(DEFAULT_TAGS)
@@ -134,6 +139,43 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
     }
   }
 
+  const handleFileUpload = async (file) => {
+    if (!file) return
+    const validExtensions = ['.pdf', '.docx']
+    const isExtValid = validExtensions.some((ext) => file.name.toLowerCase().endsWith(ext))
+    if (!isExtValid) {
+      setError('Format berkas harus berupa .pdf atau .docx')
+      return
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setError('Ukuran berkas maksimal 5 MB')
+      return
+    }
+
+    setError('')
+    setExtracting(true)
+    setExtractSuccessMsg('')
+    try {
+      const res = await extractSyllabus(file)
+      if (res?.success && res?.suggested) {
+        const { title, subject, category, description } = res.suggested
+        setForm((prev) => ({
+          ...prev,
+          title: title || prev.title,
+          description: description || prev.description,
+          subject: subject || prev.subject,
+          category: category || prev.category,
+        }))
+        setExtractedFileName(file.name)
+        setExtractSuccessMsg(`Silabus "${file.name}" berhasil diekstrak (${res.extracted_chars || 0} karakter)!`)
+      }
+    } catch (err) {
+      setError(err?.response?.data?.detail || err?.message || 'Gagal mengekstrak berkas silabus')
+    } finally {
+      setExtracting(false)
+    }
+  }
+
   const handleSubmit = async (e) => {
     if (e) e.preventDefault()
     if (!form.title.trim()) {
@@ -176,6 +218,8 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
         subject: 'Website Redesign',
       })
       setSubtasksCount(null)
+      setExtractedFileName(null)
+      setExtractSuccessMsg('')
 
       if (onTaskCreated) {
         onTaskCreated({
@@ -279,6 +323,77 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
 
         {/* Form Body (Scrollable fields) */}
         <form id="task-form" onSubmit={handleSubmit} className="space-y-3.5 overflow-y-auto flex-1 pr-1 pt-2 no-scrollbar">
+          {/* Ekstraksi Modul & Silabus Dosen Otomatis (In-Memory PDF Reader) */}
+          <div className="bg-white rounded-2xl p-3 border border-dashed border-zinc-300 hover:border-zinc-400 transition-colors">
+            <input
+              type="file"
+              ref={fileInputRef}
+              accept=".pdf,.docx"
+              className="hidden"
+              onChange={(e) => {
+                if (e.target.files?.[0]) handleFileUpload(e.target.files[0])
+              }}
+            />
+            {extracting ? (
+              <div className="flex items-center justify-center gap-2 py-2.5 text-xs text-zinc-600 font-medium">
+                <Loader2 className="w-4 h-4 animate-spin text-zinc-800 shrink-0" />
+                <span>Mengekstrak instruksi silabus modul (in-memory)...</span>
+              </div>
+            ) : extractedFileName ? (
+              <div className="flex items-center justify-between gap-2 py-0.5">
+                <div className="flex items-center gap-2 overflow-hidden">
+                  <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0">
+                    <FileText className="w-4 h-4" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xs font-semibold text-zinc-800 truncate">{extractedFileName}</p>
+                    <p className="text-[11px] text-emerald-600 font-medium">Instruksi tugas otomatis terisi</p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="text-xs text-zinc-500 hover:text-zinc-800 underline px-2 py-1 cursor-pointer shrink-0"
+                >
+                  Ganti
+                </button>
+              </div>
+            ) : (
+              <div
+                onDragOver={(e) => {
+                  e.preventDefault()
+                  setDragOverDropzone(true)
+                }}
+                onDragLeave={() => setDragOverDropzone(false)}
+                onDrop={(e) => {
+                  e.preventDefault()
+                  setDragOverDropzone(false)
+                  if (e.dataTransfer.files?.[0]) handleFileUpload(e.dataTransfer.files[0])
+                }}
+                onClick={() => fileInputRef.current?.click()}
+                className={`flex items-center gap-3 py-1 px-1 cursor-pointer select-none rounded-xl transition-colors ${
+                  dragOverDropzone ? 'bg-zinc-50 ring-2 ring-zinc-400' : ''
+                }`}
+              >
+                <div className="w-8 h-8 rounded-xl bg-zinc-100 flex items-center justify-center text-zinc-600 shrink-0">
+                  <UploadCloud className="w-4 h-4" />
+                </div>
+                <div className="flex-1 min-w-0 text-left">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs font-semibold text-zinc-800">Unggah Silabus / Modul</span>
+                    <span className="text-[10px] bg-zinc-100 text-zinc-600 font-medium px-1.5 py-0.5 rounded-md">PDF / DOCX</span>
+                  </div>
+                  <p className="text-[11px] text-zinc-500 truncate">
+                    Tarik berkas atau klik di sini untuk auto-fill (maks. 5MB)
+                  </p>
+                </div>
+              </div>
+            )}
+            {extractSuccessMsg && !extracting && (
+              <p className="text-[11px] text-emerald-700 font-medium mt-1.5 px-1 truncate">{extractSuccessMsg}</p>
+            )}
+          </div>
+
           {/* 1. Task Title */}
           <div>
             <label className="block text-sm font-bold text-zinc-900 mb-1.5">

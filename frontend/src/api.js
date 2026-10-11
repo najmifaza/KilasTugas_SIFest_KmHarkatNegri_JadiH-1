@@ -87,3 +87,15 @@ export const cloneBlueprint = async (taskId, sessionId, targetDeadline = null) =
   })
   return res.data
 }
+
+export const extractSyllabus = async (file) => {
+  const formData = new FormData()
+  formData.append('file', file)
+  const res = await apiClient.post('/api/extract-syllabus', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })
+  return res.data
+}
+
