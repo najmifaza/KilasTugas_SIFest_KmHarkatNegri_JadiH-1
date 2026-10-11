@@ -384,6 +384,7 @@ export default function TaskCard({
   const deadlineDate = new Date(task.deadline)
   const now = new Date()
   const diffDays = Math.ceil((deadlineDate - now) / (1000 * 60 * 60 * 24))
+  const diffHours = (deadlineDate - now) / (1000 * 60 * 60)
   const isOverdue = diffDays < 0 && !isAllDone
 
   const todayStr = new Date().toISOString().slice(0, 10)
@@ -391,7 +392,9 @@ export default function TaskCard({
     (s) => !s.is_completed && s.target_date && String(s.target_date).slice(0, 10) < todayStr
   )
   const hasDelayedSubtasks = delayedSubtasks.length > 0
-  const isBehindSchedule = !isAllDone && hasDelayedSubtasks
+  const isNearDeadline = !isAllDone && (diffDays <= 2 || diffHours <= 48)
+  const canRebalance = !isAllDone && (hasDelayedSubtasks || isNearDeadline || isOverdue)
+  const isBehindSchedule = !isAllDone && (hasDelayedSubtasks || isNearDeadline)
 
   let pacing = {
     label: 'On Track',
@@ -410,13 +413,13 @@ export default function TaskCard({
       color: 'text-rose-800 bg-[#FFD9D9] border border-[#FFBFBF]',
       dot: 'bg-rose-600',
     }
-  } else if (isBehindSchedule) {
+  } else if (hasDelayedSubtasks) {
     pacing = {
       label: 'Behind Schedule',
       color: 'text-amber-800 bg-[#FFE8CC] border border-[#FFD6A3]',
       dot: 'bg-amber-600',
     }
-  } else if (diffDays <= 1 && percent < 60) {
+  } else if (isNearDeadline) {
     pacing = {
       label: 'Mendekati Deadline',
       color: 'text-amber-800 bg-[#FFE8CC] border border-[#FFD6A3]',
@@ -471,7 +474,7 @@ export default function TaskCard({
             </span>
 
             {/* One-click Action Button: Re-balance Pacing */}
-            {isBehindSchedule && !isAllDone && (
+            {canRebalance && !isAllDone && (
               <button
                 type="button"
                 onClick={handleRebalance}
@@ -523,7 +526,7 @@ export default function TaskCard({
                         : 'top-10 origin-top-right'
                     }`}
                   >
-                    {!isAllDone && hasDelayedSubtasks && (
+                    {!isAllDone && canRebalance && (
                       <button
                         type="button"
                         onClick={(e) => {
@@ -676,13 +679,15 @@ export default function TaskCard({
               <span>{rebalanceSuccessMsg}</span>
             </div>
           )}
-          {isBehindSchedule && !isAllDone && (
+          {canRebalance && !isAllDone && (
             <div className="p-2.5 my-1 bg-amber-50 border border-amber-200/80 rounded-2xl flex items-center justify-between gap-2 text-xs">
               <div className="flex items-center gap-2 text-amber-900 font-medium">
                 <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse shrink-0" />
                 <span>
                   {hasDelayedSubtasks
                     ? `${delayedSubtasks.length} langkah tertunda dari target awal.`
+                    : isNearDeadline
+                    ? 'Tenggat waktu mepet! Re-balance untuk mode sprint darurat.'
                     : 'Ritme pengerjaan tertinggal jadwal.'}
                 </span>
               </div>
