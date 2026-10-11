@@ -35,40 +35,64 @@ def extract_text_from_pdf(stream: io.BytesIO) -> str:
 
 def extract_text_from_docx(stream: io.BytesIO) -> str:
     doc = docx.Document(stream)
-    paragraphs = [p.text.strip() for p in doc.paragraphs if p.text.strip()]
-    return "\n\n".join(paragraphs)
+    lines = []
+    for p in doc.paragraphs:
+        t = p.text.strip()
+        if t:
+            lines.append(t)
+    # Ekstrak teks dalam tabel (rubrik, matriks penilaian, jadwal)
+    for table in doc.tables:
+        for row in table.rows:
+            row_text = " | ".join(cell.text.strip() for cell in row.cells if cell.text.strip())
+            if row_text:
+                lines.append(row_text)
+    return "\n\n".join(lines)
 
-def sliding_window_filter(raw_text: str, max_chars: int = 3000) -> str:
-    # Pecah per paragraf/bagian
-    chunks = [c.strip() for c in re.split(r'\n{2,}', raw_text) if c.strip()]
-    
+def sliding_window_filter(raw_text: str, max_chars: int = 8000) -> str:
+    cleaned = re.sub(r'[ \t]+', ' ', raw_text)
+    chunks = [c.strip() for c in re.split(r'\n{2,}', cleaned) if c.strip()]
+    if not chunks:
+        chunks = [c.strip() for c in cleaned.split("\n") if c.strip()]
+
+    if not chunks:
+        return ""
+
+    # Jika teks dokumen masih di bawah batas, kirim utuh tanpa potong
+    if len(cleaned) <= max_chars:
+        filtered = [c for c in chunks if not any(sk in c.lower() for sk in SKIP_KEYWORDS)]
+        return "\n\n".join(filtered) if filtered else cleaned[:max_chars]
+
+    # Beri skor tiap chunk namun simpan indeks aslinya agar alur bacaan tidak teracak
     scored_chunks = []
-    for chunk in chunks:
+    for idx, chunk in enumerate(chunks):
         lower = chunk.lower()
-        # Penalti/buang bagian skip (daftar pustaka, kata pengantar, dll)
         if any(sk in lower for sk in SKIP_KEYWORDS):
             continue
         score = sum(1 for kw in INSTRUCTION_KEYWORDS if kw in lower)
-        scored_chunks.append((score, chunk))
+        # Prioritas ekstra pada 2 chunk awal (memuat Judul Tugas, Mata Kuliah, Dosen)
+        if idx < 2:
+            score += 15
+        scored_chunks.append((idx, score, chunk))
 
-    # Sort by score descending agar rubrik/instruksi penting diprioritaskan (LOGIC-07)
-    if scored_chunks:
-        scored_chunks.sort(key=lambda x: x[0], reverse=True)
-        selected = []
-        cur_len = 0
-        for score, chunk in scored_chunks:
-            if cur_len + len(chunk) > max_chars:
-                rem = max_chars - cur_len
-                if rem > 80:
-                    selected.append(chunk[:rem])
-                break
-            selected.append(chunk)
-            cur_len += len(chunk)
-        if selected:
-            return "\n\n".join(selected)
+    if not scored_chunks:
+        return raw_text[:max_chars]
 
-    # Fallback potongan awal jika filter kata kunci kosong
-    return raw_text[:max_chars]
+    # Pilih chunk paling berbobot
+    top_chunks = sorted(scored_chunks, key=lambda x: x[1], reverse=True)
+    selected_indexed = []
+    cur_len = 0
+    for orig_idx, score, chunk in top_chunks:
+        if cur_len + len(chunk) > max_chars:
+            rem = max_chars - cur_len
+            if rem > 100:
+                selected_indexed.append((orig_idx, chunk[:rem]))
+            break
+        selected_indexed.append((orig_idx, chunk))
+        cur_len += len(chunk)
+
+    # Urutkan KEMBALI ke urutan kronologis dokumen asli
+    selected_indexed.sort(key=lambda x: x[0])
+    return "\n\n".join(chunk for _, chunk in selected_indexed)
 
 def fallback_heuristics(text: str) -> dict:
     lower = text.lower()
@@ -82,12 +106,33 @@ def fallback_heuristics(text: str) -> dict:
     elif any(k in lower for k in ["presentasi", "slide", "ppt", "powerpoint", "pitch"]):
         cat = "presentasi"
 
-    first_line = text.split("\n")[0].strip()[:60]
-    title = first_line if len(first_line) > 5 else "Tugas Kuliah Terstruktur"
+    # Cari baris yang memuat indikasi judul
+    lines = [line.strip() for line in text.split("\n") if line.strip()]
+    title = "Tugas Kuliah Terstruktur"
+    for line in lines[:8]:
+        line_clean = re.sub(r'^[#*\-•\d\.\s]+', '', line).strip()
+        if len(line_clean) >= 6 and len(line_clean) <= 70:
+            if any(k in line_clean.lower() for k in ["tugas", "projek", "makalah", "laporan", "analisis", "sistem", "modul"]):
+                title = line_clean
+                break
+    if title == "Tugas Kuliah Terstruktur" and lines:
+        first_clean = re.sub(r'^[#*\-•\d\.\s]+', '', lines[0]).strip()
+        if len(first_clean) >= 6:
+            title = first_clean[:60]
+
+    # Cari indikasi mata kuliah
+    subject = "Mata Kuliah"
+    for line in lines[:10]:
+        lower_line = line.lower()
+        if "mata kuliah" in lower_line or "matakuliah" in lower_line or "mk:" in lower_line:
+            parts = re.split(r'[:\-–]', line, maxsplit=1)
+            if len(parts) > 1 and len(parts[1].strip()) >= 3:
+                subject = parts[1].strip()[:40]
+                break
 
     return {
         "title": title,
-        "subject": "Tugas Kuliah",
+        "subject": subject if subject != "Mata Kuliah" else None,
         "category": cat,
         "description": text[:800],
     }
@@ -137,29 +182,35 @@ async def extract_syllabus(file: UploadFile = File(...)):
             detail="Tidak ditemukan teks yang dapat dibaca di dalam dokumen (mungkin berupa scan gambar)."
         )
 
-    # Sliding window parser (2000 - 3000 chars)
-    filtered_text = sliding_window_filter(raw_text, max_chars=2800)
+    # Sliding window parser (prioritaskan instruksi/rubrik tanpa merusak urutan bacaan dokumen)
+    filtered_text = sliding_window_filter(raw_text, max_chars=8000)
 
     # AI Extraction for Title, Subject, Category, Description
-    prompt = f"""Kamu adalah parser dokumen silabus dan panduan tugas dosen untuk mahasiswa.
-Tugasmu: Dari potongan teks panduan tugas di bawah, ekstrak informasi ringkas menjadi format JSON murni.
+    prompt = f"""Kamu adalah parser dokumen silabus dan lembar panduan tugas kuliah dari dosen.
+Tugasmu: Analisis dokumen instruksi tugas kuliah berikut dan ekstrak informasinya secara akurat menjadi JSON murni.
 
 Kategori yang valid:
-- "laporan_lab" (Praktikum / Laporan Lab)
-- "makalah" (Makalah / Paper / Esai)
-- "coding" (Pemrograman / Aplikasi / Algoritma)
-- "presentasi" (Presentasi Proyek / Slide)
-- "custom" (Tugas umum / lainnya)
+- "laporan_lab": Praktikum, laporan laboratorium, uji coba lab.
+- "makalah": Makalah, karya tulis ilmiah, paper, esai, studi literatur.
+- "coding": Pemrograman, implementasi fitur, proyek aplikasi, web/mobile dev, algoritma.
+- "presentasi": Presentasi tugas besar, slide decks, demo pitch.
+- "custom": Tugas umum atau penugasan lainnya.
 
-Format JSON murni (tanpa markdown, tanpa backtick, tanpa kata pembuka):
+Aturan Ekstraksi:
+1. "title": Ambil nama penugasan/proyek spesifik dari dokumen (misal: "Tugas 2: Implementasi REST API" atau "Makalah Analisis Sistem"), BUKAN nama mata kuliah, maksimal 60 karakter.
+2. "subject": Ambil nama mata kuliah resmi jika ada di dokumen (misal: "Pemrograman Web", "Kecerdasan Buatan"), maksimal 40 karakter. Jika tidak ditemukan, isi null.
+3. "category": Pilih salah satu kategori paling relevan dari daftar di atas.
+4. "description": Tulis rangkuman instruksi konkret tugas ini (tujuan tugas, batasan teknologi/format pengumpulan, dan luaran utama yang diminta dosen), padat dalam 2-4 kalimat.
+
+Format JSON murni (tanpa markdown, tanpa backtick, tanpa kata pengantar):
 {{
-  "title": "Judul tugas singkat dan padat (maksimal 60 karakter)",
-  "subject": "Nama mata kuliah atau topik utama (maksimal 40 karakter)",
-  "category": "salah satu dari kategori di atas",
-  "description": "Rangkuman instruksi tugas dan kriteria utama (2-4 kalimat konkret)"
+  "title": "Judul spesifik tugas",
+  "subject": "Nama mata kuliah",
+  "category": "coding",
+  "description": "Deskripsi instruksi tugas..."
 }}
 
-Potongan teks dokumen:
+Teks Panduan Dokumen:
 \"\"\"{filtered_text}\"\"\"
 """
 
