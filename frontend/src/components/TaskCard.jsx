@@ -430,6 +430,29 @@ export default function TaskCard({
     }
   }
 
+  // Label sisa waktu: jika < 24 jam informasikan dalam jam / menit
+  let deadlineLabel = ''
+  if (isAllDone) {
+    deadlineLabel = 'Target tuntas'
+  } else if (isOverdue) {
+    const pastHours = Math.floor(Math.abs(diffHours))
+    if (pastHours < 24) {
+      deadlineLabel = pastHours < 1 ? 'Baru saja lewat' : `${pastHours} jam lewat`
+    } else {
+      deadlineLabel = `${Math.abs(diffDays)} hari lewat`
+    }
+  } else if (diffHours < 24) {
+    const hoursLeft = Math.floor(diffHours)
+    if (hoursLeft < 1) {
+      const minsLeft = Math.max(1, Math.round((deadlineDate - now) / (1000 * 60)))
+      deadlineLabel = `${minsLeft} menit lagi`
+    } else {
+      deadlineLabel = `${hoursLeft} jam lagi`
+    }
+  } else {
+    deadlineLabel = `${diffDays} hari lagi`
+  }
+
   // Hide duplicated subject if it's identical to title
   const hasDistinctSubject =
     task.subject &&
@@ -641,15 +664,7 @@ export default function TaskCard({
           )}
           <span className="flex items-center gap-1 text-slate-500 font-medium">
             <Clock className="w-3.5 h-3.5 text-slate-400" />
-            <span>
-              {isAllDone
-                ? 'Target tuntas'
-                : diffDays > 0
-                ? `${diffDays} hari lagi`
-                : diffDays === 0
-                ? 'Hari ini'
-                : `${Math.abs(diffDays)} hari lewat`}
-            </span>
+            <span>{deadlineLabel}</span>
           </span>
         </div>
 
