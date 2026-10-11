@@ -35,7 +35,6 @@ export default function TaskInputModal({
   const [extractSuccessMsg, setExtractSuccessMsg] = useState('')
   const [dragOverDropzone, setDragOverDropzone] = useState(false)
   const fileInputRef = useRef(null)
-  const [priority, setPriority] = useState('medium')
   const [subtasksCount, setSubtasksCount] = useState(null)
   const [tags, setTags] = useState(DEFAULT_TAGS)
   const [newTagInput, setNewTagInput] = useState('')
@@ -545,54 +544,7 @@ export default function TaskInputModal({
             </div>
           </div>
 
-          {/* 4. Priority (3 Colored Selection Pills, matching reference Screen 3) */}
-          <div>
-            <label className="block text-sm font-bold text-zinc-900 mb-1.5">
-              Priority
-            </label>
-            <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
-              {/* Low (Always green tint) */}
-              <button
-                type="button"
-                onClick={() => setPriority('low')}
-                className={`py-2.5 rounded-2xl text-sm font-semibold transition active:scale-95 cursor-pointer text-center bg-[#E5F4E3] border text-[#2E7D32] ${
-                  priority === 'low'
-                    ? 'border-[#7CB685] ring-2 ring-[#7CB685]/40 shadow-xs font-bold scale-[1.02]'
-                    : 'border-[#7CB685]/60 opacity-90'
-                }`}
-              >
-                Low
-              </button>
-
-              {/* Medium (Always orange/peach tint) */}
-              <button
-                type="button"
-                onClick={() => setPriority('medium')}
-                className={`py-2.5 rounded-2xl text-sm font-semibold transition active:scale-95 cursor-pointer text-center bg-[#FDEBD2] border text-[#E76F51] ${
-                  priority === 'medium'
-                    ? 'border-[#F4A261] ring-2 ring-[#F4A261]/40 shadow-xs font-bold scale-[1.02]'
-                    : 'border-[#F4A261]/60 opacity-90'
-                }`}
-              >
-                Medium
-              </button>
-
-              {/* High (Always red/pink tint) */}
-              <button
-                type="button"
-                onClick={() => setPriority('high')}
-                className={`py-2.5 rounded-2xl text-sm font-semibold transition active:scale-95 cursor-pointer text-center bg-[#FCDAD7] border text-[#D90429] ${
-                  priority === 'high'
-                    ? 'border-[#E76F51] ring-2 ring-[#E76F51]/40 shadow-xs font-bold scale-[1.02]'
-                    : 'border-[#E76F51]/60 opacity-90'
-                }`}
-              >
-                High
-              </button>
-            </div>
-          </div>
-
-          {/* 5. Project (Dropdown Bar with Folder Icon) */}
+          {/* 4. Project (Dropdown Bar with Folder Icon) */}
           <div>
             <label className="block text-sm font-bold text-zinc-900 mb-1.5">
               Project
