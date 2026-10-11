@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 import confetti from 'canvas-confetti'
 import { patchSubtask } from '../api'
+import { cacheSubtasks, getCachedSubtasks } from '../offlineStore'
 
 const playCheckSound = (isCompleted = true) => {
   try {
@@ -241,6 +242,13 @@ export default function TaskDetailModal({
 
     try {
       await patchSubtask(currentSubtask.id, { is_completed: nextStatus })
+      if (currentTask?.id) {
+        const cached = await getCachedSubtasks(currentTask.id)
+        if (cached && cached.length > 0) {
+          const updated = cached.map((s) => (s.id === currentSubtask.id ? { ...s, is_completed: nextStatus } : s))
+          await cacheSubtasks(currentTask.id, updated)
+        }
+      }
       if (onComplete) onComplete({ ...currentSubtask, is_completed: nextStatus })
       handleAnimatedClose()
     } catch (err) {
