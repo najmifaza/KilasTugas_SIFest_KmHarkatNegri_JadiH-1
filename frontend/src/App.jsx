@@ -97,13 +97,16 @@ export default function App() {
           if (diff > 0) {
             return { ...parsed, remainingSeconds: diff }
           }
-          // LOGIC-11: timer habis saat tab ditutup — transisi ke break state
-          if (diff <= 0 && parsed.subtask) {
+          // LOGIC-11: timer habis saat tab ditutup — transisi ke break state (baik dengan atau tanpa subtask)
+          if (diff <= 0) {
+            const wasBreak = parsed.isBreak ?? false
             return {
               ...parsed,
               isActive: false,
-              isBreak: !parsed.isBreak,
-              remainingSeconds: parsed.isBreak ? (Number(parsed.subtask?.duration_minutes) || 25) * 60 : 5 * 60,
+              isBreak: !wasBreak,
+              remainingSeconds: wasBreak
+                ? (Number(parsed.subtask?.duration_minutes) || 25) * 60
+                : 5 * 60,
               endTime: null,
             }
           }
