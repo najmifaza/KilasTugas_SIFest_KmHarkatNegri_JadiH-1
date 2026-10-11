@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from config.db import get_db
 from models.schemas import TaskCreate, TaskOut, TaskPatch
+from datetime import datetime
 import uuid
 
 router = APIRouter(prefix="/api", tags=["tasks"])
@@ -70,3 +71,70 @@ async def delete_task(task_id: str):
     async with get_db() as db:
         await db.execute("DELETE FROM tasks WHERE id = %s", (task_id,))
     return {"success": True}
+
+@router.post("/tasks/{task_id}/rebalance")
+async def rebalance_task_pacing(task_id: str):
+    async with get_db() as db:
+        await db.execute(
+            "SELECT id, title, deadline, is_completed FROM tasks WHERE id = %s",
+            (task_id,),
+        )
+        task = await db.fetchone()
+        if not task:
+            raise HTTPException(status_code=404, detail="Tugas tidak ditemukan")
+
+        # Ambil seluruh sub-tugas terurut
+        await db.execute(
+            """SELECT id, step_number, title, duration_minutes, target_date, is_completed
+               FROM subtasks WHERE task_id = %s
+               ORDER BY step_number ASC""",
+            (task_id,),
+        )
+        all_subtasks = await db.fetchall()
+
+        uncompleted = [s for s in all_subtasks if not s["is_completed"]]
+        if not uncompleted:
+            return {
+                "success": True,
+                "message": "Semua sub-tugas sudah selesai, tidak perlu rebalancing",
+                "rebalanced_count": 0,
+                "data": all_subtasks,
+            }
+
+        now_naive = datetime.now()
+        deadline = task["deadline"]
+        deadline_naive = deadline.replace(tzinfo=None) if hasattr(deadline, "tzinfo") and deadline.tzinfo else deadline
+
+        days_left = max((deadline_naive.date() - now_naive.date()).days, 0)
+        num_uncompleted = len(uncompleted)
+
+        # Distribusikan tanggal target secara proporsional mulai hari ini (offset 0) hingga sisa hari
+        for idx, st in enumerate(uncompleted):
+            if days_left == 0 or num_uncompleted == 1:
+                day_offset = 0
+            else:
+                day_offset = int(round((idx / max(1, num_uncompleted - 1)) * days_left))
+
+            await db.execute(
+                """UPDATE subtasks
+                   SET target_date = DATE_ADD(CURDATE(), INTERVAL %s DAY)
+                   WHERE id = %s""",
+                (day_offset, st["id"]),
+            )
+
+        # Ambil data subtasks terbaru setelah rebalance
+        await db.execute(
+            """SELECT id, step_number, title, description, duration_minutes,
+                      target_date, is_completed, source
+               FROM subtasks WHERE task_id = %s ORDER BY step_number ASC""",
+            (task_id,),
+        )
+        updated_subtasks = await db.fetchall()
+
+        return {
+            "success": True,
+            "rebalanced_count": len(uncompleted),
+            "days_left": days_left,
+            "data": updated_subtasks,
+        }
+

@@ -99,3 +99,9 @@ export const extractSyllabus = async (file) => {
   return res.data
 }
 
+export const rebalanceTaskPacing = async (taskId) => {
+  const res = await apiClient.post(`/api/tasks/${taskId}/rebalance`)
+  return res.data
+}
+
+

@@ -11,9 +11,10 @@ import {
   MoreHorizontal,
   Download,
   Share2,
+  RotateCcw,
 } from 'lucide-react'
 import confetti from 'canvas-confetti'
-import { getSubtasks, patchSubtask, createSubtask, deleteSubtask } from '../api'
+import { getSubtasks, patchSubtask, createSubtask, deleteSubtask, rebalanceTaskPacing } from '../api'
 
 const CATEGORY_MAP = {
   laporan_lab: 'Laporan Lab',
@@ -91,6 +92,28 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask, onSubtaskCh
   const [showMenu, setShowMenu] = useState(false)
   const [menuPlacement, setMenuPlacement] = useState('bottom')
   const [shareCopied, setShareCopied] = useState(false)
+  const [rebalancing, setRebalancing] = useState(false)
+  const [rebalanceSuccessMsg, setRebalanceSuccessMsg] = useState('')
+
+  const handleRebalance = async (e) => {
+    if (e) e.stopPropagation()
+    if (rebalancing) return
+    setRebalancing(true)
+    try {
+      const res = await rebalanceTaskPacing(task.id)
+      if (res?.data) {
+        setSubtasks(res.data)
+        setRebalanceSuccessMsg('Ritme kerja berhasil diseimbangkan kembali!')
+        setTimeout(() => setRebalanceSuccessMsg(''), 3500)
+        playCheckSound(true)
+        if (onSubtaskChange) onSubtaskChange()
+      }
+    } catch (err) {
+      alert(err?.response?.data?.detail || 'Gagal menyeimbangkan ritme tugas')
+    } finally {
+      setRebalancing(false)
+    }
+  }
 
   const handleShareBlueprint = (e) => {
     if (e) e.stopPropagation()
@@ -345,8 +368,15 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask, onSubtaskCh
   const diffDays = Math.ceil((deadlineDate - now) / (1000 * 60 * 60 * 24))
   const isOverdue = diffDays < 0 && !isAllDone
 
+  const todayStr = new Date().toISOString().slice(0, 10)
+  const delayedSubtasks = subtasks.filter(
+    (s) => !s.is_completed && s.target_date && String(s.target_date).slice(0, 10) < todayStr
+  )
+  const hasDelayedSubtasks = delayedSubtasks.length > 0
+  const isBehindSchedule = !isAllDone && (hasDelayedSubtasks || (diffDays <= 2 && percent < 50))
+
   let pacing = {
-    label: 'Tepat Waktu',
+    label: 'On Track',
     color: 'text-emerald-800 bg-[#D1F2D9]/70 border border-[#B3E8C0]',
     dot: 'bg-emerald-600',
   }
@@ -358,9 +388,15 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask, onSubtaskCh
     }
   } else if (isOverdue) {
     pacing = {
-      label: 'Terlambat',
+      label: 'Terlewat',
       color: 'text-rose-800 bg-[#FFD9D9] border border-[#FFBFBF]',
       dot: 'bg-rose-600',
+    }
+  } else if (isBehindSchedule) {
+    pacing = {
+      label: 'Behind Schedule',
+      color: 'text-amber-800 bg-[#FFE8CC] border border-[#FFD6A3]',
+      dot: 'bg-amber-600',
     }
   } else if (diffDays <= 1 && percent < 60) {
     pacing = {
@@ -388,7 +424,7 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask, onSubtaskCh
       >
         <div className="flex items-center justify-between gap-2 mb-2.5">
           {/* Subtle Category & Pacing Status */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
               {CATEGORY_MAP[task.category] || 'Tugas'}
             </span>
@@ -397,6 +433,20 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask, onSubtaskCh
               <span className={`w-1.5 h-1.5 rounded-full ${pacing.dot}`} />
               <span>{pacing.label}</span>
             </span>
+
+            {/* One-click Action Button: Re-balance Pacing */}
+            {isBehindSchedule && !isAllDone && (
+              <button
+                type="button"
+                onClick={handleRebalance}
+                disabled={rebalancing}
+                title="Sesuaikan ulang jadwal target sub-tugas secara proporsional"
+                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-500 hover:bg-amber-600 text-white shadow-2xs transition-all active:scale-95 cursor-pointer"
+              >
+                <RotateCcw className={`w-3 h-3 ${rebalancing ? 'animate-spin' : ''}`} />
+                <span>{rebalancing ? 'Menyesuaikan...' : 'Re-balance Pacing'}</span>
+              </button>
+            )}
           </div>
 
           {/* Minimal Actions Menu & Expand */}
@@ -437,6 +487,20 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask, onSubtaskCh
                         : 'top-10 origin-top-right'
                     }`}
                   >
+                    {!isAllDone && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          setShowMenu(false)
+                          handleRebalance(e)
+                        }}
+                        className="w-full px-3.5 py-2 text-left hover:bg-amber-50 flex items-center gap-2 text-amber-900 font-semibold"
+                      >
+                        <RotateCcw className={`w-4 h-4 text-amber-600 shrink-0 ${rebalancing ? 'animate-spin' : ''}`} />
+                        <span>Re-balance Pacing</span>
+                      </button>
+                    )}
+
                     <button
                       type="button"
                       onClick={(e) => {
@@ -570,6 +634,34 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask, onSubtaskCh
       {/* Subtask List */}
       {expanded && (
         <div className="px-3 pb-3 sm:px-4 sm:pb-4 pt-1 space-y-1.5 border-t border-slate-100 bg-slate-50/50">
+          {rebalanceSuccessMsg && (
+            <div className="p-2.5 my-1 bg-emerald-50 border border-emerald-200/80 rounded-2xl flex items-center gap-2 text-xs text-emerald-800 font-medium">
+              <Check className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span>{rebalanceSuccessMsg}</span>
+            </div>
+          )}
+          {isBehindSchedule && !isAllDone && (
+            <div className="p-2.5 my-1 bg-amber-50 border border-amber-200/80 rounded-2xl flex items-center justify-between gap-2 text-xs">
+              <div className="flex items-center gap-2 text-amber-900 font-medium">
+                <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse shrink-0" />
+                <span>
+                  {hasDelayedSubtasks
+                    ? `${delayedSubtasks.length} langkah tertunda dari target awal.`
+                    : 'Ritme pengerjaan tertinggal jadwal.'}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={handleRebalance}
+                disabled={rebalancing}
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-[11px] font-bold bg-amber-500 hover:bg-amber-600 text-white shadow-2xs transition active:scale-95 cursor-pointer shrink-0"
+              >
+                <RotateCcw className={`w-3 h-3 ${rebalancing ? 'animate-spin' : ''}`} />
+                <span>{rebalancing ? 'Menyesuaikan...' : 'Re-balance Pacing'}</span>
+              </button>
+            </div>
+          )}
+
           {loading && subtasks.length === 0 ? (
             <div className="text-xs text-slate-400 py-4 text-center font-medium">
               Memuat langkah kerja...
