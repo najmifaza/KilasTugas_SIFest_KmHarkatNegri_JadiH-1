@@ -30,7 +30,12 @@ class TaskOut(BaseModel):
     subtasks_done: int
 
 class TaskPatch(BaseModel):
-    is_completed: bool
+    is_completed: Optional[bool] = None
+    title: Optional[str] = None
+    description: Optional[str] = None
+    subject: Optional[str] = None
+    category: Optional[str] = None
+    deadline: Optional[datetime] = None
 
 # ── Subtask ───────────────────────────────────────────────
 class SubtaskCreate(BaseModel):

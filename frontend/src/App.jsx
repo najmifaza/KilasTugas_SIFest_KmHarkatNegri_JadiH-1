@@ -55,6 +55,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('today') // 'today' | 'all' | 'completed' | 'schedule'
   const [selectedDate, setSelectedDate] = useState(null)
   const [isInputModalOpen, setIsInputModalOpen] = useState(false)
+  const [editingTask, setEditingTask] = useState(null)
   const [activeDetail, setActiveDetail] = useState(null) // { subtask, task }
   const [sharedBlueprint, setSharedBlueprint] = useState(null)
 
@@ -398,6 +399,24 @@ export default function App() {
     }
   }
 
+  const handleOpenCreate = () => {
+    setEditingTask(null)
+    setIsInputModalOpen(true)
+  }
+
+  const handleEditTask = (task) => {
+    setEditingTask(task)
+    setIsInputModalOpen(true)
+  }
+
+  const handleTaskUpdated = (updatedTask) => {
+    setTasks((prev) => {
+      const next = prev.map((t) => (t.id === updatedTask.id ? { ...t, ...updatedTask } : t))
+      cacheTasks(next)
+      return next
+    })
+  }
+
   // Filter tasks based on selectedDate or activeTab
   const today = new Date()
   today.setHours(0, 0, 0, 0)
@@ -441,7 +460,10 @@ export default function App() {
 
       if (e.key === 'Escape') {
         if (activeDetail) setActiveDetail(null)
-        if (isInputModalOpen) setIsInputModalOpen(false)
+        if (isInputModalOpen) {
+          setIsInputModalOpen(false)
+          setEditingTask(null)
+        }
         if (sharedBlueprint) setSharedBlueprint(null)
         return
       }
@@ -482,6 +504,7 @@ export default function App() {
         }
       } else if (e.key === 'n' || e.key === 'N') {
         e.preventDefault()
+        setEditingTask(null)
         setIsInputModalOpen(true)
       }
     }
@@ -505,7 +528,7 @@ export default function App() {
       )}
       {/* Top Header across all device viewports */}
       <div className="w-full max-w-md md:max-w-3xl lg:max-w-5xl xl:max-w-6xl mx-auto px-4 sm:px-6 box-border">
-        <AppHeader onOpenCreate={() => setIsInputModalOpen(true)} />
+        <AppHeader onOpenCreate={handleOpenCreate} />
       </div>
 
       {/* Main Responsive Content Frame */}
@@ -514,7 +537,7 @@ export default function App() {
         {/* Hero Section: Dark Squircle Card with Radial Progress Ring */}
         <HeroOverview
           tasks={tasks}
-          onOpenCreate={() => setIsInputModalOpen(true)}
+          onOpenCreate={handleOpenCreate}
         />
 
         {/* Horizontal Date Picker Carousel */}
@@ -658,7 +681,7 @@ export default function App() {
               </div>
               <button
                 type="button"
-                onClick={() => setIsInputModalOpen(true)}
+                onClick={handleOpenCreate}
                 className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-[#111113] hover:bg-black text-white font-bold text-xs sm:text-sm shadow-xs transition active:scale-95 cursor-pointer"
               >
                 <Plus className="w-4 h-4 stroke-[2.5]" />
@@ -696,6 +719,7 @@ export default function App() {
                     task={t}
                     isFocused={idx === focusedTaskIndex}
                     onOpenDetail={(subtask, task) => setActiveDetail({ subtask, task })}
+                    onEditTask={handleEditTask}
                     onDeleteTask={handleDeleteTask}
                     onSubtaskChange={handleSubtaskChange}
                   />
@@ -743,7 +767,7 @@ export default function App() {
       {/* Floating Action Button (FAB) on mobile for quick task creation */}
       <button
         type="button"
-        onClick={() => setIsInputModalOpen(true)}
+        onClick={handleOpenCreate}
         className={`fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-[#18181B] text-white shadow-xl shadow-black/25 flex items-center justify-center hover:scale-105 active:scale-95 transition-all cursor-pointer border border-white/20 sm:hidden ${
           !activeDetail && timerState.subtask ? 'scale-90 opacity-90' : ''
         }`}
@@ -756,8 +780,19 @@ export default function App() {
       {/* Modals */}
       <TaskInputModal
         isOpen={isInputModalOpen}
-        onClose={() => setIsInputModalOpen(false)}
-        onTaskCreated={() => loadTasks()}
+        editingTask={editingTask}
+        onClose={() => {
+          setIsInputModalOpen(false)
+          setEditingTask(null)
+        }}
+        onTaskCreated={() => {
+          setEditingTask(null)
+          loadTasks()
+        }}
+        onTaskUpdated={(updatedTask) => {
+          setEditingTask(null)
+          handleTaskUpdated(updatedTask)
+        }}
       />
 
       {/* Task Step Detail & Focus Timer Modal */}

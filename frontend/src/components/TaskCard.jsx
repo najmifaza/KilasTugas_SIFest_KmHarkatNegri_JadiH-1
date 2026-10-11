@@ -12,6 +12,7 @@ import {
   Download,
   Share2,
   RotateCcw,
+  Edit3,
 } from 'lucide-react'
 import confetti from 'canvas-confetti'
 import { getSubtasks, patchSubtask, createSubtask, deleteSubtask, rebalanceTaskPacing } from '../api'
@@ -90,6 +91,7 @@ export default function TaskCard({
   task,
   isFocused = false,
   onOpenDetail,
+  onEditTask,
   onDeleteTask,
   onSubtaskChange,
 }) {
@@ -537,6 +539,21 @@ export default function TaskCard({
                       >
                         <RotateCcw className={`w-4 h-4 text-amber-600 shrink-0 ${rebalancing ? 'animate-spin' : ''}`} />
                         <span>Re-balance Pacing</span>
+                      </button>
+                    )}
+
+                    {onEditTask && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setShowMenu(false)
+                          onEditTask(task)
+                        }}
+                        className="w-full px-3.5 py-2 text-left hover:bg-slate-50 flex items-center gap-2 text-slate-800"
+                      >
+                        <Edit3 className="w-4 h-4 text-slate-700 shrink-0" />
+                        <span>Edit Rincian Tugas</span>
                       </button>
                     )}
 

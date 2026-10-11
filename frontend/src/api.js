@@ -41,6 +41,11 @@ export const createTask = async (taskData) => {
   return res.data
 }
 
+export const updateTask = async (taskId, updates) => {
+  const res = await apiClient.patch(`/api/tasks/${taskId}`, updates)
+  return res.data
+}
+
 export const getTasks = async (sessionId) => {
   const res = await apiClient.get(`/api/tasks/${sessionId}`)
   return res.data

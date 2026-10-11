@@ -64,12 +64,52 @@ async def get_tasks(session_id: str):
 
 @router.patch("/tasks/{task_id}")
 async def patch_task(task_id: str, body: TaskPatch):
+    fields = []
+    values = []
+    if body.title is not None:
+        fields.append("title = %s")
+        values.append(body.title)
+    if body.description is not None:
+        fields.append("description = %s")
+        values.append(body.description)
+    if body.subject is not None:
+        fields.append("subject = %s")
+        values.append(body.subject)
+    if body.category is not None:
+        fields.append("category = %s")
+        values.append(body.category)
+    if body.deadline is not None:
+        fields.append("deadline = %s")
+        values.append(body.deadline)
+    if body.is_completed is not None:
+        fields.append("is_completed = %s")
+        values.append(body.is_completed)
+
+    if not fields:
+        return {"success": True, "message": "Tidak ada kolom yang diubah"}
+
+    values.append(task_id)
     async with get_db() as db:
         await db.execute(
-            "UPDATE tasks SET is_completed = %s WHERE id = %s",
-            (body.is_completed, task_id),
+            f"UPDATE tasks SET {', '.join(fields)} WHERE id = %s",
+            tuple(values),
         )
-    return {"success": True}
+        await db.execute(
+            """SELECT t.id, t.session_id, t.title, t.description, t.subject, t.category,
+                      t.deadline, t.is_completed, t.progress_percent,
+                      COUNT(s.id) as subtasks_total,
+                      SUM(CASE WHEN s.is_completed THEN 1 ELSE 0 END) as subtasks_done
+               FROM tasks t
+               LEFT JOIN subtasks s ON t.id = s.task_id
+               WHERE t.id = %s
+               GROUP BY t.id""",
+            (task_id,),
+        )
+        task = await db.fetchone()
+        if not task:
+            raise HTTPException(status_code=404, detail="Task tidak ditemukan")
+
+    return {"success": True, "data": task}
 
 @router.delete("/tasks/{task_id}")
 async def delete_task(task_id: str):

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { X, Check, Loader2, Calendar, Clock, Folder, ChevronDown, Minus, Plus, UploadCloud, FileText } from 'lucide-react'
-import { createTask, triggerBreakdown, getSessionId, extractSyllabus } from '../api'
+import { createTask, updateTask, triggerBreakdown, getSessionId, extractSyllabus } from '../api'
 
 const DEFAULT_TAGS = ['Design', 'UI/UX', 'Work']
 
@@ -12,7 +12,13 @@ const CATEGORIES = [
   { id: 'custom', label: 'Lainnya' },
 ]
 
-export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
+export default function TaskInputModal({
+  isOpen,
+  onClose,
+  onTaskCreated,
+  editingTask = null,
+  onTaskUpdated = null,
+}) {
   const [isMounted, setIsMounted] = useState(isOpen)
   const [isVisible, setIsVisible] = useState(false)
   const [dragY, setDragY] = useState(0)
@@ -51,7 +57,7 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
     subject: 'Website Redesign',
   })
 
-  // Handle enter and exit animation
+  // Handle enter and exit animation & initial edit values
   useEffect(() => {
     if (isOpen) {
       setIsMounted(true)
@@ -60,6 +66,37 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
       const timer = setTimeout(() => {
         setIsVisible(true)
       }, 20)
+
+      if (editingTask) {
+        let dateVal = getDefaultDate(3)
+        let timeVal = '10:00'
+        if (editingTask.deadline) {
+          const d = new Date(editingTask.deadline)
+          if (!isNaN(d.getTime())) {
+            dateVal = d.toISOString().slice(0, 10)
+            timeVal = d.toTimeString().slice(0, 5)
+          }
+        }
+        setForm({
+          title: editingTask.title || '',
+          description: editingTask.description || '',
+          date: dateVal,
+          time: timeVal,
+          category: editingTask.category || 'coding',
+          subject: editingTask.subject || '',
+        })
+        setError('')
+      } else {
+        setForm({
+          title: '',
+          description: '',
+          date: getDefaultDate(3),
+          time: '10:00',
+          category: 'coding',
+          subject: 'Website Redesign',
+        })
+        setError('')
+      }
       return () => clearTimeout(timer)
     } else {
       setIsVisible(false)
@@ -67,7 +104,7 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
       setDragY(0)
       currentDragY.current = 0
     }
-  }, [isOpen])
+  }, [isOpen, editingTask])
 
   const handleAnimatedClose = () => {
     if (loading) return
@@ -186,9 +223,30 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
     setLoading(true)
 
     try {
-      const sessionId = getSessionId()
       const deadlineISO = new Date(`${form.date}T${form.time}:00`).toISOString()
 
+      if (editingTask) {
+        const updatePayload = {
+          title: form.title.trim(),
+          subject: form.subject.trim() || null,
+          category: form.category,
+          deadline: deadlineISO,
+          description: form.description.trim() || null,
+        }
+        const updatedRes = await updateTask(editingTask.id, updatePayload)
+        if (onTaskUpdated) {
+          onTaskUpdated(
+            updatedRes.data || {
+              ...editingTask,
+              ...updatePayload,
+            }
+          )
+        }
+        handleAnimatedClose()
+        return
+      }
+
+      const sessionId = getSessionId()
       const taskRes = await createTask({
         session_id: sessionId,
         title: form.title.trim(),
@@ -300,7 +358,7 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
 
           {/* Centered Title */}
           <h2 className="text-[17px] font-bold text-zinc-900 tracking-tight">
-            Add New Task
+            {editingTask ? 'Edit Rincian Tugas' : 'Add New Task'}
           </h2>
 
           {/* Submit Button (48px white circle) */}
@@ -323,76 +381,78 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
 
         {/* Form Body (Scrollable fields) */}
         <form id="task-form" onSubmit={handleSubmit} className="space-y-3.5 overflow-y-auto flex-1 pr-1 pt-2 no-scrollbar">
-          {/* Ekstraksi Modul & Silabus Dosen Otomatis (In-Memory PDF Reader) */}
-          <div className="bg-white rounded-2xl p-3 border border-dashed border-zinc-300 hover:border-zinc-400 transition-colors">
-            <input
-              type="file"
-              ref={fileInputRef}
-              accept=".pdf,.docx"
-              className="hidden"
-              onChange={(e) => {
-                if (e.target.files?.[0]) handleFileUpload(e.target.files[0])
-              }}
-            />
-            {extracting ? (
-              <div className="flex items-center justify-center gap-2 py-2.5 text-xs text-zinc-600 font-medium">
-                <Loader2 className="w-4 h-4 animate-spin text-zinc-800 shrink-0" />
-                <span>Mengekstrak instruksi silabus modul (in-memory)...</span>
-              </div>
-            ) : extractedFileName ? (
-              <div className="flex items-center justify-between gap-2 py-0.5">
-                <div className="flex items-center gap-2 overflow-hidden">
-                  <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0">
-                    <FileText className="w-4 h-4" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-xs font-semibold text-zinc-800 truncate">{extractedFileName}</p>
-                    <p className="text-[11px] text-emerald-600 font-medium">Instruksi tugas otomatis terisi</p>
-                  </div>
+          {/* Ekstraksi Modul & Silabus Dosen Otomatis (In-Memory PDF Reader) - Only when creating */}
+          {!editingTask && (
+            <div className="bg-white rounded-2xl p-3 border border-dashed border-zinc-300 hover:border-zinc-400 transition-colors">
+              <input
+                type="file"
+                ref={fileInputRef}
+                accept=".pdf,.docx"
+                className="hidden"
+                onChange={(e) => {
+                  if (e.target.files?.[0]) handleFileUpload(e.target.files[0])
+                }}
+              />
+              {extracting ? (
+                <div className="flex items-center justify-center gap-2 py-2.5 text-xs text-zinc-600 font-medium">
+                  <Loader2 className="w-4 h-4 animate-spin text-zinc-800 shrink-0" />
+                  <span>Mengekstrak instruksi silabus modul (in-memory)...</span>
                 </div>
-                <button
-                  type="button"
+              ) : extractedFileName ? (
+                <div className="flex items-center justify-between gap-2 py-0.5">
+                  <div className="flex items-center gap-2 overflow-hidden">
+                    <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0">
+                      <FileText className="w-4 h-4" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-xs font-semibold text-zinc-800 truncate">{extractedFileName}</p>
+                      <p className="text-[11px] text-emerald-600 font-medium">Instruksi tugas otomatis terisi</p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="text-xs text-zinc-500 hover:text-zinc-800 underline px-2 py-1 cursor-pointer shrink-0"
+                  >
+                    Ganti
+                  </button>
+                </div>
+              ) : (
+                <div
+                  onDragOver={(e) => {
+                    e.preventDefault()
+                    setDragOverDropzone(true)
+                  }}
+                  onDragLeave={() => setDragOverDropzone(false)}
+                  onDrop={(e) => {
+                    e.preventDefault()
+                    setDragOverDropzone(false)
+                    if (e.dataTransfer.files?.[0]) handleFileUpload(e.dataTransfer.files[0])
+                  }}
                   onClick={() => fileInputRef.current?.click()}
-                  className="text-xs text-zinc-500 hover:text-zinc-800 underline px-2 py-1 cursor-pointer shrink-0"
+                  className={`flex items-center gap-3 py-1 px-1 cursor-pointer select-none rounded-xl transition-colors ${
+                    dragOverDropzone ? 'bg-zinc-50 ring-2 ring-zinc-400' : ''
+                  }`}
                 >
-                  Ganti
-                </button>
-              </div>
-            ) : (
-              <div
-                onDragOver={(e) => {
-                  e.preventDefault()
-                  setDragOverDropzone(true)
-                }}
-                onDragLeave={() => setDragOverDropzone(false)}
-                onDrop={(e) => {
-                  e.preventDefault()
-                  setDragOverDropzone(false)
-                  if (e.dataTransfer.files?.[0]) handleFileUpload(e.dataTransfer.files[0])
-                }}
-                onClick={() => fileInputRef.current?.click()}
-                className={`flex items-center gap-3 py-1 px-1 cursor-pointer select-none rounded-xl transition-colors ${
-                  dragOverDropzone ? 'bg-zinc-50 ring-2 ring-zinc-400' : ''
-                }`}
-              >
-                <div className="w-8 h-8 rounded-xl bg-zinc-100 flex items-center justify-center text-zinc-600 shrink-0">
-                  <UploadCloud className="w-4 h-4" />
-                </div>
-                <div className="flex-1 min-w-0 text-left">
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-xs font-semibold text-zinc-800">Unggah Silabus / Modul</span>
-                    <span className="text-[10px] bg-zinc-100 text-zinc-600 font-medium px-1.5 py-0.5 rounded-md">PDF / DOCX</span>
+                  <div className="w-8 h-8 rounded-xl bg-zinc-100 flex items-center justify-center text-zinc-600 shrink-0">
+                    <UploadCloud className="w-4 h-4" />
                   </div>
-                  <p className="text-[11px] text-zinc-500 truncate">
-                    Tarik berkas atau klik di sini untuk auto-fill (maks. 5MB)
-                  </p>
+                  <div className="flex-1 min-w-0 text-left">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs font-semibold text-zinc-800">Unggah Silabus / Modul</span>
+                      <span className="text-[10px] bg-zinc-100 text-zinc-600 font-medium px-1.5 py-0.5 rounded-md">PDF / DOCX</span>
+                    </div>
+                    <p className="text-[11px] text-zinc-500 truncate">
+                      Tarik berkas atau klik di sini untuk auto-fill (maks. 5MB)
+                    </p>
+                  </div>
                 </div>
-              </div>
-            )}
-            {extractSuccessMsg && !extracting && (
-              <p className="text-[11px] text-emerald-700 font-medium mt-1.5 px-1 truncate">{extractSuccessMsg}</p>
-            )}
-          </div>
+              )}
+              {extractSuccessMsg && !extracting && (
+                <p className="text-[11px] text-emerald-700 font-medium mt-1.5 px-1 truncate">{extractSuccessMsg}</p>
+              )}
+            </div>
+          )}
 
           {/* 1. Task Title */}
           <div>
@@ -551,84 +611,86 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
             </div>
           </div>
 
-          {/* 6. Jumlah Langkah Target (Subtasks Count) */}
-          <div>
-            <label className="block text-sm font-bold text-zinc-900 mb-1.5">
-              Pecah Menjadi Berapa Langkah?
-            </label>
-            <div className="h-14 w-full bg-white rounded-2xl px-4 flex items-center justify-between shadow-xs border border-slate-100">
-              {/* Counter: [-] [Value / -] [+] */}
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  disabled={subtasksCount === null || subtasksCount <= 2}
-                  onClick={() => {
-                    if (subtasksCount !== null && subtasksCount > 2) {
-                      setSubtasksCount(subtasksCount - 1)
-                    }
-                  }}
-                  className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-zinc-800 disabled:opacity-35 disabled:hover:bg-slate-100 flex items-center justify-center transition active:scale-95 cursor-pointer disabled:cursor-not-allowed"
-                  aria-label="Kurangi jumlah langkah"
-                >
-                  <Minus className="w-3.5 h-3.5 stroke-[2.5]" />
-                </button>
+          {/* 6. Jumlah Langkah Target (Subtasks Count) - Only when creating */}
+          {!editingTask && (
+            <div>
+              <label className="block text-sm font-bold text-zinc-900 mb-1.5">
+                Pecah Menjadi Berapa Langkah?
+              </label>
+              <div className="h-14 w-full bg-white rounded-2xl px-4 flex items-center justify-between shadow-xs border border-slate-100">
+                {/* Counter: [-] [Value / -] [+] */}
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    disabled={subtasksCount === null || subtasksCount <= 2}
+                    onClick={() => {
+                      if (subtasksCount !== null && subtasksCount > 2) {
+                        setSubtasksCount(subtasksCount - 1)
+                      }
+                    }}
+                    className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-zinc-800 disabled:opacity-35 disabled:hover:bg-slate-100 flex items-center justify-center transition active:scale-95 cursor-pointer disabled:cursor-not-allowed"
+                    aria-label="Kurangi jumlah langkah"
+                  >
+                    <Minus className="w-3.5 h-3.5 stroke-[2.5]" />
+                  </button>
 
-                <div className="w-16 text-center select-none">
-                  <span className="text-base font-bold text-zinc-900 leading-none">
-                    {subtasksCount === null ? '-' : subtasksCount}
-                  </span>
-                  <span className="text-[10px] text-zinc-500 block leading-none font-medium mt-0.5">
-                    {subtasksCount === null ? 'Default' : 'Langkah'}
-                  </span>
+                  <div className="w-16 text-center select-none">
+                    <span className="text-base font-bold text-zinc-900 leading-none">
+                      {subtasksCount === null ? '-' : subtasksCount}
+                    </span>
+                    <span className="text-[10px] text-zinc-500 block leading-none font-medium mt-0.5">
+                      {subtasksCount === null ? 'Default' : 'Langkah'}
+                    </span>
+                  </div>
+
+                  <button
+                    type="button"
+                    disabled={subtasksCount !== null && subtasksCount >= 10}
+                    onClick={() => {
+                      if (subtasksCount === null) {
+                        setSubtasksCount(4)
+                      } else if (subtasksCount < 10) {
+                        setSubtasksCount(subtasksCount + 1)
+                      }
+                    }}
+                    className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-zinc-800 disabled:opacity-35 disabled:hover:bg-slate-100 flex items-center justify-center transition active:scale-95 cursor-pointer disabled:cursor-not-allowed"
+                    aria-label="Tambah jumlah langkah"
+                  >
+                    <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+                  </button>
                 </div>
 
+                {/* Vertical divider */}
+                <div className="h-7 w-px bg-slate-200 shrink-0 mx-2" />
+
+                {/* Checklist: Default / Otomatis AI */}
                 <button
                   type="button"
-                  disabled={subtasksCount !== null && subtasksCount >= 10}
                   onClick={() => {
                     if (subtasksCount === null) {
                       setSubtasksCount(4)
-                    } else if (subtasksCount < 10) {
-                      setSubtasksCount(subtasksCount + 1)
+                    } else {
+                      setSubtasksCount(null)
                     }
                   }}
-                  className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-zinc-800 disabled:opacity-35 disabled:hover:bg-slate-100 flex items-center justify-center transition active:scale-95 cursor-pointer disabled:cursor-not-allowed"
-                  aria-label="Tambah jumlah langkah"
+                  className="flex items-center gap-2 cursor-pointer select-none py-1 group"
                 >
-                  <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+                  <div
+                    className={`w-5 h-5 rounded-lg border flex items-center justify-center transition-all ${
+                      subtasksCount === null
+                        ? 'bg-zinc-900 border-zinc-900 text-white shadow-2xs'
+                        : 'bg-white border-zinc-300 text-transparent group-hover:border-zinc-400'
+                    }`}
+                  >
+                    <Check className="w-3.5 h-3.5 stroke-[3]" />
+                  </div>
+                  <span className="text-xs font-semibold text-zinc-800 group-hover:text-zinc-950">
+                    Otomatis AI
+                  </span>
                 </button>
               </div>
-
-              {/* Vertical divider */}
-              <div className="h-7 w-px bg-slate-200 shrink-0 mx-2" />
-
-              {/* Checklist: Default / Otomatis AI */}
-              <button
-                type="button"
-                onClick={() => {
-                  if (subtasksCount === null) {
-                    setSubtasksCount(4)
-                  } else {
-                    setSubtasksCount(null)
-                  }
-                }}
-                className="flex items-center gap-2 cursor-pointer select-none py-1 group"
-              >
-                <div
-                  className={`w-5 h-5 rounded-lg border flex items-center justify-center transition-all ${
-                    subtasksCount === null
-                      ? 'bg-zinc-900 border-zinc-900 text-white shadow-2xs'
-                      : 'bg-white border-zinc-300 text-transparent group-hover:border-zinc-400'
-                  }`}
-                >
-                  <Check className="w-3.5 h-3.5 stroke-[3]" />
-                </div>
-                <span className="text-xs font-semibold text-zinc-800 group-hover:text-zinc-950">
-                  Otomatis AI
-                </span>
-              </button>
             </div>
-          </div>
+          )}
 
           {/* 7. Tags (Removable Pills + Add) */}
           <div>
@@ -701,10 +763,10 @@ export default function TaskInputModal({ isOpen, onClose, onTaskCreated }) {
             {loading ? (
               <div className="flex items-center gap-2">
                 <Loader2 className="w-5 h-5 animate-spin text-zinc-400" />
-                <span>Creating Task...</span>
+                <span>{editingTask ? 'Menyimpan Perubahan...' : 'Creating Task...'}</span>
               </div>
             ) : (
-              <span>Create Task</span>
+              <span>{editingTask ? 'Simpan Perubahan' : 'Create Task'}</span>
             )}
           </button>
         </div>
