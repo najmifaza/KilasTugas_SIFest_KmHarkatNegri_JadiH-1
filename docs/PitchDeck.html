@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pitch Deck KilasTugas - SIFest 2026</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            canvas: '#F3EFEA',
+            brandLime: '#C7F263',
+            brandDark: '#1C1C1E',
+            cardBg: '#FFFFFF',
+            muted: '#71717A',
+            subtle: '#E4E4E7',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #F3EFEA;
+      background-image: 
+        radial-gradient(circle at 10% 8%, #F9D0C1 0%, transparent 48%),
+        radial-gradient(circle at 90% 5%, #DCBFE6 0%, transparent 42%);
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: #1C1C1E;
+      height: 100dvh;
+      overflow: hidden;
+    }
+    .slide {
+      display: none;
+      height: 100%;
+    }
+    .slide.active {
+      display: flex;
+    }
+    @media print {
+      @page {
+        size: A4 landscape;
+        margin: 0;
+      }
+      body {
+        background: #F3EFEA !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        height: auto !important;
+        overflow: visible !important;
+        padding: 0 !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      main {
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .slide {
+        display: flex !important;
+        page-break-after: always;
+        break-after: page;
+        height: 100vh !important;
+        min-height: 100vh !important;
+        box-sizing: border-box;
+        margin: 0 !important;
+        padding: 32px 48px !important;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body class="h-[100dvh] flex flex-col justify-between p-4 sm:p-6 box-border overflow-hidden">
+
+  <!-- Header Bar -->
+  <header class="no-print max-w-6xl w-full mx-auto flex items-center justify-between pb-4 border-b border-black/5 shrink-0">
+    <div class="flex items-center gap-4">
+      <div class="rounded-3xl bg-white shadow-sm ring-1 ring-black/5 p-1.5 flex items-center justify-center overflow-hidden" style="width: 3.75rem; height: 3.75rem;">
+        <img src="../frontend/public/logo.png" alt="KilasTugas Logo" class="w-full h-full object-contain">
+      </div>
+      <div>
+        <h1 class="text-2xl font-bold text-brandDark tracking-tight leading-snug">KilasTugas</h1>
+        <p class="text-sm font-medium text-muted">Pitch Deck Grand Final: SIFest 2026</p>
+      </div>
+    </div>
+    
+    <div class="flex items-center gap-2">
+      <span class="text-sm font-semibold px-4 py-1.5 rounded-full bg-white border border-black/5 text-brandDark shadow-2xs">
+        Slide <span id="currentSlideNum">1</span> / 10
+      </span>
+    </div>
+  </header>
+
+  <!-- Main Slide Container -->
+  <main class="max-w-6xl w-full mx-auto flex-1 flex flex-col justify-center min-h-0 py-4">
+
+    <!-- SLIDE 1 -->
+    <section class="slide active flex-col justify-center" data-slide="1">
+      <div class="bg-white/80 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-black/5 shadow-xl">
+        <div class="flex flex-wrap items-center gap-2 mb-6">
+          <span class="px-3 py-1 rounded-full bg-brandLime text-brandDark text-xs font-bold uppercase tracking-wider">Slide 01</span>
+          <span class="px-3 py-1 rounded-full bg-black/5 text-brandDark text-xs font-semibold">Track Education</span>
+          <span class="px-3 py-1 rounded-full bg-black/5 text-muted text-xs font-medium">Tim Jadi H-1</span>
+        </div>
+        <p class="text-sm font-bold tracking-wider text-muted uppercase mb-2">Problem Statement</p>
+        <h2 class="text-3xl sm:text-5xl font-extrabold text-brandDark leading-tight mb-6">
+          Task Paralysis pada Penugasan Mahasiswa.
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+          <div class="p-5 rounded-2xl bg-[#FBF9F6] border border-black/5">
+            <div class="text-2xl mb-2">📚</div>
+            <h3 class="font-bold text-brandDark mb-1">Beban Multi-Matkul</h3>
+            <p class="text-sm text-muted">Mahasiswa hadapi 4–7 modul tugas serentak dengan instruksi abstrak dan tebal (10–20 halaman).</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-[#FBF9F6] border border-black/5">
+            <div class="text-2xl mb-2">🧠</div>
+            <h3 class="font-bold text-brandDark mb-1">Cognitive Overload</h3>
+            <p class="text-sm text-muted">Bukan malas, tapi otak mengalami <i>freeze</i>: buntu menentukan aksi pertama (<i>where to start</i>).</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-[#FBF9F6] border border-black/5">
+            <div class="text-2xl mb-2">🚨</div>
+            <h3 class="font-bold text-brandDark mb-1">Sistem Kebut Semalam</h3>
+            <p class="text-sm text-muted">Berujung panik massal di malam H-1/H-0, mutu tugas akademik anjlok, dan memicu burnout.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 2 -->
+    <section class="slide flex-col justify-center" data-slide="2">
+      <div class="bg-white/80 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-black/5 shadow-xl">
+        <div class="flex items-center gap-2 mb-6">
+          <span class="px-3 py-1 rounded-full bg-brandLime text-brandDark text-xs font-bold uppercase tracking-wider">Slide 02</span>
+          <span class="text-xs font-semibold text-muted uppercase tracking-wider">Empirical Validation</span>
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-brandDark mb-6">
+          Mengapa Ini Penting? Bukti Nyata Lapangan.
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="space-y-3">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-muted">Literatur Akademis & Kajian Ilmiah</h3>
+            <div class="p-3.5 rounded-2xl bg-[#FBF9F6] border border-black/5">
+              <span class="text-base font-bold text-brandDark block">Steel (2007) · APA Psych Bulletin</span>
+              <p class="text-xs text-muted mt-0.5">Meta-analisis bukti <b>80%–95% mahasiswa</b> menunda tugas akibat aversivitas tugas & impulsivitas.</p>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-[#FBF9F6] border border-black/5">
+              <span class="text-base font-bold text-brandDark block">Solomon & Rothblum (1984)</span>
+              <p class="text-xs text-muted mt-0.5">Studi 342 mahasiswa: prokrastinasi melibatkan beban kognitif & afektif, bukan sekadar manajemen waktu.</p>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-[#FBF9F6] border border-black/5">
+              <span class="text-base font-bold text-brandDark block">Gollwitzer & Sheeran (2006)</span>
+              <p class="text-xs text-muted mt-0.5">Rencana aksi terarah berpeluang tinggi (<i>d = .65</i>) menggerakkan eksekusi tindakan nyata.</p>
+            </div>
+          </div>
+          <div class="space-y-3">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-muted">Survei Tim Jadi H-1 (28 Mahasiswa)</h3>
+            <div class="p-3.5 rounded-2xl bg-[#FBF9F6] border border-black/5">
+              <span class="text-2xl font-black text-rose-600">78.6%</span>
+              <p class="text-xs text-muted mt-0.5">Sering/selalu selesaikan tugas di malam H-1 / H-0 deadline.</p>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-[#FBF9F6] border border-black/5">
+              <span class="text-2xl font-black text-brandDark">64.3%</span>
+              <p class="text-xs text-muted mt-0.5">Menunda karena bingung cara memulai & modul terlalu panjang.</p>
+            </div>
+            <div class="p-3.5 rounded-2xl bg-[#FBF9F6] border border-black/5">
+              <span class="text-2xl font-black text-brandDark">53.6%</span>
+              <p class="text-xs text-muted mt-0.5">Pernah gagal kumpul tepat waktu hingga kena penalti nilai.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 3 -->
+    <section class="slide flex-col justify-center" data-slide="3">
+      <div class="bg-white/80 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-black/5 shadow-xl">
+        <div class="flex items-center gap-2 mb-6">
+          <span class="px-3 py-1 rounded-full bg-brandLime text-brandDark text-xs font-bold uppercase tracking-wider">Slide 03</span>
+          <span class="text-xs font-semibold text-muted uppercase tracking-wider">Market Landscape</span>
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-brandDark mb-6">
+          Lanskap Solusi yang Ada Saat Ini.
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="p-5 rounded-2xl bg-[#FBF9F6] border border-black/5">
+            <div class="font-mono text-xs font-bold text-muted uppercase mb-2">Kategori 01</div>
+            <h3 class="font-bold text-brandDark mb-2">To-Do List Standar</h3>
+            <p class="text-xs text-muted">Todoist, Google Tasks, Apple Reminders.</p>
+            <p class="text-xs text-brandDark mt-4 font-medium">Hanya mencatat judul tugas & tanggal deadline.</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-[#FBF9F6] border border-black/5">
+            <div class="font-mono text-xs font-bold text-muted uppercase mb-2">Kategori 02</div>
+            <h3 class="font-bold text-brandDark mb-2">Project Management</h3>
+            <p class="text-xs text-muted">Notion, Trello, Asana, Jira.</p>
+            <p class="text-xs text-brandDark mt-4 font-medium">Ditujukan untuk tim enterprise bisnis, bukan individu mahasiswa.</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-[#FBF9F6] border border-black/5">
+            <div class="font-mono text-xs font-bold text-muted uppercase mb-2">Kategori 03</div>
+            <h3 class="font-bold text-brandDark mb-2">Kalender Pasif</h3>
+            <p class="text-xs text-muted">Google Calendar, Apple iCal.</p>
+            <p class="text-xs text-brandDark mt-4 font-medium">Blok waktu statis tanpa arahan aksi mikro bertahap.</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-[#FBF9F6] border border-black/5">
+            <div class="font-mono text-xs font-bold text-muted uppercase mb-2">Kategori 04</div>
+            <h3 class="font-bold text-brandDark mb-2">Catatan Manual</h3>
+            <p class="text-xs text-muted">Notes HP, WhatsApp Grup Kelas.</p>
+            <p class="text-xs text-brandDark mt-4 font-medium">Terkubur pesan lain dan rentan terlupa.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 4 -->
+    <section class="slide flex-col justify-center" data-slide="4">
+      <div class="bg-white/80 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-black/5 shadow-xl">
+        <div class="flex items-center gap-2 mb-6">
+          <span class="px-3 py-1 rounded-full bg-brandLime text-brandDark text-xs font-bold uppercase tracking-wider">Slide 04</span>
+          <span class="text-xs font-semibold text-muted uppercase tracking-wider">Gap Analysis</span>
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-brandDark mb-6">
+          Kesenjangan Kritis Alat Produktivitas Populer.
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-6 rounded-2xl bg-rose-50/60 border border-rose-200/60">
+            <span class="text-xs font-bold uppercase tracking-wider text-rose-700">Gap 01</span>
+            <h3 class="text-lg font-bold text-brandDark mt-2 mb-2">Deadline-Centric</h3>
+            <p class="text-xs text-muted leading-relaxed">
+              Mencatat tanggal akhir pengumpulan tanpa memecah langkah kerja nyata. Beban dekomposisi diserahkan 100% ke mahasiswa yang sedang kewalahan.
+            </p>
+          </div>
+          <div class="p-6 rounded-2xl bg-rose-50/60 border border-rose-200/60">
+            <span class="text-xs font-bold uppercase tracking-wider text-rose-700">Gap 02</span>
+            <h3 class="text-lg font-bold text-brandDark mt-2 mb-2">Nir Micro-Pacing</h3>
+            <p class="text-xs text-muted leading-relaxed">
+              Tidak ada bimbingan porsi cicilan harian yang aman. Menimbulkan ilusi waktu luang semu yang memicu penundaan hingga H-1.
+            </p>
+          </div>
+          <div class="p-6 rounded-2xl bg-rose-50/60 border border-rose-200/60">
+            <span class="text-xs font-bold uppercase tracking-wider text-rose-700">Gap 03</span>
+            <h3 class="text-lg font-bold text-brandDark mt-2 mb-2">Setup Friction Tinggi</h3>
+            <p class="text-xs text-muted leading-relaxed">
+              Notion & PM tools butuh setup database, board, dan tags manual. Energi kognitif habis sebelum eksekusi dimulai.
+            </p>
+          </div>
+        </div>
+        <div class="mt-6 p-4 rounded-2xl bg-black/5 flex items-center justify-between text-xs font-semibold text-brandDark">
+          <span>Hasil Survei: 67.9% mahasiswa memakai to-do list biasa...</span>
+          <span class="text-rose-600 font-bold">57.1% menyatakan tidak efektif mengeksekusi tugas</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 5 -->
+    <section class="slide flex-col justify-center" data-slide="5">
+      <div class="bg-white/80 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-black/5 shadow-xl">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="px-3 py-1 rounded-full bg-brandLime text-brandDark text-xs font-bold uppercase tracking-wider">Slide 05</span>
+          <span class="text-xs font-semibold text-muted uppercase tracking-wider">The Innovation</span>
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-brandDark mb-2">
+          KilasTugas: 4 Pilar Solusi Aksi Nyata.
+        </h2>
+        <p class="text-sm font-medium text-muted mb-6">
+          <i>"Jangan tanya kapan selesai, tanyakan apa yang dikerjakan hari ini."</i>
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="p-5 rounded-2xl bg-[#FBF9F6] border border-black/5 flex gap-4 items-start">
+            <div class="w-10 h-10 rounded-xl bg-brandLime flex items-center justify-center font-bold text-brandDark shrink-0">1</div>
+            <div>
+              <h3 class="font-bold text-brandDark mb-1">Actionable AI Chunking</h3>
+              <p class="text-xs text-muted">Pecah silabus panjang jadi 3–8 sub-tugas konkret (&lt;60 huruf) dengan estimasi menit realistis (25–90 mnt).</p>
+            </div>
+          </div>
+          <div class="p-5 rounded-2xl bg-[#FBF9F6] border border-black/5 flex gap-4 items-start">
+            <div class="w-10 h-10 rounded-xl bg-brandLime flex items-center justify-center font-bold text-brandDark shrink-0">2</div>
+            <div>
+              <h3 class="font-bold text-brandDark mb-1">Visual Micro-Pacing Ring</h3>
+              <p class="text-xs text-muted">Progress gauge harian otomatis: On Track, Behind Schedule, atau Overdue Alert tanpa hitung manual.</p>
+            </div>
+          </div>
+          <div class="p-5 rounded-2xl bg-[#FBF9F6] border border-black/5 flex gap-4 items-start">
+            <div class="w-10 h-10 rounded-xl bg-brandLime flex items-center justify-center font-bold text-brandDark shrink-0">3</div>
+            <div>
+              <h3 class="font-bold text-brandDark mb-1">Persistent Pomodoro Engine</h3>
+              <p class="text-xs text-muted">Floating timer 25/5 persisten di tab browser dengan audio chime synthesizer saat sesi selesai.</p>
+            </div>
+          </div>
+          <div class="p-5 rounded-2xl bg-[#FBF9F6] border border-black/5 flex gap-4 items-start">
+            <div class="w-10 h-10 rounded-xl bg-brandLime flex items-center justify-center font-bold text-brandDark shrink-0">4</div>
+            <div>
+              <h3 class="font-bold text-brandDark mb-1">Blueprint Sharing (/p/:id)</h3>
+              <p class="text-xs text-muted">1 orang dekomposisi tugas kelas, seluruh teman seangkatan bisa impor rencana aksi dalam 1 detik.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 6 -->
+    <section class="slide flex-col justify-center" data-slide="6">
+      <div class="bg-white/80 backdrop-blur-md rounded-3xl p-5 sm:p-6 border border-black/5 shadow-xl">
+        <div class="flex items-center gap-2 mb-1.5">
+          <span class="px-3 py-1 rounded-full bg-brandLime text-brandDark text-xs font-bold uppercase tracking-wider">Slide 06</span>
+          <span class="text-xs font-semibold text-muted uppercase tracking-wider">Product Demo</span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-brandDark mb-3 leading-none">
+          Alur Pengalaman Pengguna
+        </h2>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
+          <div class="lg:col-span-7 space-y-2">
+            <div class="p-2.5 rounded-xl bg-[#FBF9F6] border border-black/5 flex items-center gap-3">
+              <span class="w-7 h-7 rounded-full bg-brandDark text-white text-xs font-extrabold flex items-center justify-center shrink-0">1</span>
+              <div>
+                <h3 class="font-bold text-sm text-brandDark leading-tight">Quick Input</h3>
+                <p class="text-xs font-medium text-muted">Paste modul tugas kuliah dan pilih target 3-8 langkah.</p>
+              </div>
+            </div>
+            <div class="p-2.5 rounded-xl bg-[#FBF9F6] border border-black/5 flex items-center gap-3">
+              <span class="w-7 h-7 rounded-full bg-brandDark text-white text-xs font-extrabold flex items-center justify-center shrink-0">2</span>
+              <div>
+                <h3 class="font-bold text-sm text-brandDark leading-tight">AI Decomposition</h3>
+                <p class="text-xs font-medium text-muted">AI susun urutan aksi konkret dengan estimasi waktu terukur.</p>
+              </div>
+            </div>
+            <div class="p-2.5 rounded-xl bg-[#FBF9F6] border border-black/5 flex items-center gap-3">
+              <span class="w-7 h-7 rounded-full bg-brandDark text-white text-xs font-extrabold flex items-center justify-center shrink-0">3</span>
+              <div>
+                <h3 class="font-bold text-sm text-brandDark leading-tight">Today Focus & Micro-Pacing</h3>
+                <p class="text-xs font-medium text-muted">Pantau status On Track/Behind dan fokus kuota hari ini.</p>
+              </div>
+            </div>
+            <div class="p-2.5 rounded-xl bg-[#FBF9F6] border border-black/5 flex items-center gap-3">
+              <span class="w-7 h-7 rounded-full bg-brandDark text-white text-xs font-extrabold flex items-center justify-center shrink-0">4</span>
+              <div>
+                <h3 class="font-bold text-sm text-brandDark leading-tight">Persistent Pomodoro</h3>
+                <p class="text-xs font-medium text-muted">Fokus 25/5 lewat floating timer dan lonceng audio.</p>
+              </div>
+            </div>
+            <div class="p-2.5 rounded-xl bg-[#FBF9F6] border border-black/5 flex items-center gap-3">
+              <span class="w-7 h-7 rounded-full bg-brandDark text-white text-xs font-extrabold flex items-center justify-center shrink-0">5</span>
+              <div>
+                <h3 class="font-bold text-sm text-brandDark leading-tight">Sync & Peer Sharing</h3>
+                <p class="text-xs font-medium text-muted">Ekspor kalender .ics/GCal dan bagikan blueprint sekelas.</p>
+              </div>
+            </div>
+            <div class="p-2.5 rounded-xl bg-brandLime/25 border border-brandLime flex items-center justify-between">
+              <span class="text-xs font-bold text-brandDark">Live Demo: kilastugas.vercel.app</span>
+              <span class="text-[11px] font-semibold text-muted">Guest Mode Aktif</span>
+            </div>
+          </div>
+          <div class="lg:col-span-5 flex justify-center items-center">
+            <div class="max-h-[360px] rounded-3xl overflow-hidden shadow-card border border-black/5 bg-white p-1.5 flex items-center justify-center">
+              <img src="mockupIphone.png" alt="Mockup Aplikasi KilasTugas" class="max-h-[350px] w-auto object-contain rounded-2xl mx-auto">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 7 -->
+    <section class="slide flex-col justify-center" data-slide="7">
+      <div class="bg-white/80 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-black/5 shadow-xl">
+        <div class="flex items-center gap-2 mb-6">
+          <span class="px-3 py-1 rounded-full bg-brandLime text-brandDark text-xs font-bold uppercase tracking-wider">Slide 07</span>
+          <span class="text-xs font-semibold text-muted uppercase tracking-wider">Product Defense & Tech Stack</span>
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-brandDark mb-6">
+          Teknologi: Bukan Sekadar AI Chatbot / Wrapper.
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-6 rounded-2xl bg-[#FBF9F6] border border-black/5">
+            <span class="px-2.5 py-1 rounded-md bg-white border border-black/5 text-[11px] font-mono font-bold text-brandDark">01 · Inference Engine</span>
+            <h3 class="text-lg font-bold text-brandDark mt-3 mb-2">9Router & Gemini</h3>
+            <p class="text-xs text-muted leading-relaxed">
+              Model <b>ag/gemini-3.7-flash-medium</b> dengan output <b>JSON Schema murni</b> (aksi singkat, durasi terukur, day offset), bukan sekadar teks percakapan bebas.
+            </p>
+          </div>
+          <div class="p-6 rounded-2xl bg-[#FBF9F6] border border-brandLime">
+            <span class="px-2.5 py-1 rounded-md bg-brandLime text-[11px] font-mono font-bold text-brandDark">02 · Execution Ecosystem</span>
+            <h3 class="text-lg font-bold text-brandDark mt-3 mb-2">Pacing & Timer Nyata</h3>
+            <p class="text-xs text-muted leading-relaxed">
+              Tiap langkah terhubung langsung ke <b>Visual Progress Gauge</b> harian (On Track / Behind) dan <b>Persistent Pomodoro Timer</b> dengan audio chime bawaan peramban.
+            </p>
+          </div>
+          <div class="p-6 rounded-2xl bg-[#FBF9F6] border border-black/5">
+            <span class="px-2.5 py-1 rounded-md bg-white border border-black/5 text-[11px] font-mono font-bold text-brandDark">03 · Zero Downtime</span>
+            <h3 class="text-lg font-bold text-brandDark mt-3 mb-2">Smart Cache & Fallback</h3>
+            <p class="text-xs text-muted leading-relaxed">
+              Cache MariaDB sajikan tugas sekelas <b>&lt;20ms</b> (hemat 70% token AI). Jika AI timeout, <b>Deterministic Fallback</b> template kurikulum aktif otomatis.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 8 -->
+    <section class="slide flex-col justify-center" data-slide="8">
+      <div class="bg-white/80 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-black/5 shadow-xl">
+        <div class="flex items-center gap-2 mb-6">
+          <span class="px-3 py-1 rounded-full bg-brandLime text-brandDark text-xs font-bold uppercase tracking-wider">Slide 08</span>
+          <span class="text-xs font-semibold text-muted uppercase tracking-wider">Business Model & Sustainability</span>
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-brandDark mb-6">
+          Model Keberlanjutan: Social Open-Access.
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="p-6 rounded-2xl bg-[#FBF9F6] border border-brandLime">
+            <span class="px-2.5 py-1 rounded-md bg-brandLime text-[11px] font-bold uppercase text-brandDark">Aksesibilitas</span>
+            <h3 class="text-lg font-bold text-brandDark mt-3 mb-2">Zero-Barrier Adoption</h3>
+            <ul class="text-xs text-muted space-y-2">
+              <li>• Mode Guest tanpa form registrasi akun</li>
+              <li>• Penetrasi pengguna masif di lingkungan kampus</li>
+              <li>• Pertumbuhan organik via link Blueprint Sharing</li>
+            </ul>
+          </div>
+          <div class="p-6 rounded-2xl bg-[#FBF9F6] border border-black/5">
+            <span class="px-2.5 py-1 rounded-md bg-black/5 text-[11px] font-bold uppercase text-muted">Operasional</span>
+            <h3 class="text-lg font-bold text-brandDark mt-3 mb-2">Ultra-Low Operating Cost</h3>
+            <ul class="text-xs text-muted space-y-2">
+              <li>• Smart Caching pangkas 70% konsumsi token AI</li>
+              <li>• Hosting SPA statis gratis di Vercel Global Edge</li>
+              <li>• Single low-cost VPS untuk backend FastAPI async</li>
+            </ul>
+          </div>
+          <div class="p-6 rounded-2xl bg-[#FBF9F6] border border-black/5">
+            <span class="px-2.5 py-1 rounded-md bg-black/5 text-[11px] font-bold uppercase text-muted">Keberlanjutan</span>
+            <h3 class="text-lg font-bold text-brandDark mt-3 mb-2">Campus & Faculty Support</h3>
+            <ul class="text-xs text-muted space-y-2">
+              <li>• Integrasi pemantauan tenggat tugas prodi/fakultas</li>
+              <li>• Pendanaan operasional via hibah inovasi/PKM</li>
+              <li>• Kemitraan penyediaan komputasi server universitas</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 9 -->
+    <section class="slide flex-col justify-center" data-slide="9">
+      <div class="bg-white/80 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-black/5 shadow-xl">
+        <div class="flex items-center gap-2 mb-6">
+          <span class="px-3 py-1 rounded-full bg-brandLime text-brandDark text-xs font-bold uppercase tracking-wider">Slide 09</span>
+          <span class="text-xs font-semibold text-muted uppercase tracking-wider">Social Impact</span>
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-brandDark mb-6">
+          Dampak Nyata & Metrik Keberhasilan.
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="p-5 rounded-2xl bg-[#FBF9F6] border border-black/5">
+            <span class="text-3xl font-black text-brandDark">&lt;5 Menit</span>
+            <h3 class="font-bold text-xs text-brandDark mt-2 mb-1">Inisiasi Tugas</h3>
+            <p class="text-xs text-muted">Memangkas waktu mulai dari hitungan hari menjadi hitungan menit.</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-[#FBF9F6] border border-black/5">
+            <span class="text-3xl font-black text-brandDark">+40%</span>
+            <h3 class="font-bold text-xs text-brandDark mt-2 mb-1">Completion Rate</h3>
+            <p class="text-xs text-muted">Target kenaikan ketepatan waktu pengumpulan tugas kuliah.</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-[#FBF9F6] border border-black/5">
+            <span class="text-3xl font-black text-brandDark">0 Stres</span>
+            <h3 class="font-bold text-xs text-brandDark mt-2 mb-1">Eliminasi H-1</h3>
+            <p class="text-xs text-muted">Mengganti panik begadang semalam suntuk dengan kebiasaan mikro harian.</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-[#FBF9F6] border border-black/5">
+            <span class="text-3xl font-black text-brandDark">1-Click</span>
+            <h3 class="font-bold text-xs text-brandDark mt-2 mb-1">Viral Peer Sharing</h3>
+            <p class="text-xs text-muted">Satu rencana tugas dapat membantu puluhan mahasiswa seangkatan sekaligus.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 10 -->
+    <section class="slide flex-col justify-center" data-slide="10">
+      <div class="bg-white/80 backdrop-blur-md rounded-3xl p-8 sm:p-12 border border-black/5 shadow-xl">
+        <div class="flex items-center gap-2 mb-6">
+          <span class="px-3 py-1 rounded-full bg-brandLime text-brandDark text-xs font-bold uppercase tracking-wider">Slide 10</span>
+          <span class="text-xs font-semibold text-muted uppercase tracking-wider">The Roadmap</span>
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-brandDark mb-6">
+          Peta Jalan Pengembangan Produk.
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="p-6 rounded-2xl bg-[#FBF9F6] border border-black/5">
+            <span class="text-xs font-bold uppercase text-brandDark px-2.5 py-1 rounded bg-brandLime inline-block mb-3">Fase 1: Saat Ini (MVP)</span>
+            <h3 class="font-bold text-base text-brandDark mb-3">Online Round (~50% Selesai)</h3>
+            <ul class="text-xs text-muted space-y-2">
+              <li>✓ AI Task Breakdown terarah (3-8 langkah kustom)</li>
+              <li>✓ Visual Micro-Pacing ring & circular gauge status</li>
+              <li>✓ Persistent Pomodoro Timer di background tab</li>
+              <li>✓ Blueprint URL sharing (/p/:id) & ekspor iCal/GCal</li>
+            </ul>
+          </div>
+          <div class="p-6 rounded-2xl bg-[#FBF9F6] border border-brandDark">
+            <span class="text-xs font-bold uppercase text-white px-2.5 py-1 rounded bg-brandDark inline-block mb-3">Fase 2: Grand Final Sprint</span>
+            <h3 class="font-bold text-base text-brandDark mb-3">Product Sprint & Defense</h3>
+            <ul class="text-xs text-muted space-y-2">
+              <li>• <b>AI Syllabus & PDF Reader:</b> Ekstraksi modul tugas tebal via drag-and-drop</li>
+              <li>• <b>Web Push Notification:</b> Alarm Service Worker saat peramban ditutup</li>
+              <li>• <b>PWA Offline-First:</b> Dukungan IndexedDB untuk akses nir-kuota</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    let current = 1;
+    const total = 10;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialSlide = parseInt(urlParams.get('slide'));
+    if (initialSlide && initialSlide >= 1 && initialSlide <= total) {
+      current = initialSlide;
+    }
+
+    function showSlide(n) {
+      if (n < 1) n = 1;
+      if (n > total) n = total;
+      current = n;
+      document.querySelectorAll('.slide').forEach((el) => {
+        el.classList.toggle('active', parseInt(el.getAttribute('data-slide')) === current);
+      });
+      const numEl = document.getElementById('currentSlideNum');
+      if (numEl) numEl.innerText = current;
+    }
+
+    function nextSlide() {
+      if (current < total) showSlide(current + 1);
+    }
+
+    function prevSlide() {
+      if (current > 1) showSlide(current - 1);
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'Space') nextSlide();
+      if (e.key === 'ArrowLeft') prevSlide();
+    });
+
+    showSlide(current);
+  </script>
+</body>
+</html>
