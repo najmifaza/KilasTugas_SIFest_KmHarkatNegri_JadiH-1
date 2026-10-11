@@ -42,11 +42,15 @@ export async function cacheTasks(tasks) {
   try {
     const db = await openDB()
     if (!db) return
-    const tx = db.transaction('tasks', 'readwrite')
-    const store = tx.objectStore('tasks')
-    for (const t of tasks) {
-      store.put(t)
-    }
+    return new Promise((resolve) => {
+      const tx = db.transaction('tasks', 'readwrite')
+      const store = tx.objectStore('tasks')
+      for (const t of tasks) {
+        store.put(t)
+      }
+      tx.oncomplete = () => resolve()
+      tx.onerror = () => resolve()
+    })
   } catch (err) {
     console.warn('Gagal menyimpan cache tugas:', err)
   }
@@ -56,11 +60,28 @@ export async function getCachedTasks() {
   try {
     const db = await openDB()
     if (!db) return []
+    const pending = await getPendingMutations()
+    const taskMutations = {}
+    for (const m of pending) {
+      if (m.entity_type === 'task') {
+        taskMutations[m.entity_id] = { ...(taskMutations[m.entity_id] || {}), ...m.data }
+      }
+    }
+
     return new Promise((resolve) => {
       const tx = db.transaction('tasks', 'readonly')
       const store = tx.objectStore('tasks')
       const req = store.getAll()
-      req.onsuccess = () => resolve(req.result || [])
+      req.onsuccess = () => {
+        let items = req.result || []
+        items = items.map((t) => {
+          if (taskMutations[t.id]) {
+            return { ...t, ...taskMutations[t.id] }
+          }
+          return t
+        })
+        resolve(items)
+      }
       req.onerror = () => resolve([])
     })
   } catch (err) {
@@ -73,11 +94,15 @@ export async function cacheSubtasks(taskId, subtasks) {
   try {
     const db = await openDB()
     if (!db) return
-    const tx = db.transaction('subtasks', 'readwrite')
-    const store = tx.objectStore('subtasks')
-    for (const s of subtasks) {
-      store.put({ ...s, task_id: taskId })
-    }
+    return new Promise((resolve) => {
+      const tx = db.transaction('subtasks', 'readwrite')
+      const store = tx.objectStore('subtasks')
+      for (const s of subtasks) {
+        store.put({ ...s, task_id: taskId })
+      }
+      tx.oncomplete = () => resolve()
+      tx.onerror = () => resolve()
+    })
   } catch (err) {
     console.warn('Gagal menyimpan cache sub-tugas:', err)
   }
@@ -87,13 +112,28 @@ export async function getCachedSubtasks(taskId) {
   try {
     const db = await openDB()
     if (!db) return []
+    const pending = await getPendingMutations()
+    const subtaskMutations = {}
+    for (const m of pending) {
+      if (m.entity_type === 'subtask') {
+        subtaskMutations[m.entity_id] = { ...(subtaskMutations[m.entity_id] || {}), ...m.data }
+      }
+    }
+
     return new Promise((resolve) => {
       const tx = db.transaction('subtasks', 'readonly')
       const store = tx.objectStore('subtasks')
       const index = store.index('by_task_id')
       const req = index.getAll(taskId)
       req.onsuccess = () => {
-        const sorted = (req.result || []).sort((a, b) => (a.step_number || 0) - (b.step_number || 0))
+        let items = req.result || []
+        items = items.map((s) => {
+          if (subtaskMutations[s.id]) {
+            return { ...s, ...subtaskMutations[s.id] }
+          }
+          return s
+        })
+        const sorted = items.sort((a, b) => (a.step_number || 0) - (b.step_number || 0))
         resolve(sorted)
       }
       req.onerror = () => resolve([])

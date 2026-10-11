@@ -148,7 +148,7 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask, onSubtaskCh
 
   useEffect(() => {
     fetchSubtasks()
-  }, [task.id, task.subtasks_done, task.subtasks_total])
+  }, [task.id])
 
   const fireConfetti = (e) => {
     if (e) e.stopPropagation()
@@ -330,7 +330,7 @@ export default function TaskCard({ task, onOpenDetail, onDeleteTask, onSubtaskCh
     // Optimistic UI update
     const updated = subtasks.map((s) => (s.id === st.id ? { ...s, is_completed: nextState } : s))
     setSubtasks(updated)
-    cacheSubtasks(task.id, updated)
+    await cacheSubtasks(task.id, updated)
 
     const newlyCompleted = updated.filter((s) => s.is_completed).length
     const isFinishedAll = newlyCompleted === total && total > 0 && nextState
