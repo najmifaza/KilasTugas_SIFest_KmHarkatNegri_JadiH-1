@@ -1,0 +1,30 @@
+name: Sync main to with-docs
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  sync-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Merge main into with-docs
+        run: |
+          git checkout with-docs
+          git merge origin/main --no-edit -m "chore(sync): merge main into with-docs [skip ci]"
+          git push origin with-docs
