@@ -120,8 +120,8 @@ export default function BlueprintModal({ blueprint, onClose, onImportSuccess }) 
     setError('')
     try {
       const sid = getSessionId()
-      const deadlineISO = new Date(`${deadlineDate}T23:59:00`).toISOString()
-      const res = await cloneBlueprint(currentBlueprint.id, sid, deadlineISO)
+      const deadlineLocal = `${deadlineDate}T23:59:00`
+      const res = await cloneBlueprint(currentBlueprint.id, sid, deadlineLocal)
 
       try {
         confetti({

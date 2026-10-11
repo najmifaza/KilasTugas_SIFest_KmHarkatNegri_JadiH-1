@@ -286,7 +286,7 @@ export default function TaskInputModal({
           id: taskId,
           title: form.title,
           subject: form.subject,
-          deadline: deadlineISO,
+          deadline: deadlineLocal,
           source: breakdownRes.source,
           subtasks: breakdownRes.data,
         })
