@@ -151,15 +151,16 @@ async def rebalance_task_pacing(task_id: str):
                 "data": all_subtasks,
             }
 
-        now_naive = datetime.now()
+        wib_tz = timezone(timedelta(hours=7))
+        now_wib = datetime.now(wib_tz).replace(tzinfo=None)
         deadline = task["deadline"]
         deadline_naive = deadline.replace(tzinfo=None) if hasattr(deadline, "tzinfo") and deadline.tzinfo else deadline
 
-        days_left = max((deadline_naive.date() - now_naive.date()).days, 0)
+        days_left = max((deadline_naive.date() - now_wib.date()).days, 0)
         num_uncompleted = len(uncompleted)
 
-        # Hitung sisa menit riil menuju deadline
-        seconds_left = (deadline_naive - now_naive).total_seconds()
+        # Hitung sisa menit riil menuju deadline berbasis waktu WIB
+        seconds_left = (deadline_naive - now_wib).total_seconds()
         minutes_left = int(seconds_left / 60)
         total_current_duration = sum(int(st.get("duration_minutes") or 25) for st in uncompleted)
 
@@ -236,6 +237,8 @@ Format HANYA JSON array:
             else:
                 day_offset = int(round((idx / max(1, num_uncompleted - 1)) * days_left))
 
+            target_date_val = (now_wib.date() + timedelta(days=day_offset)).isoformat()
+
             orig_dur = int(st.get("duration_minutes") or 25)
             if should_compress:
                 if minutes_left <= 0:
@@ -249,10 +252,10 @@ Format HANYA JSON array:
                 new_dur = orig_dur
 
             update_sets = [
-                "target_date = DATE_ADD(CURDATE(), INTERVAL %s DAY)",
+                "target_date = %s",
                 "duration_minutes = %s",
             ]
-            update_vals = [day_offset, new_dur]
+            update_vals = [target_date_val, new_dur]
 
             if st["id"] in rescoped_map:
                 update_sets.append("title = %s")

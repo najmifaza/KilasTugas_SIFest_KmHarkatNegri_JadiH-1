@@ -112,8 +112,9 @@ export default function TaskCard({
       const res = await rebalanceTaskPacing(task.id)
       if (res?.data) {
         setSubtasks(res.data)
-        setRebalanceSuccessMsg('Ritme kerja berhasil diseimbangkan kembali!')
-        setTimeout(() => setRebalanceSuccessMsg(''), 3500)
+        await cacheSubtasks(task.id, res.data)
+        setRebalanceSuccessMsg(res.message || 'Ritme kerja berhasil diseimbangkan kembali!')
+        setTimeout(() => setRebalanceSuccessMsg(''), 4500)
         playCheckSound(true)
         if (onSubtaskChange) onSubtaskChange()
       }
